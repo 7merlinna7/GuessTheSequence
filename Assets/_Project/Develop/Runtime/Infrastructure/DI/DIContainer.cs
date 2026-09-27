@@ -48,7 +48,7 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.DI
                     return (T)registration.CreateInstanceFrom(this);
 
                 if (_parent != null)
-                    return Resolve<T>();
+                    return _parent.Resolve<T>();
             }
             finally
             {  

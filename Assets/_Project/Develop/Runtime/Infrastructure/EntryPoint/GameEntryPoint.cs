@@ -19,8 +19,6 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
 
             ProjectContextRegistrations.Process(projectContainer);
             projectContainer.Resolve<ICoroutinesPerformer>().StartPerform(Initialize(projectContainer));
-
-            Debug.Log("DONE");
         }
 
         private void SetupAppSettings()
