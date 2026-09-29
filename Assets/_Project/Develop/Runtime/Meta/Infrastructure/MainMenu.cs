@@ -18,7 +18,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 
         private IEnumerator WaitForPlayerInput(DIContainer container)
         {
-            Debug.Log("Для выбора режиа нажмите 1 - Цифры, 2 - Символы");
+            Debug.Log("Для выбора режиа нажмите 1 - Цифры, 2 - Буквы");
             yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Alpha2));
 
             if (Input.GetKeyDown(KeyCode.Alpha1))
