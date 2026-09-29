@@ -1,6 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Gameplay.SequenceFeature;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.GamemodeFeature
@@ -10,30 +9,20 @@ namespace Assets._Project.Develop.Runtime.Gameplay.GamemodeFeature
         public event Action Win;
         public event Action Defeat;
 
-        private int _sequenceLenth = 5;
-        private int _sequenceCount = 0;
+        private int _sequenceCount;
         private Sequence _sequence;
 
         public bool IsRunning { get; private set; }
 
-        private Dictionary<KeyCode, char> _sequencePool = new Dictionary<KeyCode, char>()
+        public Gamemode(Sequence sequence)
         {
-            { KeyCode.Alpha0,'0' },
-            { KeyCode.Alpha1,'1' },
-            { KeyCode.Alpha2,'2' },
-            { KeyCode.Alpha3,'3' },
-            { KeyCode.Alpha4,'4' },
-            { KeyCode.Alpha5,'5' },
-            { KeyCode.Alpha6,'6' },
-            { KeyCode.Alpha7,'7' },
-            { KeyCode.Alpha8,'8' },
-            { KeyCode.Alpha9,'9' },
-        };
+            _sequence = sequence;
+        }
 
         public void Start()
         {
-            _sequence = new Sequence(_sequencePool, _sequenceLenth);
             _sequence.Create();
+            _sequenceCount = 0;
 
             IsRunning = true;
             Debug.Log(_sequence.Get());
@@ -58,7 +47,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.GamemodeFeature
                 }
             }
 
-            if (_sequenceCount == _sequenceLenth)
+            if (_sequenceCount == _sequence.SequenceLenth)
             {
                 IsRunning = false;
                 Win?.Invoke();

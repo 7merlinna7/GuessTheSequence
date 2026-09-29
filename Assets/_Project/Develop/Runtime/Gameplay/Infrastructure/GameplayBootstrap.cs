@@ -1,9 +1,12 @@
-﻿using Assets._Project.Develop.Runtime.Infrastructure;
+﻿using Assets._Project.Develop.Runtime.Gameplay.GamemodeFeature;
+using Assets._Project.Develop.Runtime.Gameplay.SequenceFeature;
+using Assets._Project.Develop.Runtime.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Utilites.ConfigsManagment;
+using Assets._Project.Develop.Runtime.Utilities.Configs;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 using System;
 using System.Collections;
-using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 {
@@ -11,6 +14,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
     {
         private DIContainer _container;
         private GameplayInputArgs _inputArgs;
+        private GameCycle _gameCycle;
 
         public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
         {
@@ -22,18 +26,41 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             _inputArgs = gameplayInputArgs;
 
             GameplayContextRegistrations.Process(_container, _inputArgs);
+
         }
 
         public override IEnumerator Initialize()
         {
-            Debug.Log(_inputArgs.LevelNumber);
+            SequenceFactory sequenceFactory = new SequenceFactory(GetSequenceConfig(_container));
+            Gamemode gamemode = new Gamemode(sequenceFactory.Create());
 
+            _gameCycle = new GameCycle(_container,gamemode);
             yield break;
         }
 
         public override void Run()
         {
-            //start sceni
+            _gameCycle.Start();
+        }
+
+        private void Update()
+        {
+            _gameCycle?.Update();
+        }
+
+        private ISequenceConfig GetSequenceConfig(DIContainer container)
+        {
+            ISequenceConfig config = null;
+            switch (_inputArgs.LevelType)
+            {
+                case SequenceType.Letters:
+                    config = _container.Resolve<ConfigsProviderService>().GetConfig<LettersSequenceConfig>();
+                    break;
+                case SequenceType.Numbers:
+                    config = _container.Resolve<ConfigsProviderService>().GetConfig<NumbersSequenceConfig>();
+                    break;
+            }
+            return config;
         }
     }
 }

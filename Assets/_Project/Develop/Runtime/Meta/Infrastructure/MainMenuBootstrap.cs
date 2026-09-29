@@ -28,13 +28,11 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
             Debug.Log("Инициализация меню");
             _mainMenu = new MainMenu();
 
-
             yield break;
         }
 
         public override void Run()
         {
-            //start sceni
             Debug.Log("Старт сцены меню");
             _mainMenu.Start(_container);
         }

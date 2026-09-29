@@ -16,6 +16,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.SequenceFeature
 
         private Queue<char> _currentSequence;
 
+        public int SequenceLenth => _sequenceLenth;
+
         public Sequence(Dictionary<KeyCode,char> sequencePool, int sequenceLenth)
         {
             _sequencePool = sequencePool;
