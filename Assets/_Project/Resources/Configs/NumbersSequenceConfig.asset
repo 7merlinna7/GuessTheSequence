@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c777db4a9b7b5f041a02d9c31eb68fd7, type: 3}
   m_Name: NumbersSequenceConfig
   m_EditorClassIdentifier: 
-  <SequenceLenth>k__BackingField: 0
+  <SequenceLenth>k__BackingField: 5
   <SequenceType>k__BackingField: 0
