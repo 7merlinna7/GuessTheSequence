@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Assets._Project.Develop.Runtime.Utilities.DataManagement
+namespace Assets._Project.Develop.Runtime.Utilities.DataManagement.Serializers
 {
     public interface IDataSerializer 
     {
