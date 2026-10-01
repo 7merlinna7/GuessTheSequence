@@ -34,7 +34,7 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
 
             container.RegisterAsSingle(CreateSceneSwitcherService);
 
-            container.RegisterAsSingle(CreateWalletService);
+            container.RegisterAsSingle(CreateWalletService).NonLazy();
 
             container.RegisterAsSingle<ISaveLoadService>(CreateSaveLoadService);
 
@@ -63,7 +63,7 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
             foreach (CurrencyTypes currencyTypes in Enum.GetValues(typeof(CurrencyTypes)))
                 currencies[currencyTypes] = new ReactiveVariable<int>();
 
-            return new WalletService(currencies);
+            return new WalletService(currencies,c.Resolve<PlayerDataProvider>());
         }
 
         private static SceneLoaderService CreateSceneLoaderService(DIContainer c) 
