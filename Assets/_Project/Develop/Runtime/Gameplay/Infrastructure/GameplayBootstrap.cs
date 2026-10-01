@@ -3,6 +3,7 @@ using Assets._Project.Develop.Runtime.Gameplay.SequenceFeature;
 using Assets._Project.Develop.Runtime.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Utilites.ConfigsManagment;
+using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilities.Configs;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 using System;
@@ -34,7 +35,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             SequenceFactory sequenceFactory = new SequenceFactory(GetSequenceConfig(_container));
             Gamemode gamemode = new Gamemode(sequenceFactory.Create());
 
-            _gameCycle = new GameCycle(_container,gamemode);
+            _gameCycle = new GameCycle(_container.Resolve<ICoroutinesPerformer>(),_container.Resolve<SceneSwitcherService>(),gamemode);
             yield break;
         }
 

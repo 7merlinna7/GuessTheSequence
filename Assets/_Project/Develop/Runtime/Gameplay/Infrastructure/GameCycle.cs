@@ -12,15 +12,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
     public class GameCycle 
     {
         private Gamemode _gamemode;
-        private DIContainer _container;
         ICoroutinesPerformer _coroutinesPerformer;
+        SceneSwitcherService _sceneSwitcherService;
 
-        public GameCycle(DIContainer container, Gamemode gamemode)
+        public GameCycle(ICoroutinesPerformer coroutinesPerformer, SceneSwitcherService sceneSwitcherService, Gamemode gamemode)
         {
-            _container = container;
             _gamemode = gamemode;
-
-            _coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
+            _coroutinesPerformer = coroutinesPerformer;
+            _sceneSwitcherService = sceneSwitcherService;
         }
 
         public void Start()
@@ -71,13 +70,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
         public IEnumerator SwitchToMainMenue()
         {
-            SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
-            ILoadingScreen loadingScreen = _container.Resolve<ILoadingScreen>();
-
-            loadingScreen.Show();
-            yield return new WaitForSeconds(1);
-            loadingScreen.Hide();
-            yield return sceneSwitcherService.ProcessSwitchTo(Scenes.MainMenue);
+            yield return _sceneSwitcherService.ProcessSwitchTo(Scenes.MainMenue);
         }
     }
 }
