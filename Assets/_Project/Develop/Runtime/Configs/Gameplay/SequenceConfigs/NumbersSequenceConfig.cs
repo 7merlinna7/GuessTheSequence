@@ -1,7 +1,8 @@
+using Assets._Project.Develop.Runtime.Configs.Gameplay.SequenceConfigs;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets._Project.Develop.Runtime.Utilities.Configs
+namespace Assets._Project.Develop.Runtime.Utilities.Configs.Gameplay.SequenceConfigs
 {
 
     [CreateAssetMenu(menuName = "Configs/Gameplay/NumbersSequenceConfig", fileName = "NumbersSequenceConfig")]

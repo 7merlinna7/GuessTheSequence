@@ -1,4 +1,4 @@
-﻿using Assets._Project.Develop.Runtime.Utilities.Configs;
+﻿using Assets._Project.Develop.Runtime.Configs.Gameplay.SequenceConfigs;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

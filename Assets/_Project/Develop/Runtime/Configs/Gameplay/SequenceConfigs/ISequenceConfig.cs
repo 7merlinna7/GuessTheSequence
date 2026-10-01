@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets._Project.Develop.Runtime.Utilities.Configs
+namespace Assets._Project.Develop.Runtime.Configs.Gameplay.SequenceConfigs
 {
     public interface ISequenceConfig
     {

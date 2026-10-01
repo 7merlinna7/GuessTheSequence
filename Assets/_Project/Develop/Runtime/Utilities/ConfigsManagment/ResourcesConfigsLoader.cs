@@ -1,5 +1,7 @@
+using Assets._Project.Develop.Runtime.Configs.Gameplay.SequenceConfigs;
+using Assets._Project.Develop.Runtime.Configs.Meta.Wallet;
 using Assets._Project.Develop.Runtime.Utilites.AssetsManagment;
-using Assets._Project.Develop.Runtime.Utilities.Configs;
+using Assets._Project.Develop.Runtime.Utilities.Configs.Gameplay.SequenceConfigs;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,6 +16,7 @@ namespace Assets._Project.Develop.Runtime.Utilites.ConfigsManagment
         {
             { typeof(NumbersSequenceConfig),"Configs/NumbersSequenceConfig" },
             { typeof(LettersSequenceConfig),"Configs/LettersSequenceConfig" },
+            { typeof(StartWalletConfig),"Configs/StartWalletConfig"}
         };
 
         public ResourcesConfigsLoader(ResourcesAssetsLoader resources)

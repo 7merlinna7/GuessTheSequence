@@ -1,9 +1,10 @@
-﻿using Assets._Project.Develop.Runtime.Gameplay.GamemodeFeature;
+﻿using Assets._Project.Develop.Runtime.Configs.Gameplay.SequenceConfigs;
+using Assets._Project.Develop.Runtime.Gameplay.GamemodeFeature;
 using Assets._Project.Develop.Runtime.Gameplay.SequenceFeature;
 using Assets._Project.Develop.Runtime.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Utilites.ConfigsManagment;
-using Assets._Project.Develop.Runtime.Utilities.Configs;
+using Assets._Project.Develop.Runtime.Utilities.Configs.Gameplay.SequenceConfigs;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 using System;
 using System.Collections;
