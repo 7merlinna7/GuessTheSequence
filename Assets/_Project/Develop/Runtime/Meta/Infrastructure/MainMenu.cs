@@ -1,8 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Gameplay.Infrastructure;
-using Assets._Project.Develop.Runtime.Infrastructure.DI;
-using Assets._Project.Develop.Runtime.Utilites.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
-using Assets._Project.Develop.Runtime.Utilities.LoadingScreen;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 using System.Collections;
 using UnityEngine;
@@ -11,12 +8,13 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 {
     public class MainMenu 
     {
-        public void Start(DIContainer container)
+        public void Start(SceneSwitcherService sceneSwitcherService,ICoroutinesPerformer coroutinesPerformer)
         {
-            container.Resolve<ICoroutinesPerformer>().StartPerform(WaitForPlayerInput(container));
+
+            coroutinesPerformer.StartPerform(WaitForPlayerInput(sceneSwitcherService));
         }
 
-        private IEnumerator WaitForPlayerInput(DIContainer container)
+        private IEnumerator WaitForPlayerInput(SceneSwitcherService sceneSwitcherService)
         {
             Debug.Log("Для выбора режиа нажмите 1 - Цифры, 2 - Буквы");
             yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Alpha2));
@@ -24,30 +22,19 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 Debug.Log("Режим цифры");
-                yield return SwitchToScene(container,Scenes.Gameplay,SequenceType.Numbers);
+                yield return SwitchToScene(Scenes.Gameplay,SequenceType.Numbers,sceneSwitcherService);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
                 Debug.Log("Режим буквы");
 
-                yield return SwitchToScene(container, Scenes.Gameplay, SequenceType.Letters);
+                yield return SwitchToScene(Scenes.Gameplay, SequenceType.Letters,sceneSwitcherService);
             }
         }
 
-        private IEnumerator SwitchToScene(DIContainer container, string scene, SequenceType sequenceType)
+        private IEnumerator SwitchToScene(string scene, SequenceType sequenceType,SceneSwitcherService sceneSwitcherService)
         {
-            SceneSwitcherService sceneSwitcherService = container.Resolve<SceneSwitcherService>();
-            ILoadingScreen loadingScreen = container.Resolve<ILoadingScreen>();
-
-            loadingScreen.Show();
-
-            yield return container.Resolve<ConfigsProviderService>().LoadAsync();
-
             GameplayInputArgs gameplayInputArgs = new GameplayInputArgs(sequenceType);
-            yield return new WaitForSeconds(1f);
-
-            loadingScreen.Hide();
-
             yield return sceneSwitcherService.ProcessSwitchTo(scene, gameplayInputArgs);
         }
     }
