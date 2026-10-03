@@ -21,15 +21,13 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 
         public override IEnumerator Initialize()
         {
-            Debug.Log("Инициализация меню");
-            _mainMenu = new MainMenu();
+            _mainMenu = _container.Resolve<MainMenu>();
 
             yield break;
         }
 
         public override void Run()
         {
-            Debug.Log("Старт сцены меню");
             _mainMenu.Start(_container.Resolve<SceneSwitcherService>(),_container.Resolve<ICoroutinesPerformer>());
         }
     }

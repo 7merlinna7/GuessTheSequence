@@ -6,7 +6,10 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
     {
         public static void Process(DIContainer container)
         {
-
+            container.RegisterAsSingle(CreateMainMenu);
         }
+
+        private static MainMenu CreateMainMenu(DIContainer container)
+            => new MainMenu();
     }
 }

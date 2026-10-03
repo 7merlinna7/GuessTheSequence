@@ -54,7 +54,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         {
             Debug.Log("Press SPACE to exit in main menu");
             yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
-            Debug.Log("main menue");
             yield return SwitchToMainMenue();
         }
 
