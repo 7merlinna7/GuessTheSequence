@@ -1,12 +1,8 @@
-﻿using Assets._Project.Develop.Runtime.Gameplay.Infrastructure;
-using Assets._Project.Develop.Runtime.Infrastructure;
+﻿using Assets._Project.Develop.Runtime.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
-using Assets._Project.Develop.Runtime.Utilites.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
-using Assets._Project.Develop.Runtime.Utilities.LoadingScreen;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
@@ -25,16 +21,14 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 
         public override IEnumerator Initialize()
         {
-            Debug.Log("Инициализация меню");
-            _mainMenu = new MainMenu();
+            _mainMenu = _container.Resolve<MainMenu>();
 
             yield break;
         }
 
         public override void Run()
         {
-            Debug.Log("Старт сцены меню");
-            _mainMenu.Start(_container);
+            _mainMenu.Start(_container.Resolve<SceneSwitcherService>(),_container.Resolve<ICoroutinesPerformer>());
         }
     }
 }

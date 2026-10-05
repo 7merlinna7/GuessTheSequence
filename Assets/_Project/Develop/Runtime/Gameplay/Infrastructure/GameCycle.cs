@@ -1,8 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Gameplay.GamemodeFeature;
-using Assets._Project.Develop.Runtime.Infrastructure.DI;
-using Assets._Project.Develop.Runtime.Utilites.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
-using Assets._Project.Develop.Runtime.Utilities.LoadingScreen;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 using System.Collections;
 using UnityEngine;
@@ -12,15 +9,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
     public class GameCycle 
     {
         private Gamemode _gamemode;
-        private DIContainer _container;
         ICoroutinesPerformer _coroutinesPerformer;
+        SceneSwitcherService _sceneSwitcherService;
 
-        public GameCycle(DIContainer container, Gamemode gamemode)
+        public GameCycle(ICoroutinesPerformer coroutinesPerformer, SceneSwitcherService sceneSwitcherService, Gamemode gamemode)
         {
-            _container = container;
             _gamemode = gamemode;
-
-            _coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
+            _coroutinesPerformer = coroutinesPerformer;
+            _sceneSwitcherService = sceneSwitcherService;
         }
 
         public void Start()
@@ -58,7 +54,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         {
             Debug.Log("Press SPACE to exit in main menu");
             yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
-            Debug.Log("main menue");
             yield return SwitchToMainMenue();
         }
 
@@ -71,13 +66,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
         public IEnumerator SwitchToMainMenue()
         {
-            SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
-            ILoadingScreen loadingScreen = _container.Resolve<ILoadingScreen>();
-
-            loadingScreen.Show();
-            yield return new WaitForSeconds(1);
-            loadingScreen.Hide();
-            yield return sceneSwitcherService.ProcessSwitchTo(Scenes.MainMenue);
+            yield return _sceneSwitcherService.ProcessSwitchTo(Scenes.MainMenue);
         }
     }
 }

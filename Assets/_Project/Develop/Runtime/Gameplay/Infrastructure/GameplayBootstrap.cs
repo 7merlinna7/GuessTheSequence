@@ -32,10 +32,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
         public override IEnumerator Initialize()
         {
-            SequenceFactory sequenceFactory = new SequenceFactory(GetSequenceConfig(_container));
-            Gamemode gamemode = new Gamemode(sequenceFactory.Create());
-
-            _gameCycle = new GameCycle(_container,gamemode);
+            _gameCycle = _container.Resolve<GameCycle>();
             yield break;
         }
 
@@ -49,19 +46,5 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             _gameCycle?.Update();
         }
 
-        private ISequenceConfig GetSequenceConfig(DIContainer container)
-        {
-            ISequenceConfig config = null;
-            switch (_inputArgs.LevelType)
-            {
-                case SequenceType.Letters:
-                    config = _container.Resolve<ConfigsProviderService>().GetConfig<LettersSequenceConfig>();
-                    break;
-                case SequenceType.Numbers:
-                    config = _container.Resolve<ConfigsProviderService>().GetConfig<NumbersSequenceConfig>();
-                    break;
-            }
-            return config;
-        }
     }
 }

@@ -52,7 +52,6 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
 
             loadingScreen.Hide();
 
-            //MoveToNextScene
             yield return sceneSwitcherService.ProcessSwitchTo(Scenes.MainMenue);
         }
     }
