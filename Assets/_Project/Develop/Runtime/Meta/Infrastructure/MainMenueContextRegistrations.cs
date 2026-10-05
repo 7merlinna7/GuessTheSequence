@@ -1,4 +1,9 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics;
+using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
+using Assets._Project.Develop.Runtime.Utilities.DataManagement;
+using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 
 namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 {
@@ -10,6 +15,9 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
         }
 
         private static MainMenu CreateMainMenu(DIContainer container)
-            => new MainMenu();
+            => new MainMenu(
+                container.Resolve<SceneSwitcherService>(),
+                container.Resolve<ICoroutinesPerformer>(),
+                container.Resolve<ISaveLoadService>());
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Gameplay.GamemodeFeature;
+using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 using System.Collections;
@@ -9,14 +10,28 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
     public class GameCycle 
     {
         private Gamemode _gamemode;
-        ICoroutinesPerformer _coroutinesPerformer;
-        SceneSwitcherService _sceneSwitcherService;
+        private WalletService _wallet;
+        private ICoroutinesPerformer _coroutinesPerformer;
+        private SceneSwitcherService _sceneSwitcherService;
 
-        public GameCycle(ICoroutinesPerformer coroutinesPerformer, SceneSwitcherService sceneSwitcherService, Gamemode gamemode)
+        private int _winWalletUpdateBalance;
+        private int _defeatWalletUpdateBalance;
+
+
+        public GameCycle(
+            ICoroutinesPerformer coroutinesPerformer,
+            SceneSwitcherService sceneSwitcherService,
+            Gamemode gamemode,
+            WalletService walletService
+            ,int WinWalletUpdateBalance, int DefeatWalletUpdateBalance)
         {
             _gamemode = gamemode;
+            _wallet = walletService;
             _coroutinesPerformer = coroutinesPerformer;
             _sceneSwitcherService = sceneSwitcherService;
+
+            _defeatWalletUpdateBalance = DefeatWalletUpdateBalance;
+            _winWalletUpdateBalance = WinWalletUpdateBalance;
         }
 
         public void Start()
@@ -41,12 +56,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         private void Defeat()
         {
             Debug.Log("Defeat");
+            _wallet.Spend(CurrencyTypes.Gold,_defeatWalletUpdateBalance);
+            Debug.Log("Gold " + _wallet.GetCurrency(CurrencyTypes.Gold).Value);
             _coroutinesPerformer.StartPerform(ContinueToPlayAgain());
         }
 
         private void Win()
         {
             Debug.Log("Win");
+            _wallet.Add(CurrencyTypes.Gold,_winWalletUpdateBalance);
+            Debug.Log("Gold "+ _wallet.GetCurrency(CurrencyTypes.Gold).Value);
             _coroutinesPerformer.StartPerform(ContinueToMainMenu());
         }
 

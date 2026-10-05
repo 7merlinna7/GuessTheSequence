@@ -1,9 +1,12 @@
-﻿using Assets._Project.Develop.Runtime.Gameplay.GamemodeFeature;
+﻿using Assets._Project.Develop.Runtime.Configs.Gameplay.SequenceConfigs;
+using Assets._Project.Develop.Runtime.Configs.Meta.Wallet;
+using Assets._Project.Develop.Runtime.Gameplay.GamemodeFeature;
 using Assets._Project.Develop.Runtime.Gameplay.SequenceFeature;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Utilites.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
-using Assets._Project.Develop.Runtime.Utilities.Configs;
+using Assets._Project.Develop.Runtime.Utilities.Configs.Gameplay.SequenceConfigs;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
@@ -40,6 +43,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             => new Gamemode(c.Resolve<SequenceFactory>().Create());
 
         private static GameCycle CreateGameCycle(DIContainer c)
-            => new GameCycle(c.Resolve<ICoroutinesPerformer>(), c.Resolve<SceneSwitcherService>(),c.Resolve<Gamemode>());
+        {
+            WalletSettingsConfig config = c.Resolve<ConfigsProviderService>().GetConfig<WalletSettingsConfig>();
+
+           return new GameCycle(
+                c.Resolve<ICoroutinesPerformer>(),
+                c.Resolve<SceneSwitcherService>(),
+                c.Resolve<Gamemode>(),
+                c.Resolve<WalletService>(),
+                config.WalletBalanceWinUpdate,
+                config.WalletBalanceDefeatUpdate);
+        }
     }
 }
