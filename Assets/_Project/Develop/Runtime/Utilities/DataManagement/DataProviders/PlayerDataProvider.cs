@@ -20,9 +20,11 @@ namespace Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders
 
         protected override PlayerData GetOriginData()
         {
+
             return new PlayerData()
             {
-                WalletData = InitWalletData()
+                WalletData = InitWalletData(),
+                vvv
             };
         }
 

@@ -1,4 +1,5 @@
-﻿using Assets._Project.Develop.Runtime.Configs.Meta.Wallet;
+﻿using Assets._Project.Develop.Runtime.Configs.Meta.PlayerStatistics;
+using Assets._Project.Develop.Runtime.Configs.Meta.Wallet;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
@@ -45,7 +46,11 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
             container.RegisterAsSingle(CreatePlayerStatisticsService).NonLazy();
         }
 
-        private static PlayerStatisticsService CreatePlayerStatisticsService(DIContainer c) => new PlayerStatisticsService(0, 0, c.Resolve<PlayerDataProvider>());
+        private static PlayerStatisticsService CreatePlayerStatisticsService(DIContainer c)
+        {
+            PlayerStatisticsStartConfig config = c.Resolve<ConfigsProviderService>().GetConfig<PlayerStatisticsStartConfig>();
+            return new PlayerStatisticsService(config.WinsCount, config.DefeatsCount, config.ResetStatisticsPrice, c.Resolve<PlayerDataProvider>());
+        }
 
         private static PlayerDataProvider CreatePlayerDataProvider(DIContainer c)
             => new PlayerDataProvider(c.Resolve<ISaveLoadService>(),c.Resolve<ConfigsProviderService>());

@@ -39,7 +39,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
         private IEnumerator WaitForPlayerInput(SceneSwitcherService sceneSwitcherService)
         {
             Debug.Log("Для выбора режиа нажмите 1 - Цифры, 2 - Буквы");
-            Debug.Log("Для просмотра статистики нажмите 3, для сохранения - S");
+            Debug.Log("Статистика - 3, сохранение- S, сброс - R");
 
             yield return new WaitUntil(() => Input.anyKeyDown);
 
@@ -65,6 +65,18 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
                 Debug.Log("Save");
                 _coroutinesPerformer.StartPerform(_dataProvider.Save());
                 Start();
+            }
+            else if(Input.GetKeyDown(KeyCode.R))
+            {
+                if (_wallet.Enough(CurrencyTypes.Gold, _playerStatistics.ResetStatisticsPrice))
+                {
+                    _playerStatistics.Reset();
+                    _wallet.Spend(CurrencyTypes.Gold,_playerStatistics.ResetStatisticsPrice);
+                }
+                else
+                {
+                    Debug.Log("Не достаточно золота для сброса статистики");
+                }
             }
             else
             {

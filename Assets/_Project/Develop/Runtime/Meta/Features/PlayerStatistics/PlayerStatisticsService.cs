@@ -1,7 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Utilities.DataManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
-using System.Collections;
-using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics
 {
@@ -9,14 +7,16 @@ namespace Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics
     {
         public int WinsCount { get; private set; }
         public int DefeatsCount { get; private set; }
+        public int ResetStatisticsPrice { get; private set; }
 
         public void AddWin() => WinsCount++;
         public void AddDefeat() => DefeatsCount++;
 
-        public PlayerStatisticsService(int winsCount, int defeatsCount,PlayerDataProvider playerDataProvider)
+        public PlayerStatisticsService(int winsCount, int defeatsCount,int resetStatisticsPrice, PlayerDataProvider playerDataProvider)
         {
             WinsCount = winsCount;
             DefeatsCount = defeatsCount;
+
             playerDataProvider.RegisterWriter(this);
             playerDataProvider.RegisterReader(this);
         }

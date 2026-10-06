@@ -60,8 +60,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         private void Defeat()
         {
             Debug.Log("Defeat");
-            _wallet.Spend(CurrencyTypes.Gold,_defeatWalletUpdateBalance);
-            _playerStatistics.AddDefeat();
+            if (_wallet.Enough(CurrencyTypes.Gold, _defeatWalletUpdateBalance))
+                _wallet.Spend(CurrencyTypes.Gold, _defeatWalletUpdateBalance);
+            else
+                _wallet.SpendAll(CurrencyTypes.Gold);
+
+                _playerStatistics.AddDefeat();
             _coroutinesPerformer.StartPerform(ContinueToPlayAgain());
         }
 

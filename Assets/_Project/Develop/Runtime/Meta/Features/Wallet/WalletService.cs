@@ -22,6 +22,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Features.Wallet
 
         public IReadonlyVariable<int> GetCurrency(CurrencyTypes type) => _currencies[type];
 
+        public void SpendAll(CurrencyTypes currencyType) => _currencies[currencyType].Value = 0;
         public bool Enough(CurrencyTypes type, int amount)
         {
             if (amount < 0) 
