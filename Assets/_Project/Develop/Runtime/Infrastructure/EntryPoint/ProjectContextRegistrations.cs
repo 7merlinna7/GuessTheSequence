@@ -48,8 +48,7 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
 
         private static PlayerStatisticsService CreatePlayerStatisticsService(DIContainer c)
         {
-            PlayerStatisticsStartConfig config = c.Resolve<ConfigsProviderService>().GetConfig<PlayerStatisticsStartConfig>();
-            return new PlayerStatisticsService(config.WinsCount, config.DefeatsCount, config.ResetStatisticsPrice, c.Resolve<PlayerDataProvider>());
+            return new PlayerStatisticsService(c.Resolve<PlayerDataProvider>());
         }
 
         private static PlayerDataProvider CreatePlayerDataProvider(DIContainer c)

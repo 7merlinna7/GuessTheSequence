@@ -1,4 +1,5 @@
-﻿using Assets._Project.Develop.Runtime.Configs.Meta.Wallet;
+﻿using Assets._Project.Develop.Runtime.Configs.Meta.PlayerStatistics;
+using Assets._Project.Develop.Runtime.Configs.Meta.Wallet;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Utilites.ConfigsManagment;
 using System;
@@ -20,11 +21,14 @@ namespace Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders
 
         protected override PlayerData GetOriginData()
         {
+            PlayerStatisticsStartConfig playerStatisticsConfig = _configsProviderService.GetConfig<PlayerStatisticsStartConfig>();
 
             return new PlayerData()
             {
                 WalletData = InitWalletData(),
-                vvv
+                WinsCountData = playerStatisticsConfig.WinsCount,
+                DefeatCountData = playerStatisticsConfig.DefeatsCount,
+                ResetStatisticsPriceData = playerStatisticsConfig.ResetStatisticsPrice
             };
         }
 

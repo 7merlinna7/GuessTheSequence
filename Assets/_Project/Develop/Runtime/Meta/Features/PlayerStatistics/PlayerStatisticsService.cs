@@ -12,11 +12,8 @@ namespace Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics
         public void AddWin() => WinsCount++;
         public void AddDefeat() => DefeatsCount++;
 
-        public PlayerStatisticsService(int winsCount, int defeatsCount,int resetStatisticsPrice, PlayerDataProvider playerDataProvider)
+        public PlayerStatisticsService(PlayerDataProvider playerDataProvider)
         {
-            WinsCount = winsCount;
-            DefeatsCount = defeatsCount;
-
             playerDataProvider.RegisterWriter(this);
             playerDataProvider.RegisterReader(this);
         }
