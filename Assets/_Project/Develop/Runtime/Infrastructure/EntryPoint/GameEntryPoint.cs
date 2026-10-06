@@ -44,7 +44,7 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
             yield return playerDataProvider.Exists(result => isPlayerDataSaveExists = result);
 
             if (isPlayerDataSaveExists)
-                playerDataProvider.Load();
+               yield return playerDataProvider.Load();
             else
                 playerDataProvider.Reset();
 

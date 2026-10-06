@@ -3,6 +3,7 @@ using Assets._Project.Develop.Runtime.Configs.Meta.Wallet;
 using Assets._Project.Develop.Runtime.Gameplay.GamemodeFeature;
 using Assets._Project.Develop.Runtime.Gameplay.SequenceFeature;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Utilites.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
@@ -51,6 +52,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
                 c.Resolve<SceneSwitcherService>(),
                 c.Resolve<Gamemode>(),
                 c.Resolve<WalletService>(),
+                c.Resolve<PlayerStatisticsService>(),
                 config.WalletBalanceWinUpdate,
                 config.WalletBalanceDefeatUpdate);
         }

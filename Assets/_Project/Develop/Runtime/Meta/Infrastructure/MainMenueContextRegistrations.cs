@@ -3,6 +3,7 @@ using Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement;
+using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 
 namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
@@ -18,6 +19,8 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
             => new MainMenu(
                 container.Resolve<SceneSwitcherService>(),
                 container.Resolve<ICoroutinesPerformer>(),
-                container.Resolve<ISaveLoadService>());
+                container.Resolve<PlayerDataProvider>(),
+                container.Resolve<WalletService>(),
+                container.Resolve<PlayerStatisticsService>());
     }
 }

@@ -2,7 +2,7 @@
 using Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
-using Assets._Project.Develop.Runtime.Utilities.DataManagement;
+using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 using System.Collections;
 using UnityEngine;
@@ -13,24 +13,27 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
     {
         private SceneSwitcherService _sceneSwitcherService;
         private ICoroutinesPerformer _coroutinesPerformer;
-        private ISaveLoadService _saveLoadService;
-        private Coroutine _playerInputCoroutine;
-        private PlayerData _playerData;
+        private PlayerDataProvider _dataProvider;
+        private WalletService _wallet;
+        private PlayerStatisticsService _playerStatistics;
 
         public MainMenu(
             SceneSwitcherService sceneSwitcherService,
             ICoroutinesPerformer coroutinesPerformer,
-            ISaveLoadService saveLoadService)
+            PlayerDataProvider dataProvider,
+            WalletService walletService,
+            PlayerStatisticsService playerStatistics)
         {
             _sceneSwitcherService = sceneSwitcherService;
             _coroutinesPerformer = coroutinesPerformer;
-            _saveLoadService = saveLoadService;
-            _playerData = new PlayerData();
+            _dataProvider = dataProvider;
+            _wallet = walletService;
+            _playerStatistics = playerStatistics;
         }
 
         public void Start()
         {
-            _playerInputCoroutine = _coroutinesPerformer.StartPerform(WaitForPlayerInput(_sceneSwitcherService));
+            _coroutinesPerformer.StartPerform(WaitForPlayerInput(_sceneSwitcherService));
         }
 
         private IEnumerator WaitForPlayerInput(SceneSwitcherService sceneSwitcherService)
@@ -53,14 +56,14 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
             }
             else if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                Debug.Log($"Побед: {_playerData.WinsCountData},Поражений: {_playerData.DefeatCountData}");
-                Debug.Log("Золота в наличии: "+ _playerData.WalletData[CurrencyTypes.Gold]);
+                Debug.Log($"Побед: {_playerStatistics.WinsCount},Поражений: {_playerStatistics.DefeatsCount}");
+                Debug.Log("Золота в наличии: "+ _wallet.GetCurrency(CurrencyTypes.Gold).Value);
+                Start();
             }
             else if(Input.GetKeyDown(KeyCode.S))
             {
-                //не сохраняет дату кошелька исправить
                 Debug.Log("Save");
-                _coroutinesPerformer.StartPerform(_saveLoadService.Save(_playerData));
+                _coroutinesPerformer.StartPerform(_dataProvider.Save());
                 Start();
             }
             else

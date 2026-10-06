@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Gameplay.GamemodeFeature;
+using Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
@@ -16,19 +17,22 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
         private int _winWalletUpdateBalance;
         private int _defeatWalletUpdateBalance;
+        private PlayerStatisticsService _playerStatistics;
 
 
         public GameCycle(
             ICoroutinesPerformer coroutinesPerformer,
             SceneSwitcherService sceneSwitcherService,
             Gamemode gamemode,
-            WalletService walletService
+            WalletService walletService,
+            PlayerStatisticsService playerStatistics
             ,int WinWalletUpdateBalance, int DefeatWalletUpdateBalance)
         {
             _gamemode = gamemode;
             _wallet = walletService;
             _coroutinesPerformer = coroutinesPerformer;
             _sceneSwitcherService = sceneSwitcherService;
+            _playerStatistics = playerStatistics;
 
             _defeatWalletUpdateBalance = DefeatWalletUpdateBalance;
             _winWalletUpdateBalance = WinWalletUpdateBalance;
@@ -57,7 +61,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         {
             Debug.Log("Defeat");
             _wallet.Spend(CurrencyTypes.Gold,_defeatWalletUpdateBalance);
-            Debug.Log("Gold " + _wallet.GetCurrency(CurrencyTypes.Gold).Value);
+            _playerStatistics.AddDefeat();
             _coroutinesPerformer.StartPerform(ContinueToPlayAgain());
         }
 
@@ -65,7 +69,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         {
             Debug.Log("Win");
             _wallet.Add(CurrencyTypes.Gold,_winWalletUpdateBalance);
-            Debug.Log("Gold "+ _wallet.GetCurrency(CurrencyTypes.Gold).Value);
+            _playerStatistics.AddWin();
             _coroutinesPerformer.StartPerform(ContinueToMainMenu());
         }
 
