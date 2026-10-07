@@ -10,6 +10,5 @@ namespace Assets._Project.Develop.Runtime.Utilities.DataManagement
         public Dictionary<CurrencyTypes, int> WalletData;
         public int WinsCountData;
         public int DefeatCountData;
-        public int ResetStatisticsPriceData;
     }
 }

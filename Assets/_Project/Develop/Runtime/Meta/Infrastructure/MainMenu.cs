@@ -38,7 +38,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 
         private IEnumerator WaitForPlayerInput(SceneSwitcherService sceneSwitcherService)
         {
-            Debug.Log("Для выбора режиа нажмите 1 - Цифры, 2 - Буквы");
+            Debug.Log("Для выбора режима нажмите 1 - Цифры, 2 - Буквы");
             Debug.Log("Статистика - 3, сохранение- S, сброс - R");
 
             yield return new WaitUntil(() => Input.anyKeyDown);
@@ -58,32 +58,20 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
             {
                 Debug.Log($"Побед: {_playerStatistics.WinsCount},Поражений: {_playerStatistics.DefeatsCount}");
                 Debug.Log("Золота в наличии: "+ _wallet.GetCurrency(CurrencyTypes.Gold).Value);
+                yield return null;
                 Start();
             }
             else if(Input.GetKeyDown(KeyCode.S))
             {
                 Debug.Log("Save");
                 _coroutinesPerformer.StartPerform(_dataProvider.Save());
+                yield return null;
                 Start();
-            }
-            else if(Input.GetKeyDown(KeyCode.R))
-            {
-                if (_wallet.Enough(CurrencyTypes.Gold, _playerStatistics.ResetStatisticsPrice))//Вынести в отдельный метод
-                {
-                    _playerStatistics.Reset();
-                    _wallet.Spend(CurrencyTypes.Gold,_playerStatistics.ResetStatisticsPrice);//(В отдельный класс \ сервис)
-                    Start();
-                }
-                else
-                {
-                    Debug.Log("Не достаточно золота для сброса статистики");
-                    Start();
-                }
             }
             else
             {
-                Start();
-                yield break;
+                yield return null;// Нужно ли при вызове старта обновлять кадр? если заново запустить в этом же кадре то будет считаться что кнопка все еще нажата?
+                Start();           // Как показывает практика вроде да
             }
         }
 

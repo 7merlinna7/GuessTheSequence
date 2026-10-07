@@ -7,7 +7,6 @@ namespace Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics
     {
         public int WinsCount { get; private set; }
         public int DefeatsCount { get; private set; }
-        public int ResetStatisticsPrice { get; private set; }
 
         public void AddWin() => WinsCount++;
         public void AddDefeat() => DefeatsCount++;
@@ -28,14 +27,12 @@ namespace Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics
         {
             WinsCount = data.WinsCountData;
             DefeatsCount = data.DefeatCountData;
-            ResetStatisticsPrice = data.ResetStatisticsPriceData;
         }
 
         public void WriteTo(PlayerData data)
         {
             data.WinsCountData = WinsCount;
             data.DefeatCountData = DefeatsCount;
-            data.ResetStatisticsPriceData = ResetStatisticsPrice;
         }
     }
 }

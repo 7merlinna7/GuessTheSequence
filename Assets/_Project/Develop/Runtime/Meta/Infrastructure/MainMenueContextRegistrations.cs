@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Meta.Features;
 using Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
@@ -13,14 +14,21 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
         public static void Process(DIContainer container)
         {
             container.RegisterAsSingle(CreateMainMenu);
+            container.RegisterAsSingle(CreatePurchaseResetStatisticChecker);
         }
 
-        private static MainMenu CreateMainMenu(DIContainer container)
+        private static PurchaseResetStatisticChecker CreatePurchaseResetStatisticChecker(DIContainer c)
+            => new PurchaseResetStatisticChecker(
+                c.Resolve<ICoroutinesPerformer>(),
+                c.Resolve<WalletService>(),
+                c.Resolve<PlayerStatisticsService>());
+
+        private static MainMenu CreateMainMenu(DIContainer c)
             => new MainMenu(
-                container.Resolve<SceneSwitcherService>(),
-                container.Resolve<ICoroutinesPerformer>(),
-                container.Resolve<PlayerDataProvider>(),
-                container.Resolve<WalletService>(),
-                container.Resolve<PlayerStatisticsService>());
+                c.Resolve<SceneSwitcherService>(),
+                c.Resolve<ICoroutinesPerformer>(),
+                c.Resolve<PlayerDataProvider>(),
+                c.Resolve<WalletService>(),
+                c.Resolve<PlayerStatisticsService>());
     }
 }

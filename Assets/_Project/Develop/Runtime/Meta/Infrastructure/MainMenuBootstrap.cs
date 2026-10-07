@@ -1,10 +1,8 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
-using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
-using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
+using Assets._Project.Develop.Runtime.Meta.Features;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 using System.Collections;
-using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 {
@@ -12,7 +10,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
     {
         private DIContainer _container;
         private MainMenu _mainMenu;
-        private WalletService _wallet;
+        private PurchaseResetStatisticChecker _purchaseChecker;
 
         public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
         {
@@ -24,7 +22,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
         public override IEnumerator Initialize()
         {
             _mainMenu = _container.Resolve<MainMenu>();
-            _wallet = _container.Resolve<WalletService>();
+            _purchaseChecker = _container.Resolve<PurchaseResetStatisticChecker>();
 
             yield break;
         }
@@ -32,6 +30,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
         public override void Run()
         {
             _mainMenu.Start();
+            _purchaseChecker.Start();
         }
     }
 }

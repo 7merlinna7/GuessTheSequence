@@ -27,8 +27,7 @@ namespace Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders
             {
                 WalletData = InitWalletData(),
                 WinsCountData = playerStatisticsConfig.WinsCount,
-                DefeatCountData = playerStatisticsConfig.DefeatsCount,
-                ResetStatisticsPriceData = playerStatisticsConfig.ResetStatisticsPrice
+                DefeatCountData = playerStatisticsConfig.DefeatsCount
             };
         }
 
