@@ -68,10 +68,9 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
             }
             else if(Input.GetKeyDown(KeyCode.R))
             {
-                Debug.Log(_playerStatistics.ResetStatisticsPrice);
                 if (_wallet.Enough(CurrencyTypes.Gold, _playerStatistics.ResetStatisticsPrice))//Вынести в отдельный метод
                 {
-                    _playerStatistics.Reset();.//ПОЧЕМУ 0
+                    _playerStatistics.Reset();
                     _wallet.Spend(CurrencyTypes.Gold,_playerStatistics.ResetStatisticsPrice);//(В отдельный класс \ сервис)
                     Start();
                 }
