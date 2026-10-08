@@ -70,8 +70,8 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
             }
             else
             {
-                yield return null;// Нужно ли при вызове старта обновлять кадр? если заново запустить в этом же кадре то будет считаться что кнопка все еще нажата?
-                Start();           // Как показывает практика вроде да
+                yield return null;
+                Start();           
             }
         }
 

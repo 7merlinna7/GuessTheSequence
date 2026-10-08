@@ -27,7 +27,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Features
             _coroutinesPerformer.StartPerform(WaitForPlayerInput());
         }
 
-        private IEnumerator WaitForPlayerInput() //Бае что запускается +1 при каждом переходе на сцену меню
+        private IEnumerator WaitForPlayerInput() 
         {
             yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.R));
 
