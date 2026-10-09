@@ -19,7 +19,8 @@ namespace Assets._Project.Develop.Runtime.Utilites.ConfigsManagment
             { typeof(LettersSequenceConfig),"Configs/LettersSequenceConfig" },
             { typeof(StartWalletConfig),"Configs/StartWalletConfig"},
             { typeof(WalletSettingsConfig),"Configs/WalletSettingsConfig"},
-            { typeof(PlayerStatisticsStartConfig),"Configs/PlayerStatisticsStartConfig"}
+            { typeof(PlayerStatisticsStartConfig),"Configs/PlayerStatisticsStartConfig"},
+            { typeof(CurrencyIconsConfig),"Configs/CurrencyIconsConfig"}
         };
 
         public ResourcesConfigsLoader(ResourcesAssetsLoader resources)
