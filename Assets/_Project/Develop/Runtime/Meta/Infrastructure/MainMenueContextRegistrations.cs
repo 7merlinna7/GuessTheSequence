@@ -2,10 +2,13 @@
 using Assets._Project.Develop.Runtime.Meta.Features;
 using Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.UI.MainMenue;
+using Assets._Project.Develop.Runtime.Utilites.AssetsManagment;
 using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
+using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 {
@@ -15,6 +18,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
         {
             container.RegisterAsSingle(CreateMainMenu);
             container.RegisterAsSingle(CreatePurchaseResetStatisticChecker);
+            container.RegisterAsSingle(CreateMainMenueUIRoot).NonLazy();
         }
 
         private static PurchaseResetStatisticChecker CreatePurchaseResetStatisticChecker(DIContainer c)
@@ -30,5 +34,13 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
                 c.Resolve<PlayerDataProvider>(),
                 c.Resolve<WalletService>(),
                 c.Resolve<PlayerStatisticsService>());
+
+        private static MainMenueUIRoot CreateMainMenueUIRoot(DIContainer c)
+        {
+            ResourcesAssetsLoader assetsLoader = c.Resolve<ResourcesAssetsLoader>();
+            MainMenueUIRoot MainMenueUIRootPrefab = assetsLoader.Load<MainMenueUIRoot>("UI/MainMenue/MainMenueUIRoot");
+
+            return Object.Instantiate(MainMenueUIRootPrefab);
+        }
     }
 }
