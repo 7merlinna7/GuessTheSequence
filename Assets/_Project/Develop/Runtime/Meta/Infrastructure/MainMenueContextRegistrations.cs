@@ -2,10 +2,10 @@
 using Assets._Project.Develop.Runtime.Meta.Features;
 using Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.MainMenue;
 using Assets._Project.Develop.Runtime.Utilites.AssetsManagment;
 using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
-using Assets._Project.Develop.Runtime.Utilities.DataManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 using UnityEngine;
@@ -19,6 +19,8 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
             container.RegisterAsSingle(CreateMainMenu);
             container.RegisterAsSingle(CreatePurchaseResetStatisticChecker);
             container.RegisterAsSingle(CreateMainMenueUIRoot).NonLazy();
+            container.RegisterAsSingle(CreateMainMenuePresentersFactory);
+            container.RegisterAsSingle(CreateMainMenueScreenPresenter).NonLazy();
         }
 
         private static PurchaseResetStatisticChecker CreatePurchaseResetStatisticChecker(DIContainer c)
@@ -41,6 +43,25 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
             MainMenueUIRoot MainMenueUIRootPrefab = assetsLoader.Load<MainMenueUIRoot>("UI/MainMenue/MainMenueUIRoot");
 
             return Object.Instantiate(MainMenueUIRootPrefab);
+        }
+
+        private static MainMenuePresentersFactory CreateMainMenuePresentersFactory(DIContainer c)
+        {
+            return new MainMenuePresentersFactory(c);
+        }
+
+        private static MainMenueScreenPresenter CreateMainMenueScreenPresenter(DIContainer c)
+        {
+            MainMenueUIRoot uiRoot = c.Resolve<MainMenueUIRoot>();
+            MainMenueScreenView view = c
+                .Resolve<ViewsFactory>()
+                .Create<MainMenueScreenView>(ViewIDs.MainMenueScreen, uiRoot.HUDLayer);
+
+            MainMenueScreenPresenter presenter = c
+                .Resolve<MainMenuePresentersFactory>()
+                .CreateMainMenueScreen(view);
+
+            return presenter;
         }
     }
 }

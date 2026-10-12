@@ -3,5 +3,7 @@
     public class ViewIDs
     {
         public const string CurrencyView = nameof(CurrencyView);
+        public const string MainMenueScreen = nameof(MainMenueScreen);
+        public const string TestPopup = nameof(TestPopup);
     }
 }

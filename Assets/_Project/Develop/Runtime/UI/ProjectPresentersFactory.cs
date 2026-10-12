@@ -3,6 +3,7 @@ using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.UI.CommonViews;
 using Assets._Project.Develop.Runtime.UI.CommonViews.Wallet;
+using Assets._Project.Develop.Runtime.UI.Core.TestPopup;
 using Assets._Project.Develop.Runtime.Utilites.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 
@@ -28,5 +29,8 @@ namespace Assets._Project.Develop.Runtime.UI
                 _container.Resolve<ConfigsProviderService>().GetConfig<CurrencyIconsConfig>(),
                 view);
         }
+
+        public TestPopupPresenter CreateTestPopupPresenter(TestPopupView view)
+            => new TestPopupPresenter(view);
     }
 }
