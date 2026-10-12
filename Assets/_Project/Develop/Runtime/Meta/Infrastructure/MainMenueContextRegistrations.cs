@@ -2,6 +2,7 @@
 using Assets._Project.Develop.Runtime.Meta.Features;
 using Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.UI;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.MainMenue;
 using Assets._Project.Develop.Runtime.Utilites.AssetsManagment;
@@ -21,6 +22,15 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
             container.RegisterAsSingle(CreateMainMenueUIRoot).NonLazy();
             container.RegisterAsSingle(CreateMainMenuePresentersFactory);
             container.RegisterAsSingle(CreateMainMenueScreenPresenter).NonLazy();
+            container.RegisterAsSingle(CreateMainMenuePopupService);
+        }
+
+        private static MainMenuePopupService CreateMainMenuePopupService(DIContainer c)
+        {
+            return new MainMenuePopupService(
+                c.Resolve<ViewsFactory>(),
+                c.Resolve<ProjectPresentersFactory>(),
+                c.Resolve<MainMenueUIRoot>());
         }
 
         private static PurchaseResetStatisticChecker CreatePurchaseResetStatisticChecker(DIContainer c)

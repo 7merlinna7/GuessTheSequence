@@ -406,6 +406,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainGroup: {fileID: 7189483688810093730}
+  _body: {fileID: 495904485317691948}
 --- !u!1 &5860395543758396670
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.UI.Core
 {
-    public abstract class PopupService : MonoBehaviour,IDisposable
+    public abstract class PopupService : IDisposable
     {
         protected readonly ViewsFactory ViewsFactory;
 
         private readonly ProjectPresentersFactory _presentersFactory;
 
-        private readonly Dictionary<PopupPresenterBase, PopupViewBase> _presenterToView;
+        private readonly Dictionary<PopupPresenterBase, PopupInfo> _presenterToInfo = new();
 
         protected PopupService(
             ViewsFactory viewsFactory,
@@ -23,32 +23,37 @@ namespace Assets._Project.Develop.Runtime.UI.Core
 
         protected abstract Transform PopupLayer {  get; }
 
+        //presenters
+        public TestPopupPresenter OpenTestPopup(Action closedCallback = null)
+        {
+            TestPopupView view = ViewsFactory.Create<TestPopupView>(ViewIDs.TestPopup,PopupLayer);
+            TestPopupPresenter popup = _presentersFactory.CreateTestPopupPresenter(view);
+
+            OnPopupCreated(popup,view,closedCallback);
+
+            return popup;
+        }
+        //
+
         public void Dispose()
         {
-            foreach (PopupPresenterBase popup in _presenterToView.Keys)
+            foreach (PopupPresenterBase popup in _presenterToInfo.Keys)
             {
                 popup.CloseRequest -= ClosePopup;
                 DisposeFor(popup);
             }
         }
 
-        public TestPopupPresenter OpenTestPopup()
-        {
-            TestPopupView view = ViewsFactory.Create<TestPopupView>(ViewIDs.TestPopup,PopupLayer);
-            TestPopupPresenter popup = _presentersFactory.CreateTestPopupPresenter(view);
-
-            OnPopupCreated(popup,view);
-
-            return popup;
-        }
-
         protected void OnPopupCreated(
             PopupPresenterBase popup,
-            PopupViewBase view)
+            PopupViewBase view,
+            Action closedCallback = null)
         {
+            PopupInfo popupInfo = new PopupInfo(view,closedCallback);
+
             popup.Initialize();
             popup.Show();
-            _presenterToView.Add(popup, view);
+            _presenterToInfo.Add(popup, popupInfo);
 
             popup.CloseRequest += ClosePopup;
         }
@@ -58,15 +63,30 @@ namespace Assets._Project.Develop.Runtime.UI.Core
             popup.CloseRequest -= ClosePopup;
             popup.Hide(() =>
             {
+                _presenterToInfo[popup].ClosedCallback?.Invoke();
+
                 DisposeFor(popup);
-                _presenterToView.Remove(popup);
+                _presenterToInfo.Remove(popup);
             });
         }
 
         private void DisposeFor(PopupPresenterBase popup)
         {
             popup.Dispose();
-            ViewsFactory.Release(_presenterToView[popup]);
+            ViewsFactory.Release(_presenterToInfo[popup].View);
+        }
+
+        private class PopupInfo
+        {
+            public PopupInfo(PopupViewBase view, Action closedCallback)
+            {
+                View = view;
+                ClosedCallback = closedCallback;
+            }
+
+            public PopupViewBase View { get; }
+
+            public Action ClosedCallback { get; }
         }
     }
 }
