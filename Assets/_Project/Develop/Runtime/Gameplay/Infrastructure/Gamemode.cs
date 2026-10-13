@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 
-namespace Assets._Project.Develop.Runtime.Gameplay.GamemodeFeature
+namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 {
     public class Gamemode
     {
