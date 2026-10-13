@@ -36,7 +36,7 @@ namespace Assets._Project.Develop.Runtime.UI.CommonViews.PlayerStatistics
             
         }
 
-        public void UpdateValue(int value) => _view.SetText(value.ToString());
+        private void UpdateValue(int value) => _view.SetText(value.ToString());
         
     }
 }

@@ -1,4 +1,5 @@
-﻿using Assets._Project.Develop.Runtime.UI.Core;
+﻿using Assets._Project.Develop.Runtime.UI.CommonViews;
+using Assets._Project.Develop.Runtime.UI.Core;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -8,6 +9,10 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
 {
     public class MainMenueScreenView : MonoBehaviour, IView
     {
+        [field: SerializeField] public TextTextListView StatisticView { get; private set; }
+        [field: SerializeField] public IconTextView WalletView { get; private set; }
+
+
         public event Action OpenTestPopupButtonClicked;
 
         [SerializeField] private Button _openTestPopupButton;
