@@ -56,13 +56,9 @@ namespace Assets._Project.Develop.Runtime.UI
                 view);
         }
 
-        public CurrencyPresenter CreateWalletPresenter(IconTextView view)
+        public WalletPresenter CreateWalletPresenter(IconTextView walletView)
         {
-            return new CurrencyPresenter(
-                _container.Resolve<WalletService>().GetCurrency(CurrencyTypes.Gold),
-                CurrencyTypes.Gold,
-                _container.Resolve<ConfigsProviderService>().GetConfig<CurrencyIconsConfig>(),
-                view);
+            return new WalletPresenter(this,walletView,_container.Resolve<WalletService>());
         }
 
         public TestPopupPresenter CreateTestPopupPresenter(TestPopupView view)

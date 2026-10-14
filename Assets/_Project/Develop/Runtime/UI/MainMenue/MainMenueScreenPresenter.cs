@@ -58,7 +58,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
 
         private void CreateWallet()
         {
-            CurrencyPresenter walletPresenter = _projectPresentersFactory.CreateWalletPresenter(_screen.WalletView);
+            WalletPresenter walletPresenter = _projectPresentersFactory.CreateWalletPresenter(_screen.WalletView);
             _childPresenters.Add(walletPresenter);
         }
     }

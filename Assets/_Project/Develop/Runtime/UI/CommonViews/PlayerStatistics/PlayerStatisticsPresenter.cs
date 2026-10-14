@@ -27,19 +27,8 @@ namespace Assets._Project.Develop.Runtime.UI.CommonViews.PlayerStatistics
 
         public void Initialize()
         {
-            //wins
-            TextTextView winsView = _viewsFactory.Create<TextTextView>(ViewIDs.StatisticView);
-            _view.Add(winsView);
-            StatisticPresenter winsPresenter = _projectPresentersFactory.CreateStatisticsPresenter(_playerStatistics.WinsCount, PlayerStatisticType.Wins, winsView);
-            winsPresenter.Initialize();
-            _statisticsPresenters.Add(winsPresenter);
-
-            //defeats
-            TextTextView defeatsView = _viewsFactory.Create<TextTextView>(ViewIDs.StatisticView);
-            _view.Add(defeatsView);
-            StatisticPresenter defeatsPresenter = _projectPresentersFactory.CreateStatisticsPresenter(_playerStatistics.DefeatsCount, PlayerStatisticType.Defeats, defeatsView);
-            defeatsPresenter.Initialize();
-            _statisticsPresenters.Add(defeatsPresenter);
+            CreateStatisticPresenterBy(PlayerStatisticType.Wins, _playerStatistics.WinsCount);
+            CreateStatisticPresenterBy(PlayerStatisticType.Defeats, _playerStatistics.DefeatsCount);
         }
 
         public void Dispose()
@@ -52,6 +41,15 @@ namespace Assets._Project.Develop.Runtime.UI.CommonViews.PlayerStatistics
             }
 
             _statisticsPresenters.Clear();
+        }
+
+        private void CreateStatisticPresenterBy(PlayerStatisticType playerStatisticType, int value)
+        {
+            TextTextView view = _viewsFactory.Create<TextTextView>(ViewIDs.StatisticView);
+            _view.Add(view);
+            StatisticPresenter presenter = _projectPresentersFactory.CreateStatisticsPresenter(value, playerStatisticType, view);
+            presenter.Initialize();
+            _statisticsPresenters.Add(presenter);
         }
     }
 }
