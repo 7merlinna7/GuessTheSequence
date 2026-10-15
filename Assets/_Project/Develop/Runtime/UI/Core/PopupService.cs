@@ -1,4 +1,4 @@
-﻿using Assets._Project.Develop.Runtime.UI.Core.TestPopup;
+﻿using Assets._Project.Develop.Runtime.UI.Core.ConfirmPopup;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,10 +24,10 @@ namespace Assets._Project.Develop.Runtime.UI.Core
         protected abstract Transform PopupLayer {  get; }
 
         //presenters
-        public TestPopupPresenter OpenTestPopup(Action closedCallback = null)
+        public ConfirmPopupPresenter OpenConfirmPopup(Action closedCallback = null)
         {
-            TestPopupView view = ViewsFactory.Create<TestPopupView>(ViewIDs.TestPopup,PopupLayer);
-            TestPopupPresenter popup = _presentersFactory.CreateTestPopupPresenter(view);
+            ConfirmPopupView view = ViewsFactory.Create<ConfirmPopupView>(ViewIDs.ConfirmPopup,PopupLayer);
+            ConfirmPopupPresenter popup = _presentersFactory.CreateConfirmPopupPresenter(view);
 
             OnPopupCreated(popup,view,closedCallback);
 

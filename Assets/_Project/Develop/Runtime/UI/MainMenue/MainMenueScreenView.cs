@@ -9,27 +9,23 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
 {
     public class MainMenueScreenView : MonoBehaviour, IView
     {
+        public event Action ResetStatisticsButtonClicked;
+
         [field: SerializeField] public TextTextListView StatisticView { get; private set; }
         [field: SerializeField] public IconTextView WalletView { get; private set; }
 
-
-        public event Action OpenTestPopupButtonClicked;
-
-        [SerializeField] private Button _openTestPopupButton;
+        [SerializeField] private Button _resetStatisticsButton;
 
         private void OnEnable()
         {
-            _openTestPopupButton.onClick.AddListener(OnOpenTestPopupButtonClicked);
+            _resetStatisticsButton.onClick.AddListener(OnResetStatisticsButtonClicked);
         }
 
         private void OnDisable()
         {
-            _openTestPopupButton.onClick.RemoveListener(OnOpenTestPopupButtonClicked);
+            _resetStatisticsButton.onClick.RemoveListener(OnResetStatisticsButtonClicked);
         }
 
-        private void OnOpenTestPopupButtonClicked()
-        {
-            OpenTestPopupButtonClicked?.Invoke();
-        }
+        private void OnResetStatisticsButtonClicked() => ResetStatisticsButtonClicked?.Invoke();
     }
 }

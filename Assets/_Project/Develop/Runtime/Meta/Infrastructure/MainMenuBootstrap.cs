@@ -10,7 +10,6 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
     {
         private DIContainer _container;
         private MainMenu _mainMenu;
-        private PurchaseResetStatisticChecker _purchaseChecker;
 
         public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
         {
@@ -22,7 +21,6 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
         public override IEnumerator Initialize()
         {
             _mainMenu = _container.Resolve<MainMenu>();
-            _purchaseChecker = _container.Resolve<PurchaseResetStatisticChecker>();
 
             yield break;
         }
@@ -30,7 +28,6 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
         public override void Run()
         {
             _mainMenu.Start();
-            _purchaseChecker.Start();
         }
     }
 }

@@ -27,12 +27,16 @@ namespace Assets._Project.Develop.Runtime.UI.CommonViews.PlayerStatistics
 
         public void Initialize()
         {
+            _playerStatistics.StatisticsReset += ResetPlayerStatistics;
+
             CreateStatisticPresenterBy(PlayerStatisticType.Wins, _playerStatistics.WinsCount);
             CreateStatisticPresenterBy(PlayerStatisticType.Defeats, _playerStatistics.DefeatsCount);
         }
 
         public void Dispose()
         {
+            _playerStatistics.StatisticsReset -= ResetPlayerStatistics;
+
             foreach (StatisticPresenter statisticPresenter in _statisticsPresenters)
             {
                 _view.Remove(statisticPresenter.View);
@@ -41,6 +45,12 @@ namespace Assets._Project.Develop.Runtime.UI.CommonViews.PlayerStatistics
             }
 
             _statisticsPresenters.Clear();
+        }
+
+        public void ResetPlayerStatistics()
+        {
+            foreach (StatisticPresenter statisticPresenter in _statisticsPresenters)
+                statisticPresenter.ResetStatisticValue();
         }
 
         private void CreateStatisticPresenterBy(PlayerStatisticType playerStatisticType, int value)

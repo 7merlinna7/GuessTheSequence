@@ -1,10 +1,12 @@
 ﻿using Assets._Project.Develop.Runtime.Utilities.DataManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
+using System;
 
 namespace Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics
 {
     public class PlayerStatisticsService : IDataWriter<PlayerData>, IDataReader<PlayerData>
     {
+        public event Action StatisticsReset;
         public int WinsCount { get; private set; }
         public int DefeatsCount { get; private set; }
 
@@ -21,6 +23,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics
         {
             WinsCount = 0;
             DefeatsCount = 0;
+            StatisticsReset?.Invoke();
         }
 
         public void ReadFrom(PlayerData data)

@@ -11,6 +11,7 @@ namespace Assets._Project.Develop.Runtime.Configs.Meta.PlayerStatistics
     {
         [field: SerializeField] public int WinsCount { get; private set; }
         [field: SerializeField] public int DefeatsCount { get; private set; }
+        [field: SerializeField] public int ResetetValue { get; private set; } = 0;
 
         [field: SerializeField] private List<StatisticConfig> _statistics;
 

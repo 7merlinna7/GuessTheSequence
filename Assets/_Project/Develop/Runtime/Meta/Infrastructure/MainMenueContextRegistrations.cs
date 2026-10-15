@@ -35,7 +35,6 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 
         private static PurchaseResetStatisticChecker CreatePurchaseResetStatisticChecker(DIContainer c)
             => new PurchaseResetStatisticChecker(
-                c.Resolve<ICoroutinesPerformer>(),
                 c.Resolve<WalletService>(),
                 c.Resolve<PlayerStatisticsService>());
 
@@ -43,9 +42,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
             => new MainMenu(
                 c.Resolve<SceneSwitcherService>(),
                 c.Resolve<ICoroutinesPerformer>(),
-                c.Resolve<PlayerDataProvider>(),
-                c.Resolve<WalletService>(),
-                c.Resolve<PlayerStatisticsService>());
+                c.Resolve<PlayerDataProvider>());
 
         private static MainMenueUIRoot CreateMainMenueUIRoot(DIContainer c)
         {

@@ -2,6 +2,7 @@
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Assets._Project.Develop.Runtime.UI.Core
 {

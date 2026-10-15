@@ -1,6 +1,4 @@
 ﻿using Assets._Project.Develop.Runtime.Gameplay.Infrastructure;
-using Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics;
-using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
@@ -14,21 +12,15 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
         private SceneSwitcherService _sceneSwitcherService;
         private ICoroutinesPerformer _coroutinesPerformer;
         private PlayerDataProvider _dataProvider;
-        private WalletService _wallet;
-        private PlayerStatisticsService _playerStatistics;
 
         public MainMenu(
             SceneSwitcherService sceneSwitcherService,
             ICoroutinesPerformer coroutinesPerformer,
-            PlayerDataProvider dataProvider,
-            WalletService walletService,
-            PlayerStatisticsService playerStatistics)
+            PlayerDataProvider dataProvider)
         {
             _sceneSwitcherService = sceneSwitcherService;
             _coroutinesPerformer = coroutinesPerformer;
             _dataProvider = dataProvider;
-            _wallet = walletService;
-            _playerStatistics = playerStatistics;
         }
 
         public void Start()
@@ -39,7 +31,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
         private IEnumerator WaitForPlayerInput(SceneSwitcherService sceneSwitcherService)
         {
             Debug.Log("Для выбора режима нажмите 1 - Цифры, 2 - Буквы");
-            Debug.Log("Статистика - 3, сохранение- S, сброс - R");
+            Debug.Log("Cохранение - S");
 
             yield return new WaitUntil(() => Input.anyKeyDown);
 
@@ -53,13 +45,6 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
                 Debug.Log("Режим буквы");
 
                 yield return SwitchToScene(Scenes.Gameplay, SequenceType.Letters,sceneSwitcherService);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                Debug.Log($"Побед: {_playerStatistics.WinsCount},Поражений: {_playerStatistics.DefeatsCount}");
-                Debug.Log("Золота в наличии: "+ _wallet.GetCurrency(CurrencyTypes.Gold).Value);
-                yield return null;
-                Start();
             }
             else if(Input.GetKeyDown(KeyCode.S))
             {

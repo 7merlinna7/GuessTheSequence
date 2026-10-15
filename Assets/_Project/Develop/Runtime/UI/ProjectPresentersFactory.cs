@@ -7,7 +7,7 @@ using Assets._Project.Develop.Runtime.UI.CommonViews;
 using Assets._Project.Develop.Runtime.UI.CommonViews.PlayerStatistics;
 using Assets._Project.Develop.Runtime.UI.CommonViews.Wallet;
 using Assets._Project.Develop.Runtime.UI.Core;
-using Assets._Project.Develop.Runtime.UI.Core.TestPopup;
+using Assets._Project.Develop.Runtime.UI.Core.ConfirmPopup;
 using Assets._Project.Develop.Runtime.Utilites.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
@@ -61,8 +61,8 @@ namespace Assets._Project.Develop.Runtime.UI
             return new WalletPresenter(this,walletView,_container.Resolve<WalletService>());
         }
 
-        public TestPopupPresenter CreateTestPopupPresenter(TestPopupView view)
-            => new TestPopupPresenter(
+        public ConfirmPopupPresenter CreateConfirmPopupPresenter(ConfirmPopupView view)
+            => new ConfirmPopupPresenter(
                 view,
                 _container.Resolve<ICoroutinesPerformer>());
     }

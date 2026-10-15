@@ -1,62 +1,37 @@
 ﻿using Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
-using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
 using System;
-using System.Collections;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Meta.Features
 {
-    public class PurchaseResetStatisticChecker : IDisposable 
+    public class PurchaseResetStatisticChecker 
     {
-        private ICoroutinesPerformer _coroutinesPerformer;
-        private Coroutine _mainRoutine;
+        public event Action<string> StatisticsReset;
 
         private WalletService _wallet;
         private PlayerStatisticsService _playerStatistics;
 
         private int _resetStatisticsPrice = 200;
 
-        public PurchaseResetStatisticChecker(ICoroutinesPerformer coroutinesPerformer, WalletService wallet, PlayerStatisticsService playerStatistics)
+        public PurchaseResetStatisticChecker(WalletService wallet, PlayerStatisticsService playerStatistics)
         {
-            _coroutinesPerformer = coroutinesPerformer;
             _wallet = wallet;
             _playerStatistics = playerStatistics;
         }
 
-        public void Dispose()
+        public void Reset()
         {
-            if (_mainRoutine!= null && _coroutinesPerformer!= null)
-            {
-                _coroutinesPerformer.StopPerform(_mainRoutine);
-                _mainRoutine = null;
-            }
-        }
-
-        public void Start()
-        {
-            _mainRoutine = _coroutinesPerformer.StartPerform(WaitForPlayerInput());
-        }
-
-        private IEnumerator WaitForPlayerInput() 
-        {
-            yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.R));
-
-            Debug.Log("Корутина для сброса статистики запущена");
-
             if (_wallet.Enough(CurrencyTypes.Gold, _resetStatisticsPrice))
             {
-                Debug.Log("Статистика сброшена");
+                StatisticsReset?.Invoke("Статистика сброшена");
                 _playerStatistics.Reset();
                 _wallet.Spend(CurrencyTypes.Gold, _resetStatisticsPrice);
             }
             else
             {
-                Debug.Log("Не достаточно золота для сброса статистики");
+                StatisticsReset?.Invoke("Не достаточно золота для сброса статистики");
             }
-
-            yield return null;
-            Start();
         }
     }
 }

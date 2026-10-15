@@ -1,4 +1,5 @@
-﻿using Assets._Project.Develop.Runtime.UI.CommonViews.PlayerStatistics;
+﻿using Assets._Project.Develop.Runtime.Meta.Features;
+using Assets._Project.Develop.Runtime.UI.CommonViews.PlayerStatistics;
 using Assets._Project.Develop.Runtime.UI.CommonViews.Wallet;
 using Assets._Project.Develop.Runtime.UI.Core;
 using System;
@@ -10,6 +11,8 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
     {
         MainMenueScreenView _screen;
         private readonly MainMenuePopupService _popupService;
+        private readonly PurchaseResetStatisticChecker _resetStatisticChecker;
+
         private readonly ProjectPresentersFactory _projectPresentersFactory;
 
         private readonly List<IPresenter> _childPresenters = new();
@@ -17,8 +20,10 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
         public MainMenueScreenPresenter(
             MainMenueScreenView screen,
             MainMenuePopupService popupService,
-            ProjectPresentersFactory projectPresentersFactory)
+            ProjectPresentersFactory projectPresentersFactory,
+            PurchaseResetStatisticChecker resetStatisticChecker)
         {
+            _resetStatisticChecker = resetStatisticChecker;
             _screen = screen;
             _popupService = popupService;
             _projectPresentersFactory = projectPresentersFactory;
@@ -26,7 +31,8 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
 
         public void Initialize()
         {
-            _screen.OpenTestPopupButtonClicked += OnOpenTestPopupButtonClicked;
+            _screen.ResetStatisticsButtonClicked += OnResetStatisticsButtonClicked;
+            _resetStatisticChecker.StatisticsReset += OpenConfirmPopup;
 
             CreatePlayerStatistics();
             CreateWallet();
@@ -35,9 +41,11 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
                 presenter.Initialize();
         }
 
+
         public void Dispose()
         {
-            _screen.OpenTestPopupButtonClicked -= OnOpenTestPopupButtonClicked;
+            _screen.ResetStatisticsButtonClicked -= OnResetStatisticsButtonClicked;
+            _resetStatisticChecker.StatisticsReset -= OpenConfirmPopup;
 
             foreach (IPresenter presenter in _childPresenters)
                 presenter.Dispose();
@@ -45,9 +53,14 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
             _childPresenters.Clear();
         }
 
-        private void OnOpenTestPopupButtonClicked()
+        private void OpenConfirmPopup(string text)
         {
-            _popupService.OpenTestPopup();
+            _popupService.OpenConfirmPopup().SetPopupText(text);
+        }
+
+        private void OnResetStatisticsButtonClicked()
+        {
+            _resetStatisticChecker.Reset();
         }
 
         private void CreatePlayerStatistics()
@@ -61,5 +74,6 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
             WalletPresenter walletPresenter = _projectPresentersFactory.CreateWalletPresenter(_screen.WalletView);
             _childPresenters.Add(walletPresenter);
         }
+
     }
 }
