@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.UI.CommonViews;
+using Assets._Project.Develop.Runtime.UI.CommonViews.LevelSelection;
 using Assets._Project.Develop.Runtime.UI.Core;
 using System;
 using System.Collections;
@@ -13,6 +14,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
 
         [field: SerializeField] public TextTextListView StatisticView { get; private set; }
         [field: SerializeField] public IconTextView WalletView { get; private set; }
+        [field: SerializeField] public LevelSelectionView LevelSelectionView { get; private set; }
 
         [SerializeField] private Button _resetStatisticsButton;
 

@@ -30,34 +30,18 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 
         private IEnumerator WaitForPlayerInput(SceneSwitcherService sceneSwitcherService)
         {
-            Debug.Log("Для выбора режима нажмите 1 - Цифры, 2 - Буквы");
             Debug.Log("Cохранение - S");
 
-            yield return new WaitUntil(() => Input.anyKeyDown);
-
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                Debug.Log("Режим цифры");
-                yield return SwitchToScene(Scenes.Gameplay,SequenceType.Numbers,sceneSwitcherService);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                Debug.Log("Режим буквы");
-
-                yield return SwitchToScene(Scenes.Gameplay, SequenceType.Letters,sceneSwitcherService);
-            }
-            else if(Input.GetKeyDown(KeyCode.S))
-            {
+            yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.S));
                 Debug.Log("Save");
                 _coroutinesPerformer.StartPerform(_dataProvider.Save());
                 yield return null;
                 Start();
-            }
-            else
-            {
-                yield return null;
-                Start();           
-            }
+        }
+        
+        public void SelectLevel(SequenceType sequenceType)
+        {
+            _coroutinesPerformer.StartPerform(SwitchToScene(Scenes.Gameplay, sequenceType, _sceneSwitcherService));
         }
 
         private IEnumerator SwitchToScene(string scene, SequenceType sequenceType,SceneSwitcherService sceneSwitcherService)

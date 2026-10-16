@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Meta.Features;
+using Assets._Project.Develop.Runtime.UI.CommonViews.LevelSelection;
 using Assets._Project.Develop.Runtime.UI.CommonViews.PlayerStatistics;
 using Assets._Project.Develop.Runtime.UI.CommonViews.Wallet;
 using Assets._Project.Develop.Runtime.UI.Core;
@@ -14,6 +15,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
         private readonly PurchaseResetStatisticChecker _resetStatisticChecker;
 
         private readonly ProjectPresentersFactory _projectPresentersFactory;
+        private readonly MainMenuePresentersFactory _mainMenuePresentersFactory;
 
         private readonly List<IPresenter> _childPresenters = new();
 
@@ -21,12 +23,14 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
             MainMenueScreenView screen,
             MainMenuePopupService popupService,
             ProjectPresentersFactory projectPresentersFactory,
+            MainMenuePresentersFactory mainMenuePresentersFactory,
             PurchaseResetStatisticChecker resetStatisticChecker)
         {
             _resetStatisticChecker = resetStatisticChecker;
             _screen = screen;
             _popupService = popupService;
             _projectPresentersFactory = projectPresentersFactory;
+            _mainMenuePresentersFactory = mainMenuePresentersFactory;
         }
 
         public void Initialize()
@@ -36,11 +40,11 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
 
             CreatePlayerStatistics();
             CreateWallet();
+            CreateLevelSelector();
 
             foreach (IPresenter presenter in _childPresenters )
                 presenter.Initialize();
         }
-
 
         public void Dispose()
         {
@@ -75,5 +79,10 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
             _childPresenters.Add(walletPresenter);
         }
 
+        private void CreateLevelSelector()
+        {
+            LevelSelectionPresenter levelSelectionPresenter = _mainMenuePresentersFactory.CreateLevelSelectionPresenter(_screen.LevelSelectionView);
+            _childPresenters.Add(levelSelectionPresenter);
+        }
     }
 }

@@ -3,7 +3,9 @@ using Assets._Project.Develop.Runtime.Configs.Meta.Wallet;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.Meta.Infrastructure;
 using Assets._Project.Develop.Runtime.UI.CommonViews;
+using Assets._Project.Develop.Runtime.UI.CommonViews.LevelSelection;
 using Assets._Project.Develop.Runtime.UI.CommonViews.PlayerStatistics;
 using Assets._Project.Develop.Runtime.UI.CommonViews.Wallet;
 using Assets._Project.Develop.Runtime.UI.Core;
@@ -58,7 +60,10 @@ namespace Assets._Project.Develop.Runtime.UI
 
         public WalletPresenter CreateWalletPresenter(IconTextView walletView)
         {
-            return new WalletPresenter(this,walletView,_container.Resolve<WalletService>());
+            return new WalletPresenter(
+                this,
+                walletView,
+                _container.Resolve<WalletService>());
         }
 
         public ConfirmPopupPresenter CreateConfirmPopupPresenter(ConfirmPopupView view)
