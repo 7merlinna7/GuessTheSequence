@@ -2,13 +2,21 @@
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
+using System;
 using System.Collections;
-using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 {
     public class GameCycle 
     {
+        public event Action<string,Action> GameplayResult;
+        public event Action<string> SequenceCreated
+        {
+            add { _gamemode.SequenceCreated += value;}
+            remove { _gamemode.SequenceCreated -= value;}
+        }
+
+
         private Gamemode _gamemode;
         private WalletService _wallet;
         private ICoroutinesPerformer _coroutinesPerformer;
@@ -58,35 +66,30 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
         private void Defeat()
         {
-            Debug.Log("Defeat");
             if (_wallet.Enough(CurrencyTypes.Gold, _defeatWalletUpdateBalance))
                 _wallet.Spend(CurrencyTypes.Gold, _defeatWalletUpdateBalance);
             else
                 _wallet.SpendAll(CurrencyTypes.Gold);
 
                 _playerStatistics.AddDefeat();
-            _coroutinesPerformer.StartPerform(ContinueToPlayAgain());
+
+            GameplayResult?.Invoke("Defeat", ContinueToPlayAgain);
         }
 
         private void Win()
         {
-            Debug.Log("Win");
             _wallet.Add(CurrencyTypes.Gold,_winWalletUpdateBalance);
             _playerStatistics.AddWin();
-            _coroutinesPerformer.StartPerform(ContinueToMainMenu());
+            GameplayResult?.Invoke("Win", ContinueToMainMenu);
         }
 
-        private IEnumerator ContinueToMainMenu ()
+        private void ContinueToMainMenu()
         {
-            Debug.Log("Press SPACE to exit in main menu");
-            yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
-            yield return SwitchToMainMenue();
+            _coroutinesPerformer.StartPerform(SwitchToMainMenue());
         }
 
-        private IEnumerator ContinueToPlayAgain()
+        private void ContinueToPlayAgain()
         {
-            Debug.Log("Press SPACE to play again");
-            yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
             _gamemode.Start();
         }
 

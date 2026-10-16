@@ -2,7 +2,7 @@
 
 namespace Assets._Project.Develop.Runtime.UI.MainMenue
 {
-    public class MainMenueUIRoot : MonoBehaviour
+    public class ScreenUIRoot : MonoBehaviour
     {
         [field: SerializeField] public Transform HUDLayer { get; private set; }
         [field: SerializeField] public Transform PopupsLayer { get; private set; }

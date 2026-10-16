@@ -5,12 +5,12 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
 {
     public class MainMenuePopupService : PopupService
     {
-        private readonly MainMenueUIRoot _uiRoot;
+        private readonly ScreenUIRoot _uiRoot;
 
         public MainMenuePopupService(
             ViewsFactory viewsFactory,
             ProjectPresentersFactory presentersFactory,
-            MainMenueUIRoot uiRoot) 
+            ScreenUIRoot uiRoot) 
             : base(viewsFactory, presentersFactory)
         {
             _uiRoot = uiRoot;

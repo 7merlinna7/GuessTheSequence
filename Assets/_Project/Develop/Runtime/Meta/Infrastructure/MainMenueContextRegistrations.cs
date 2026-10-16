@@ -30,7 +30,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
             return new MainMenuePopupService(
                 c.Resolve<ViewsFactory>(),
                 c.Resolve<ProjectPresentersFactory>(),
-                c.Resolve<MainMenueUIRoot>());
+                c.Resolve<ScreenUIRoot>());
         }
 
         private static PurchaseResetStatisticChecker CreatePurchaseResetStatisticChecker(DIContainer c)
@@ -44,10 +44,10 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
                 c.Resolve<ICoroutinesPerformer>(),
                 c.Resolve<PlayerDataProvider>());
 
-        private static MainMenueUIRoot CreateMainMenueUIRoot(DIContainer c)
+        private static ScreenUIRoot CreateMainMenueUIRoot(DIContainer c)
         {
             ResourcesAssetsLoader assetsLoader = c.Resolve<ResourcesAssetsLoader>();
-            MainMenueUIRoot MainMenueUIRootPrefab = assetsLoader.Load<MainMenueUIRoot>("UI/MainMenue/MainMenueUIRoot");
+            ScreenUIRoot MainMenueUIRootPrefab = assetsLoader.Load<ScreenUIRoot>("UI/UIRoot");
 
             return Object.Instantiate(MainMenueUIRootPrefab);
         }
@@ -59,7 +59,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 
         private static MainMenueScreenPresenter CreateMainMenueScreenPresenter(DIContainer c)
         {
-            MainMenueUIRoot uiRoot = c.Resolve<MainMenueUIRoot>();
+            ScreenUIRoot uiRoot = c.Resolve<ScreenUIRoot>();
             MainMenueScreenView view = c
                 .Resolve<ViewsFactory>()
                 .Create<MainMenueScreenView>(ViewIDs.MainMenueScreen, uiRoot.HUDLayer);

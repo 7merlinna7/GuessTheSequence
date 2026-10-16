@@ -8,6 +8,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
     {
         public event Action Win;
         public event Action Defeat;
+        public event Action<string> SequenceCreated;
 
         private int _sequenceCount;
         private Sequence _sequence;
@@ -19,9 +20,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             _sequence = sequence;
         }
 
+
         public void Start()
         {
             _sequence.Create();
+            SequenceCreated?.Invoke(_sequence.Get());
+
             _sequenceCount = 0;
 
             IsRunning = true;
