@@ -1,6 +1,4 @@
-﻿using Assets._Project.Develop.Runtime.Configs.Meta.PlayerStatistics;
-using Assets._Project.Develop.Runtime.Configs.Meta.Wallet;
-using Assets._Project.Develop.Runtime.Infrastructure.DI;
+﻿using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.UI;

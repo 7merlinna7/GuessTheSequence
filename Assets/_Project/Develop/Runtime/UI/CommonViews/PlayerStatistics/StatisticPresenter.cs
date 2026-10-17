@@ -36,7 +36,7 @@ namespace Assets._Project.Develop.Runtime.UI.CommonViews.PlayerStatistics
             
         }
 
-        public void ResetStatisticValue() => _view.SetText(_statisticsConfig.ResetetValue.ToString());
+        public void ResetStatisticValue() => _view.SetText(_statisticsConfig.ResetedValue.ToString());
 
         private void UpdateValue(int value) => _view.SetText(value.ToString());
         

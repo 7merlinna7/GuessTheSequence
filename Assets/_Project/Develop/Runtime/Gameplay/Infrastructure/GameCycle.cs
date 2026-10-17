@@ -93,7 +93,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             _gamemode.Start();
         }
 
-        public IEnumerator SwitchToMainMenue()
+        private IEnumerator SwitchToMainMenue()
         {
             yield return _sceneSwitcherService.ProcessSwitchTo(Scenes.MainMenue);
         }
