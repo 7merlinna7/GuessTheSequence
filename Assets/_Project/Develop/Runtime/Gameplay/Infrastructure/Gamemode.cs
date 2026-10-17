@@ -29,7 +29,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             _sequenceCount = 0;
 
             IsRunning = true;
-            Debug.Log(_sequence.Get());
         }
 
         public void Update()
@@ -41,7 +40,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             {
                 if (Input.GetKeyDown(_sequence.GetNextValueKeyCode()))
                 {
-                    Debug.Log("Good");
                     _sequenceCount++;
                 }
                 else

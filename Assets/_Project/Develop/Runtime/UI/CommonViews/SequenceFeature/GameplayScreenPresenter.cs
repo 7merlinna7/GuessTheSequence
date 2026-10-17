@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Gameplay.Infrastructure;
+using Assets._Project.Develop.Runtime.UI.CommonViews.Gameplay;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.MainMenue;
 using System;
@@ -9,9 +10,9 @@ namespace Assets._Project.Develop.Runtime.UI.CommonViews.SequenceFeature
     {
         private readonly SequenceView _view;
         private readonly GameCycle _gameCycle;
-        private readonly MainMenuePopupService _popupService;
+        private readonly GameplayPopupService _popupService;
 
-        public GameplayScreenPresenter(SequenceView view, GameCycle gameCycle, MainMenuePopupService popupService)
+        public GameplayScreenPresenter(SequenceView view, GameCycle gameCycle, GameplayPopupService popupService)
         {
             _view = view;
             _gameCycle = gameCycle;

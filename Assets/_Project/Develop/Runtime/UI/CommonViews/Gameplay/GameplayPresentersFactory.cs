@@ -16,6 +16,6 @@ namespace Assets._Project.Develop.Runtime.UI.CommonViews.Gameplay
         }
 
         public GameplayScreenPresenter CreateGameplayScreenPresenter(SequenceView view)
-            => new GameplayScreenPresenter(view, _container.Resolve<GameCycle>(),_container.Resolve<MainMenuePopupService>());
+            => new GameplayScreenPresenter(view, _container.Resolve<GameCycle>(),_container.Resolve<GameplayPopupService>());
     }
 }

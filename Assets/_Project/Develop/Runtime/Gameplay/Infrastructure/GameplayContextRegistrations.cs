@@ -31,12 +31,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             container.RegisterAsSingle(CreateGameplayPresentersFactory);
             container.RegisterAsSingle(CreateGameplayUIRoot).NonLazy();
             container.RegisterAsSingle(CreateGameplayScreenPresenter).NonLazy();
-            container.RegisterAsSingle(CreateMainMenuePopupService);
+            container.RegisterAsSingle(CreateGameplayPopupServicePopupService);
         }
 
-        private static MainMenuePopupService CreateMainMenuePopupService(DIContainer c)
+        private static GameplayPopupService CreateGameplayPopupServicePopupService(DIContainer c)
         {
-            return new MainMenuePopupService(
+            return new GameplayPopupService(
                 c.Resolve<ViewsFactory>(),
                 c.Resolve<ProjectPresentersFactory>(),
                 c.Resolve<ScreenUIRoot>());
