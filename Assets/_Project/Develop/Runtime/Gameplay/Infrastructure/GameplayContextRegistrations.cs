@@ -14,6 +14,8 @@ using Assets._Project.Develop.Runtime.Utilites.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilities.Configs.Gameplay.SequenceConfigs;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
+using Assets._Project.Ecs.Gameplay.EntitiesCore;
+using Assets._Project.Ecs.Gameplay.EntitiesCore.Mono;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
@@ -25,37 +27,24 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         {
             _inputArgs = args;
 
-            container.RegisterAsSingle(CreateSequenceFactory);
             container.RegisterAsSingle(CreateGamemode);
             container.RegisterAsSingle(CreateGameCycle);
-            container.RegisterAsSingle(CreateGameplayPresentersFactory);
-            container.RegisterAsSingle(CreateGameplayUIRoot).NonLazy();
-            container.RegisterAsSingle(CreateGameplayScreenPresenter).NonLazy();
-            container.RegisterAsSingle(CreateGameplayPopupServicePopupService);
+            container.RegisterAsSingle(CreateEntitiesFactory);
+            container.RegisterAsSingle(CreateEntitiesLifeContext);
+            container.RegisterAsSingle(CreateMonoEntitiesFactory).NonLazy();
         }
 
-        private static GameplayPopupService CreateGameplayPopupServicePopupService(DIContainer c)
-        {
-            return new GameplayPopupService(
-                c.Resolve<ViewsFactory>(),
-                c.Resolve<ProjectPresentersFactory>(),
-                c.Resolve<ScreenUIRoot>());
-        }
+        private static EntitiesFactory CreateEntitiesFactory(DIContainer c)
+        {  return new EntitiesFactory(c); }
 
-        private static SequenceFactory CreateSequenceFactory(DIContainer c)
-        {
-            ISequenceConfig config = null;
-            switch (_inputArgs.LevelType)
-            {
-                case SequenceType.Letters:
-                    config = c.Resolve<ConfigsProviderService>().GetConfig<LettersSequenceConfig>();
-                    break;
-                case SequenceType.Numbers:
-                    config = c.Resolve<ConfigsProviderService>().GetConfig<NumbersSequenceConfig>();
-                    break;
-            }
+        private static EntitiesLifeContext CreateEntitiesLifeContext(DIContainer c)
+            => new EntitiesLifeContext();
 
-            return new SequenceFactory(config);
+        private static MonoEntitiesFactory CreateMonoEntitiesFactory(DIContainer c)
+        {
+            return new MonoEntitiesFactory(
+                c.Resolve<ResourcesAssetsLoader>(),
+                c.Resolve<EntitiesLifeContext>());
         }
 
         private static Gamemode CreateGamemode(DIContainer c)
@@ -75,28 +64,5 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
                 config.WalletBalanceDefeatUpdate);
         }
 
-        private static ScreenUIRoot CreateGameplayUIRoot(DIContainer c)
-        {
-            ResourcesAssetsLoader assetsLoader = c.Resolve<ResourcesAssetsLoader>();
-            ScreenUIRoot GameplayUIRootPrefab = assetsLoader.Load<ScreenUIRoot>("UI/UIRoot");
-
-            return Object.Instantiate(GameplayUIRootPrefab);
-        }
-
-        private static GameplayPresentersFactory CreateGameplayPresentersFactory (DIContainer c) => new GameplayPresentersFactory(c);
-
-        private static GameplayScreenPresenter CreateGameplayScreenPresenter(DIContainer c)
-        {
-            ScreenUIRoot uiRoot = c.Resolve<ScreenUIRoot>();
-            SequenceView view = c
-                .Resolve<ViewsFactory>()
-                .Create<SequenceView>(ViewIDs.SequenceView, uiRoot.HUDLayer);
-
-            GameplayScreenPresenter presenter = c
-                .Resolve<GameplayPresentersFactory>()
-                .CreateGameplayScreenPresenter(view);
-
-            return presenter;
-        }
     }
 }

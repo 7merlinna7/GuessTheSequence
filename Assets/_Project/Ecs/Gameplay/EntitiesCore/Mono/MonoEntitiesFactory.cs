@@ -1,0 +1,63 @@
+﻿using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Utilites.AssetsManagment;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using Object = UnityEngine.Object;
+
+namespace Assets._Project.Ecs.Gameplay.EntitiesCore.Mono
+{
+    public class MonoEntitiesFactory :IInitializable,IDisposable
+    {
+        private readonly ResourcesAssetsLoader _resources;
+        private readonly EntitiesLifeContext _entitiesLifeContext;
+
+        private readonly Dictionary<Entity, MonoEntity> _EntityToMono = new();
+
+        public MonoEntitiesFactory(ResourcesAssetsLoader resources, EntitiesLifeContext entitiesLifeContext)
+        {
+            _resources = resources;
+            _entitiesLifeContext = entitiesLifeContext;
+        }
+
+        public MonoEntity Create(Entity entity, Vector3 position, string path)
+        {
+            MonoEntity prefab = _resources.Load<MonoEntity>(path);
+            MonoEntity viewInstance = Object.Instantiate(prefab,position,Quaternion.identity,null);
+
+            viewInstance.Setup(entity);
+            _EntityToMono.Add(entity, viewInstance);
+
+            return viewInstance;
+        }
+
+        public void Initialize()
+        {
+            _entitiesLifeContext.Released += OnEntityReleased;
+        }
+
+        private void OnEntityReleased(Entity entity)
+        {
+            CleanupFor(entity);
+
+            _EntityToMono.Remove(entity);
+        }
+
+        public void Dispose()
+        {
+            _entitiesLifeContext.Released += OnEntityReleased;
+
+            foreach (Entity entity in _EntityToMono.Keys)
+                CleanupFor(entity);
+
+            _EntityToMono.Clear();
+        }
+
+        private void CleanupFor(Entity entity)
+        {
+            MonoEntity monoEntity = _EntityToMono[entity];
+            monoEntity.Cleanup(entity);
+            Object.Destroy(monoEntity.gameObject);
+        }
+    }
+}
