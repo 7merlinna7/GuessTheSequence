@@ -41,7 +41,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
         public override void Run()
         {
-            _testGameplay.Start();
+            _testGameplay.Start(_inputArgs.LevelType);
             _isRunning = true;
         }
 

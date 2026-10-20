@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 3014801438342459030}
   - component: {fileID: 4105246847321712967}
   m_Layer: 0
-  m_Name: TestEntity
+  m_Name: RigidbodyEntity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

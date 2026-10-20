@@ -1,7 +1,4 @@
-﻿using Assets._Project.Develop.Runtime.Infrastructure.DI;
-using Assets._Project.Ecs.Gameplay.EntitiesCore;
-using Assets._Project.Ecs.Gameplay.Features.MovementFeatures;
-using System.Collections;
+﻿using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using UnityEngine;
 
 namespace Assets._Project.Ecs.Gameplay
@@ -17,9 +14,13 @@ namespace Assets._Project.Ecs.Gameplay
             _entitiesFactory = entitiesFactory;
         }
 
-        public void Start()
+        public void Start(SequenceType sequenceType)
         {
-            _entity = _entitiesFactory.CreateTestEntity(Vector3.zero);
+            if (sequenceType == SequenceType.Numbers)
+                _entity = _entitiesFactory.CreateRigidbodyEntity(Vector3.zero);
+
+            if (sequenceType == SequenceType.Letters)
+                _entity = _entitiesFactory.CreateCharacterControllerEntity(Vector3.zero);
 
             _isRunning = true;
         }
@@ -32,6 +33,7 @@ namespace Assets._Project.Ecs.Gameplay
             Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"),0, Input.GetAxisRaw("Vertical"));
 
             _entity.MoveDirection.Value = input;
+            _entity.RotationDirection.Value = input;
         }
 
     }
