@@ -3,11 +3,8 @@ using UnityEngine;
 
 namespace Assets._Project.Ecs.Gameplay.Common
 {
-    public class CommonComponents : MonoBehaviour
+    public class RigidbodyComponent : IEntityComponent
     {
-        public class RigidbodyComponent : IEntityComponent
-        {
-            public Rigidbody Value;
-        }
+        public Rigidbody Value;
     }
 }
