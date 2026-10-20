@@ -25,19 +25,19 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 
         public void Start()
         {
-            _coroutinesPerformer.StartPerform(WaitForPlayerInput(_sceneSwitcherService));
+            //_coroutinesPerformer.StartPerform(WaitForPlayerInput(_sceneSwitcherService));
         }
 
-        private IEnumerator WaitForPlayerInput(SceneSwitcherService sceneSwitcherService)
-        {
-            Debug.Log("Cохранение - S");
+        //private IEnumerator WaitForPlayerInput(SceneSwitcherService sceneSwitcherService)
+        //{
+        //    Debug.Log("Cохранение - S");
 
-            yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.S));
-                Debug.Log("Save");
-                _coroutinesPerformer.StartPerform(_dataProvider.Save());
-                yield return null;
-                Start();
-        }
+        //    yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.S));
+        //        Debug.Log("Save");
+        //        _coroutinesPerformer.StartPerform(_dataProvider.Save());
+        //        yield return null;
+        //        Start();
+        //}
         
         public void SelectLevel(SequenceType sequenceType)
         {

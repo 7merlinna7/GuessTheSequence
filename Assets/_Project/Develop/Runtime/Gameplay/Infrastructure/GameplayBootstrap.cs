@@ -1,6 +1,7 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
+using Assets._Project.Ecs.Gameplay;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using System;
 using System.Collections;
@@ -12,8 +13,10 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
     {
         private DIContainer _container;
         private GameplayInputArgs _inputArgs;
+        private TestGameplay _testGameplay;
+        private bool _isRunning;
+        private EntitiesLifeContext _lifeContext;
 
-       // private EntitiesFactory _entitiesFactory;
 
         public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
         {
@@ -30,19 +33,25 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
         public override IEnumerator Initialize()
         {
-           // _entitiesFactory = _container.Resolve<EntitiesFactory>();
+            _testGameplay = new TestGameplay(_container.Resolve<EntitiesFactory>());
+            _lifeContext = _container.Resolve<EntitiesLifeContext>();
 
             yield break;
         }
 
         public override void Run()
         {
-           // Entity entity = _entitiesFactory.CreateTestEntity(Vector3.zero);
+            _testGameplay.Start();
+            _isRunning = true;
         }
 
         private void Update()
         {
-           
+            if (_isRunning == false)
+                return;
+            
+            _testGameplay.Update();
+            _lifeContext?.Update(Time.deltaTime);
         }
 
     }
