@@ -11,14 +11,13 @@ namespace Assets._Project.Ecs.Gameplay.Features.MovementFeatures
 
         private ReactiveVariable<Vector3> _direction;
         private ReactiveVariable<float> _rotationSpeed;
-        private CharacterController _controller;
         private Transform _transform;
 
         public void OnInit(Entity entity)
         {
             _rotationSpeed = entity.RotationSpeed;
             _direction = entity.RotationDirection;
-            _controller = entity.CharacterController;
+            _transform = entity.Transform;
         }
 
         public void OnUpdate(float deltaTime)
