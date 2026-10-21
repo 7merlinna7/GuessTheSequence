@@ -112,7 +112,7 @@ namespace Assets._Project.Ecs.Editor
             return "{" + string.Join(", ", initializers) + "}";
         }
 
-        public static string GetVariableNameFrom(string name) => char.ToLowerInvariant(name[0]) + name.Substring(1);
+        private static string GetVariableNameFrom(string name) => char.ToLowerInvariant(name[0]) + name.Substring(1);
 
         private static bool HasSingleField(Type type, out FieldInfo field)
         {
