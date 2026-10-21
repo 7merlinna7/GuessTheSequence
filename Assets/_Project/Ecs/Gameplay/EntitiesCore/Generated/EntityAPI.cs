@@ -30,6 +30,15 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.MovementFeatures.MoveSpeed() {Value = value}); 
 		}
 
+		public Assets._Project.Ecs.Gameplay.Features.MovementFeatures.CanMove CanMoveC => GetComponent<Assets._Project.Ecs.Gameplay.Features.MovementFeatures.CanMove>();
+
+		public Assets._Project.Ecs.Utilities.Conditions.ICompositeCondition CanMove => CanMoveC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddCanMove(Assets._Project.Ecs.Utilities.Conditions.ICompositeCondition value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.MovementFeatures.CanMove() {Value = value}); 
+		}
+
 		public Assets._Project.Ecs.Gameplay.Features.MovementFeatures.RotationDirection RotationDirectionC => GetComponent<Assets._Project.Ecs.Gameplay.Features.MovementFeatures.RotationDirection>();
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<UnityEngine.Vector3> RotationDirection => RotationDirectionC.Value;
@@ -56,6 +65,15 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddRotationSpeed(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
 		{
 			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.MovementFeatures.RotationSpeed() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.MovementFeatures.CanRotate CanRotateC => GetComponent<Assets._Project.Ecs.Gameplay.Features.MovementFeatures.CanRotate>();
+
+		public Assets._Project.Ecs.Utilities.Conditions.ICompositeCondition CanRotate => CanRotateC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddCanRotate(Assets._Project.Ecs.Utilities.Conditions.ICompositeCondition value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.MovementFeatures.CanRotate() {Value = value}); 
 		}
 
 		public Assets._Project.Ecs.Gameplay.Features.LifeCycle.CurrentHealth CurrentHealthC => GetComponent<Assets._Project.Ecs.Gameplay.Features.LifeCycle.CurrentHealth>();
@@ -98,6 +116,24 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddIsDead(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> value)
 		{
 			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.LifeCycle.IsDead() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.LifeCycle.MustDie MustDieC => GetComponent<Assets._Project.Ecs.Gameplay.Features.LifeCycle.MustDie>();
+
+		public Assets._Project.Ecs.Utilities.Conditions.ICompositeCondition MustDie => MustDieC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddMustDie(Assets._Project.Ecs.Utilities.Conditions.ICompositeCondition value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.LifeCycle.MustDie() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.LifeCycle.MustSelfRelease MustSelfReleaseC => GetComponent<Assets._Project.Ecs.Gameplay.Features.LifeCycle.MustSelfRelease>();
+
+		public Assets._Project.Ecs.Utilities.Conditions.ICompositeCondition MustSelfRelease => MustSelfReleaseC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddMustSelfRelease(Assets._Project.Ecs.Utilities.Conditions.ICompositeCondition value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.LifeCycle.MustSelfRelease() {Value = value}); 
 		}
 
 		public Assets._Project.Ecs.Gameplay.Features.LifeCycle.DeathProcessInitialTime DeathProcessInitialTimeC => GetComponent<Assets._Project.Ecs.Gameplay.Features.LifeCycle.DeathProcessInitialTime>();

@@ -3,6 +3,7 @@ using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Ecs.Gameplay.EntitiesCore.Mono;
 using Assets._Project.Ecs.Gameplay.Features.LifeCycle;
 using Assets._Project.Ecs.Gameplay.Features.MovementFeatures;
+using Assets._Project.Ecs.Utilities.Conditions;
 using UnityEngine;
 
 namespace Assets._Project.Ecs.Gameplay.EntitiesCore
@@ -28,6 +29,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
             _monoEntitiesFactory.Create(entity, position, "Entities/RigidbodyEntity");
 
             entity
+                //компоненты полей
                 //move
                 .AddMoveDirection()
                 .AddMoveSpeed(new ReactiveVariable<float>(10))
@@ -42,6 +44,27 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .AddDeathProcessInitialTime(new ReactiveVariable<float>(2))
                 .AddDeathProcessCurrentTime();
 
+            //компоненты условий
+            ICompositeCondition canMove = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+
+            ICompositeCondition canRotate = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+
+            ICompositeCondition mustDie = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.CurrentHealth.Value <= 0));
+
+            ICompositeCondition mustSelfRealese = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value))
+                .Add(new FuncCondition(() => entity.InDeathProcess.Value == false));
+
+            entity
+                .AddCanMove(canMove)
+                .AddCanRotate(canRotate)
+                .AddMustDie(mustDie)
+                .AddMustSelfRelease(mustSelfRealese);
+
+            //компоненты систем
             entity
                 .AddSystem(new RigidbodyMovementSystem())
                 .AddSystem(new RigidbodyRotationSystem())

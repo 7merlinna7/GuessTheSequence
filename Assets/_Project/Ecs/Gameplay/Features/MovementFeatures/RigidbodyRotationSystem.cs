@@ -1,6 +1,7 @@
 ﻿using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.EntitiesCore.Systems;
+using Assets._Project.Ecs.Utilities.Conditions;
 using UnityEngine;
 
 namespace Assets._Project.Ecs.Gameplay.Features.MovementFeatures
@@ -11,7 +12,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.MovementFeatures
         private ReactiveVariable<float> _rotationSpeed;
         private ReactiveVariable<Vector3> _direction;
 
-        private ReactiveVariable<bool> _isDead;
+        private ICompositeCondition _canRotate;
 
         public void OnInit(Entity entity)
         {
@@ -19,12 +20,12 @@ namespace Assets._Project.Ecs.Gameplay.Features.MovementFeatures
             _rotationSpeed = entity.RotationSpeed;
             _direction = entity.RotationDirection;
 
-            _isDead = entity.IsDead;
+            _canRotate = entity.CanRotate;
         }
 
         public void OnUpdate(float deltaTime)
         {
-            if (_isDead.Value)
+            if (_canRotate.Evaluate() == false)
                 return;
 
             if (_direction.Value == Vector3.zero)
