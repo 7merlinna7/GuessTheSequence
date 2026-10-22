@@ -1,8 +1,12 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Utilities;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Ecs.Gameplay.EntitiesCore.Mono;
+using Assets._Project.Ecs.Gameplay.Features.AplyDamage;
+using Assets._Project.Ecs.Gameplay.Features.ContactTakeDamage;
 using Assets._Project.Ecs.Gameplay.Features.LifeCycle;
 using Assets._Project.Ecs.Gameplay.Features.MovementFeatures;
+using Assets._Project.Ecs.Gameplay.Features.Sensors;
 using Assets._Project.Ecs.Utilities.Conditions;
 using UnityEngine;
 
@@ -12,7 +16,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
     {
         private readonly DIContainer _container;
         private readonly EntitiesLifeContext _entitiesLifeContext;
-
+        private readonly CollidersRegistryService _collidersRegistryService;
         private readonly MonoEntitiesFactory _monoEntitiesFactory;
 
         public EntitiesFactory(DIContainer container)
@@ -20,6 +24,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
             _container = container;
             _entitiesLifeContext = _container.Resolve<EntitiesLifeContext>();
             _monoEntitiesFactory = _container.Resolve<MonoEntitiesFactory>();
+            _collidersRegistryService = _container.Resolve<CollidersRegistryService>();
         }
 
         public Entity CreateGhost(Vector3 position)
@@ -42,7 +47,14 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .AddIsDead()
                 .AddInDeathProcess()
                 .AddDeathProcessInitialTime(new ReactiveVariable<float>(2))
-                .AddDeathProcessCurrentTime();
+                .AddDeathProcessCurrentTime()
+                //takeDamage
+                .AddTakeDamageRequest()
+                .AddTakeDamageEvent()
+                .AddContactsDetectingMask(1 << LayerMask.NameToLayer("Characters"))
+                .AddContactCollidersBuffer(new Buffer<Collider>(64))
+                .AddContactEntitiesBuffer(new Buffer<Entity>(64))
+                .AddBodyContactDamage(new ReactiveVariable<float>(50));
 
             //компоненты условий
             ICompositeCondition canMove = new CompositeCondition()
@@ -58,16 +70,24 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .Add(new FuncCondition(() => entity.IsDead.Value))
                 .Add(new FuncCondition(() => entity.InDeathProcess.Value == false));
 
+            ICompositeCondition canApplyDamage = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+
             entity
                 .AddCanMove(canMove)
                 .AddCanRotate(canRotate)
                 .AddMustDie(mustDie)
-                .AddMustSelfRelease(mustSelfRealese);
+                .AddMustSelfRelease(mustSelfRealese)
+                .AddCanApplayDamage(canApplyDamage);
 
             //компоненты систем
             entity
                 .AddSystem(new RigidbodyMovementSystem())
                 .AddSystem(new RigidbodyRotationSystem())
+                .AddSystem(new BodyContactsDetectingSystem())
+                .AddSystem(new BodyContactsEntitiesFilterSystem(_collidersRegistryService))
+                .AddSystem(new DealDamageOnContactSystem())
+                .AddSystem(new ApplyDamageSystem())
                 .AddSystem(new DeathSystem())
                 .AddSystem(new DeathProcessTimerSystem())
                 .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));

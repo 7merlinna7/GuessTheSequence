@@ -1,22 +1,14 @@
-﻿using Assets._Project.Develop.Runtime.Configs.Gameplay.SequenceConfigs;
-using Assets._Project.Develop.Runtime.Configs.Meta.Wallet;
+﻿using Assets._Project.Develop.Runtime.Configs.Meta.Wallet;
 using Assets._Project.Develop.Runtime.Gameplay.SequenceFeature;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
-using Assets._Project.Develop.Runtime.UI;
-using Assets._Project.Develop.Runtime.UI.CommonViews.Gameplay;
-using Assets._Project.Develop.Runtime.UI.CommonViews.SequenceFeature;
-using Assets._Project.Develop.Runtime.UI.Core;
-using Assets._Project.Develop.Runtime.UI.MainMenue;
 using Assets._Project.Develop.Runtime.Utilites.AssetsManagment;
 using Assets._Project.Develop.Runtime.Utilites.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
-using Assets._Project.Develop.Runtime.Utilities.Configs.Gameplay.SequenceConfigs;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.EntitiesCore.Mono;
-using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 {
@@ -32,7 +24,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             container.RegisterAsSingle(CreateEntitiesFactory);
             container.RegisterAsSingle(CreateEntitiesLifeContext);
             container.RegisterAsSingle(CreateMonoEntitiesFactory).NonLazy();
+            container.RegisterAsSingle(CreateCollidersRegistryService);
         }
+
+        private static CollidersRegistryService CreateCollidersRegistryService(DIContainer c)
+            => new CollidersRegistryService();
 
         private static EntitiesFactory CreateEntitiesFactory(DIContainer c)
         {  return new EntitiesFactory(c); }
@@ -44,7 +40,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         {
             return new MonoEntitiesFactory(
                 c.Resolve<ResourcesAssetsLoader>(),
-                c.Resolve<EntitiesLifeContext>());
+                c.Resolve<EntitiesLifeContext>(),
+                c.Resolve<CollidersRegistryService>());
         }
 
         private static Gamemode CreateGamemode(DIContainer c)

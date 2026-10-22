@@ -17,7 +17,10 @@ namespace Assets._Project.Ecs.Gameplay
         public void Start(SequenceType sequenceType)
         {
             if (sequenceType == SequenceType.Numbers)
+            {
                 _entity = _entitiesFactory.CreateGhost(Vector3.zero);
+                _entitiesFactory.CreateGhost(Vector3.zero + Vector3.forward * 5);
+            }
 
             if (sequenceType == SequenceType.Letters)
                 _entity = _entitiesFactory.CreateCharacterControllerEntity(Vector3.zero);
@@ -32,8 +35,7 @@ namespace Assets._Project.Ecs.Gameplay
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                _entity.CurrentHealth.Value -= 50;
-                Debug.Log(_entity.CurrentHealth.Value);
+                _entity.TakeDamageRequest.Invoke(50);
             }
 
             Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"),0, Input.GetAxisRaw("Vertical"));

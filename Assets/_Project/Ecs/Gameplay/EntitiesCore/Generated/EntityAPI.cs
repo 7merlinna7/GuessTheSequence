@@ -2,6 +2,42 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 {
 	public partial class Entity
 	{
+		public Assets._Project.Ecs.Gameplay.Features.Sensors.BodyCollider BodyColliderC => GetComponent<Assets._Project.Ecs.Gameplay.Features.Sensors.BodyCollider>();
+
+		public UnityEngine.CapsuleCollider BodyCollider => BodyColliderC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddBodyCollider(UnityEngine.CapsuleCollider value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.Sensors.BodyCollider() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.Sensors.ContactsDetectingMask ContactsDetectingMaskC => GetComponent<Assets._Project.Ecs.Gameplay.Features.Sensors.ContactsDetectingMask>();
+
+		public UnityEngine.LayerMask ContactsDetectingMask => ContactsDetectingMaskC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddContactsDetectingMask(UnityEngine.LayerMask value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.Sensors.ContactsDetectingMask() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.Sensors.ContactCollidersBuffer ContactCollidersBufferC => GetComponent<Assets._Project.Ecs.Gameplay.Features.Sensors.ContactCollidersBuffer>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Buffer<UnityEngine.Collider> ContactCollidersBuffer => ContactCollidersBufferC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddContactCollidersBuffer(Assets._Project.Develop.Runtime.Utilities.Buffer<UnityEngine.Collider> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.Sensors.ContactCollidersBuffer() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.Sensors.ContactEntitiesBuffer ContactEntitiesBufferC => GetComponent<Assets._Project.Ecs.Gameplay.Features.Sensors.ContactEntitiesBuffer>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Buffer<Assets._Project.Ecs.Gameplay.EntitiesCore.Entity> ContactEntitiesBuffer => ContactEntitiesBufferC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddContactEntitiesBuffer(Assets._Project.Develop.Runtime.Utilities.Buffer<Assets._Project.Ecs.Gameplay.EntitiesCore.Entity> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.Sensors.ContactEntitiesBuffer() {Value = value}); 
+		}
+
 		public Assets._Project.Ecs.Gameplay.Features.MovementFeatures.MoveDirection MoveDirectionC => GetComponent<Assets._Project.Ecs.Gameplay.Features.MovementFeatures.MoveDirection>();
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<UnityEngine.Vector3> MoveDirection => MoveDirectionC.Value;
@@ -176,6 +212,57 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddInDeathProcess(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> value)
 		{
 			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.LifeCycle.InDeathProcess() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.ContactTakeDamage.BodyContactDamage BodyContactDamageC => GetComponent<Assets._Project.Ecs.Gameplay.Features.ContactTakeDamage.BodyContactDamage>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> BodyContactDamage => BodyContactDamageC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddBodyContactDamage()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.ContactTakeDamage.BodyContactDamage() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddBodyContactDamage(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.ContactTakeDamage.BodyContactDamage() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.AplyDamage.TakeDamageRequest TakeDamageRequestC => GetComponent<Assets._Project.Ecs.Gameplay.Features.AplyDamage.TakeDamageRequest>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single> TakeDamageRequest => TakeDamageRequestC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddTakeDamageRequest()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.AplyDamage.TakeDamageRequest() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single>() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddTakeDamageRequest(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.AplyDamage.TakeDamageRequest() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.AplyDamage.TakeDamageEvent TakeDamageEventC => GetComponent<Assets._Project.Ecs.Gameplay.Features.AplyDamage.TakeDamageEvent>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single> TakeDamageEvent => TakeDamageEventC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddTakeDamageEvent()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.AplyDamage.TakeDamageEvent() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single>() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddTakeDamageEvent(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.AplyDamage.TakeDamageEvent() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.AplyDamage.CanApplayDamage CanApplayDamageC => GetComponent<Assets._Project.Ecs.Gameplay.Features.AplyDamage.CanApplayDamage>();
+
+		public Assets._Project.Ecs.Utilities.Conditions.ICompositeCondition CanApplayDamage => CanApplayDamageC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddCanApplayDamage(Assets._Project.Ecs.Utilities.Conditions.ICompositeCondition value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.AplyDamage.CanApplayDamage() {Value = value}); 
 		}
 
 		public Assets._Project.Ecs.Gameplay.Common.RigidbodyComponent RigidbodyC => GetComponent<Assets._Project.Ecs.Gameplay.Common.RigidbodyComponent>();
