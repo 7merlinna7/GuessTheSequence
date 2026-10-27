@@ -2,6 +2,113 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 {
 	public partial class Entity
 	{
+		public Assets._Project.Ecs.Gameplay.Features.TeleportFeature.MaxTeleportEnergy MaxTeleportEnergyC => GetComponent<Assets._Project.Ecs.Gameplay.Features.TeleportFeature.MaxTeleportEnergy>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> MaxTeleportEnergy => MaxTeleportEnergyC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddMaxTeleportEnergy()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.MaxTeleportEnergy() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddMaxTeleportEnergy(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.MaxTeleportEnergy() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.TeleportFeature.CurrentTeleportEnergy CurrentTeleportEnergyC => GetComponent<Assets._Project.Ecs.Gameplay.Features.TeleportFeature.CurrentTeleportEnergy>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> CurrentTeleportEnergy => CurrentTeleportEnergyC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddCurrentTeleportEnergy()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.CurrentTeleportEnergy() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddCurrentTeleportEnergy(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.CurrentTeleportEnergy() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.TeleportFeature.EnergyToTeleport EnergyToTeleportC => GetComponent<Assets._Project.Ecs.Gameplay.Features.TeleportFeature.EnergyToTeleport>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> EnergyToTeleport => EnergyToTeleportC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddEnergyToTeleport()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.EnergyToTeleport() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddEnergyToTeleport(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.EnergyToTeleport() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleprtationRadius TeleprtationRadiusC => GetComponent<Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleprtationRadius>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> TeleprtationRadius => TeleprtationRadiusC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddTeleprtationRadius()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleprtationRadius() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddTeleprtationRadius(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleprtationRadius() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.TeleportFeature.CanTeleport CanTeleportC => GetComponent<Assets._Project.Ecs.Gameplay.Features.TeleportFeature.CanTeleport>();
+
+		public Assets._Project.Ecs.Utilities.Conditions.ICompositeCondition CanTeleport => CanTeleportC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddCanTeleport(Assets._Project.Ecs.Utilities.Conditions.ICompositeCondition value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.CanTeleport() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleportRequest TeleportRequestC => GetComponent<Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleportRequest>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent TeleportRequest => TeleportRequestC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddTeleportRequest()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleportRequest() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddTeleportRequest(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleportRequest() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleportEvent TeleportEventC => GetComponent<Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleportEvent>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent TeleportEvent => TeleportEventC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddTeleportEvent()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleportEvent() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddTeleportEvent(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleportEvent() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.TeleportFeature.IsTeleporting IsTeleportingC => GetComponent<Assets._Project.Ecs.Gameplay.Features.TeleportFeature.IsTeleporting>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> IsTeleporting => IsTeleportingC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddIsTeleporting()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.IsTeleporting() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean>() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddIsTeleporting(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.IsTeleporting() {Value = value}); 
+		}
+
 		public Assets._Project.Ecs.Gameplay.Features.Sensors.BodyCollider BodyColliderC => GetComponent<Assets._Project.Ecs.Gameplay.Features.Sensors.BodyCollider>();
 
 		public UnityEngine.CapsuleCollider BodyCollider => BodyColliderC.Value;

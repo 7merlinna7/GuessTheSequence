@@ -7,6 +7,7 @@ using Assets._Project.Ecs.Gameplay.Features.ContactTakeDamage;
 using Assets._Project.Ecs.Gameplay.Features.LifeCycle;
 using Assets._Project.Ecs.Gameplay.Features.MovementFeatures;
 using Assets._Project.Ecs.Gameplay.Features.Sensors;
+using Assets._Project.Ecs.Gameplay.Features.TeleportFeature;
 using Assets._Project.Ecs.Utilities.Conditions;
 using UnityEngine;
 
@@ -27,11 +28,87 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
             _collidersRegistryService = _container.Resolve<CollidersRegistryService>();
         }
 
-        public Entity CreateGhost(Vector3 position)
+        public Entity CreateTeleportingGhost(Vector3 position)
+        {
+            Entity entity = CreateEmpty();
+
+            _monoEntitiesFactory.Create(entity, position, "Entities/TeleportingGhost");
+
+            entity
+                //компоненты полей
+                //здоровье
+                .AddMaxHealth(new ReactiveVariable<float>(100))
+                .AddCurrentHealth(new ReactiveVariable<float>(100))
+                //смерть
+                .AddIsDead()
+                .AddInDeathProcess()
+                .AddDeathProcessInitialTime(new ReactiveVariable<float>(0))
+                .AddDeathProcessCurrentTime()
+                //получение урона
+                .AddTakeDamageRequest()
+                .AddTakeDamageEvent()
+                //урон при косании
+                .AddContactsDetectingMask(1 << LayerMask.NameToLayer("Characters"))
+                .AddContactCollidersBuffer(new Buffer<Collider>(64))
+                .AddContactEntitiesBuffer(new Buffer<Entity>(64))
+                .AddBodyContactDamage(new ReactiveVariable<float>(50))
+                //телепорт
+                .AddMaxTeleportEnergy(new ReactiveVariable<float>(100))
+                .AddCurrentTeleportEnergy(new ReactiveVariable<float>(100))
+                .AddEnergyToTeleport(new ReactiveVariable<float>(20))
+
+                .AddTeleprtationRadius(new ReactiveVariable<float>(2))
+
+                .AddTeleportRequest()
+                .AddTeleportEvent()
+                ;
+
+            //компоненты условий
+
+            ICompositeCondition mustDie = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.CurrentHealth.Value <= 0));
+
+            ICompositeCondition mustSelfRealese = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value))
+                .Add(new FuncCondition(() => entity.InDeathProcess.Value == false));
+
+            ICompositeCondition canApplyDamage = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+
+            ICompositeCondition canTeleport = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false && entity.CurrentTeleportEnergy.Value >= entity.EnergyToTeleport.Value));
+
+            entity
+                .AddMustDie(mustDie)
+                .AddMustSelfRelease(mustSelfRealese)
+                .AddCanApplayDamage(canApplyDamage)
+                .AddCanTeleport(canTeleport)
+                ;
+
+            //компоненты систем
+            entity
+                .AddSystem(new BodyContactsDetectingSystem())
+                .AddSystem(new BodyContactsEntitiesFilterSystem(_collidersRegistryService))
+                .AddSystem(new DealDamageOnContactSystem())
+                .AddSystem(new ApplyDamageSystem())
+                .AddSystem(new DeathSystem())
+                .AddSystem(new DisableCollidersOnDeathSystem())
+                .AddSystem(new DeathProcessTimerSystem())
+                .AddSystem(new SelfReleaseSystem(_entitiesLifeContext))
+                //teleport
+                .AddSystem(new TeleportEnergySystem())
+                .AddSystem(new TeleportSystem());
+
+            _entitiesLifeContext.Add(entity);
+
+            return entity;
+        }
+
+        public Entity CreateWalkingGhost(Vector3 position)
         {
            Entity entity = CreateEmpty();
 
-            _monoEntitiesFactory.Create(entity, position, "Entities/RigidbodyEntity");
+            _monoEntitiesFactory.Create(entity, position, "Entities/WalkingGhost");
 
             entity
                 //компоненты полей
@@ -46,7 +123,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 //death
                 .AddIsDead()
                 .AddInDeathProcess()
-                .AddDeathProcessInitialTime(new ReactiveVariable<float>(2))
+                .AddDeathProcessInitialTime(new ReactiveVariable<float>(0))
                 .AddDeathProcessCurrentTime()
                 //takeDamage
                 .AddTakeDamageRequest()
