@@ -4,6 +4,7 @@ using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Ecs.Gameplay.EntitiesCore.Mono;
 using Assets._Project.Ecs.Gameplay.Features.AplyDamage;
 using Assets._Project.Ecs.Gameplay.Features.ContactTakeDamage;
+using Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures;
 using Assets._Project.Ecs.Gameplay.Features.LifeCycle;
 using Assets._Project.Ecs.Gameplay.Features.MovementFeatures;
 using Assets._Project.Ecs.Gameplay.Features.Sensors;
@@ -51,16 +52,25 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .AddContactsDetectingMask(1 << LayerMask.NameToLayer("Characters"))
                 .AddContactCollidersBuffer(new Buffer<Collider>(64))
                 .AddContactEntitiesBuffer(new Buffer<Entity>(64))
-                .AddBodyContactDamage(new ReactiveVariable<float>(50))
+                
                 //телепорт
                 .AddMaxTeleportEnergy(new ReactiveVariable<float>(100))
                 .AddCurrentTeleportEnergy(new ReactiveVariable<float>(100))
                 .AddEnergyToTeleport(new ReactiveVariable<float>(20))
 
+                .AddTeleportEnergyRechargeCoefficient(new ReactiveVariable<float>(0.1f))
+                .AddMaxTeleportEnergyRechargeTime(new ReactiveVariable<float>(1))
+                .AddCurrentTeleportEnergyRechargeTime(new ReactiveVariable<float>(1))
+
                 .AddTeleprtationRadius(new ReactiveVariable<float>(2))
+
+                .AddExplotionRadius(new ReactiveVariable<float>(3))
+                .AddExplotionDamage(new ReactiveVariable<float>(50))
 
                 .AddTeleportRequest()
                 .AddTeleportEvent()
+                .AddDealExplotionDamageEvent()
+                .AddRechargeEnergyTimerIsOver()
                 ;
 
             //компоненты условий
@@ -76,7 +86,8 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .Add(new FuncCondition(() => entity.IsDead.Value == false));
 
             ICompositeCondition canTeleport = new CompositeCondition()
-                .Add(new FuncCondition(() => entity.IsDead.Value == false && entity.CurrentTeleportEnergy.Value >= entity.EnergyToTeleport.Value));
+                .Add(new FuncCondition(() => entity.IsDead.Value == false))
+                .Add(new FuncCondition(() => entity.CurrentTeleportEnergy.Value >= entity.EnergyToTeleport.Value));
 
             entity
                 .AddMustDie(mustDie)
@@ -87,17 +98,19 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 
             //компоненты систем
             entity
-                .AddSystem(new BodyContactsDetectingSystem())
-                .AddSystem(new BodyContactsEntitiesFilterSystem(_collidersRegistryService))
-                .AddSystem(new DealDamageOnContactSystem())
+                .AddSystem(new ExplotionContactsDetectingSystem())
+                .AddSystem(new ExplotionContactsEntitiesFilterSystem(_collidersRegistryService))
+                .AddSystem(new DealDamageOnExplotionSystem())
                 .AddSystem(new ApplyDamageSystem())
                 .AddSystem(new DeathSystem())
                 .AddSystem(new DisableCollidersOnDeathSystem())
                 .AddSystem(new DeathProcessTimerSystem())
                 .AddSystem(new SelfReleaseSystem(_entitiesLifeContext))
-                //teleport
+                //телепорт
                 .AddSystem(new TeleportEnergySystem())
-                .AddSystem(new TeleportSystem());
+                .AddSystem(new TeleportEnergyRechargeTimerSystem())
+                .AddSystem(new TeleportSystem())
+                ;
 
             _entitiesLifeContext.Add(entity);
 
@@ -131,7 +144,8 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .AddContactsDetectingMask(1 << LayerMask.NameToLayer("Characters"))
                 .AddContactCollidersBuffer(new Buffer<Collider>(64))
                 .AddContactEntitiesBuffer(new Buffer<Entity>(64))
-                .AddBodyContactDamage(new ReactiveVariable<float>(50));
+                .AddBodyContactDamage(new ReactiveVariable<float>(50))
+                ;
 
             //компоненты условий
             ICompositeCondition canMove = new CompositeCondition()

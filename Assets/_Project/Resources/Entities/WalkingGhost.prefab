@@ -178,7 +178,7 @@ PrefabInstance:
     - target: {fileID: 3871895766786678088, guid: 00c323578a2235b4a8d8e3de36cbbb9e,
         type: 3}
       propertyPath: m_Name
-      value: Ghost1
+      value: WalkingGhost
       objectReference: {fileID: 0}
     - target: {fileID: 6722587643011911256, guid: 00c323578a2235b4a8d8e3de36cbbb9e,
         type: 3}
@@ -350,10 +350,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.64030445
-  m_Height: 1.6067725
+  m_Radius: 0.7604973
+  m_Height: 1.6067724
   m_Direction: 1
-  m_Center: {x: 0, y: 0.8033863, z: 0.058608413}
+  m_Center: {x: 0, y: 0.5, z: 0.019529402}
 --- !u!4 &8593372405906717860 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 970047506042303065, guid: 00c323578a2235b4a8d8e3de36cbbb9e,

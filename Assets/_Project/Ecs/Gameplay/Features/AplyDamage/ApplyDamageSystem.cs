@@ -44,7 +44,6 @@ namespace Assets._Project.Ecs.Gameplay.Features.AplyDamage
 
             _health.Value = MathF.Max(_health.Value - damage, 0);
             _damageEvent.Invoke(damage);
-            Debug.Log("I Take damage");
         }
     }
 }

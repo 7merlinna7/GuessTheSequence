@@ -14,6 +14,21 @@ namespace Assets._Project.Ecs.Gameplay.Features.TeleportFeature
         public ReactiveVariable<float> Value;
     }
 
+    public class MaxTeleportEnergyRechargeTime : IEntityComponent
+    {
+        public ReactiveVariable<float> Value;
+    }
+
+    public class TeleportEnergyRechargeCoefficient : IEntityComponent
+    {
+        public ReactiveVariable<float> Value;
+    }
+
+    public class CurrentTeleportEnergyRechargeTime : IEntityComponent
+    {
+        public ReactiveVariable<float> Value;
+    }
+
     public class EnergyToTeleport : IEntityComponent
     {
         public ReactiveVariable<float> Value;
@@ -39,8 +54,13 @@ namespace Assets._Project.Ecs.Gameplay.Features.TeleportFeature
         public ReactiveEvent Value;
     }
 
-    public class IsTeleporting :IEntityComponent
+    public class DealExplotionDamageEvent : IEntityComponent
     {
-        public ReactiveVariable<bool> Value;
+        public ReactiveEvent Value;
+    }
+
+    public class RechargeEnergyTimerIsOver : IEntityComponent
+    {
+        public ReactiveEvent Value;
     }
 }

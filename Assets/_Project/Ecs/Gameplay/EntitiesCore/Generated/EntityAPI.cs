@@ -30,6 +30,48 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.CurrentTeleportEnergy() {Value = value}); 
 		}
 
+		public Assets._Project.Ecs.Gameplay.Features.TeleportFeature.MaxTeleportEnergyRechargeTime MaxTeleportEnergyRechargeTimeC => GetComponent<Assets._Project.Ecs.Gameplay.Features.TeleportFeature.MaxTeleportEnergyRechargeTime>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> MaxTeleportEnergyRechargeTime => MaxTeleportEnergyRechargeTimeC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddMaxTeleportEnergyRechargeTime()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.MaxTeleportEnergyRechargeTime() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddMaxTeleportEnergyRechargeTime(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.MaxTeleportEnergyRechargeTime() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleportEnergyRechargeCoefficient TeleportEnergyRechargeCoefficientC => GetComponent<Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleportEnergyRechargeCoefficient>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> TeleportEnergyRechargeCoefficient => TeleportEnergyRechargeCoefficientC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddTeleportEnergyRechargeCoefficient()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleportEnergyRechargeCoefficient() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddTeleportEnergyRechargeCoefficient(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleportEnergyRechargeCoefficient() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.TeleportFeature.CurrentTeleportEnergyRechargeTime CurrentTeleportEnergyRechargeTimeC => GetComponent<Assets._Project.Ecs.Gameplay.Features.TeleportFeature.CurrentTeleportEnergyRechargeTime>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> CurrentTeleportEnergyRechargeTime => CurrentTeleportEnergyRechargeTimeC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddCurrentTeleportEnergyRechargeTime()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.CurrentTeleportEnergyRechargeTime() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddCurrentTeleportEnergyRechargeTime(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.CurrentTeleportEnergyRechargeTime() {Value = value}); 
+		}
+
 		public Assets._Project.Ecs.Gameplay.Features.TeleportFeature.EnergyToTeleport EnergyToTeleportC => GetComponent<Assets._Project.Ecs.Gameplay.Features.TeleportFeature.EnergyToTeleport>();
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> EnergyToTeleport => EnergyToTeleportC.Value;
@@ -95,18 +137,32 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleportEvent() {Value = value}); 
 		}
 
-		public Assets._Project.Ecs.Gameplay.Features.TeleportFeature.IsTeleporting IsTeleportingC => GetComponent<Assets._Project.Ecs.Gameplay.Features.TeleportFeature.IsTeleporting>();
+		public Assets._Project.Ecs.Gameplay.Features.TeleportFeature.DealExplotionDamageEvent DealExplotionDamageEventC => GetComponent<Assets._Project.Ecs.Gameplay.Features.TeleportFeature.DealExplotionDamageEvent>();
 
-		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> IsTeleporting => IsTeleportingC.Value;
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent DealExplotionDamageEvent => DealExplotionDamageEventC.Value;
 
-		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddIsTeleporting()
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddDealExplotionDamageEvent()
 		{
-			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.IsTeleporting() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean>() });
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.DealExplotionDamageEvent() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent() });
 		}
 
-		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddIsTeleporting(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> value)
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddDealExplotionDamageEvent(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent value)
 		{
-			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.IsTeleporting() {Value = value}); 
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.DealExplotionDamageEvent() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.TeleportFeature.RechargeEnergyTimerIsOver RechargeEnergyTimerIsOverC => GetComponent<Assets._Project.Ecs.Gameplay.Features.TeleportFeature.RechargeEnergyTimerIsOver>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent RechargeEnergyTimerIsOver => RechargeEnergyTimerIsOverC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddRechargeEnergyTimerIsOver()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.RechargeEnergyTimerIsOver() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddRechargeEnergyTimerIsOver(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.RechargeEnergyTimerIsOver() {Value = value}); 
 		}
 
 		public Assets._Project.Ecs.Gameplay.Features.Sensors.BodyCollider BodyColliderC => GetComponent<Assets._Project.Ecs.Gameplay.Features.Sensors.BodyCollider>();
@@ -333,6 +389,34 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddDisableCollidersOnDeath(System.Collections.Generic.List<UnityEngine.Collider> value)
 		{
 			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.LifeCycle.DisableCollidersOnDeath() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.ExplotionRadius ExplotionRadiusC => GetComponent<Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.ExplotionRadius>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> ExplotionRadius => ExplotionRadiusC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddExplotionRadius()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.ExplotionRadius() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddExplotionRadius(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.ExplotionRadius() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.ExplotionDamage ExplotionDamageC => GetComponent<Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.ExplotionDamage>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> ExplotionDamage => ExplotionDamageC.Value;
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddExplotionDamage()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.ExplotionDamage() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddExplotionDamage(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.ExplotionDamage() {Value = value}); 
 		}
 
 		public Assets._Project.Ecs.Gameplay.Features.ContactTakeDamage.BodyContactDamage BodyContactDamageC => GetComponent<Assets._Project.Ecs.Gameplay.Features.ContactTakeDamage.BodyContactDamage>();

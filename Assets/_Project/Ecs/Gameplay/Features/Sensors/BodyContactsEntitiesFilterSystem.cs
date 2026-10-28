@@ -1,8 +1,6 @@
 ﻿using Assets._Project.Develop.Runtime.Utilities;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.EntitiesCore.Systems;
-using System;
-using System.Collections;
 using UnityEngine;
 
 namespace Assets._Project.Ecs.Gameplay.Features.Sensors
@@ -40,8 +38,6 @@ namespace Assets._Project.Ecs.Gameplay.Features.Sensors
                     _contactsEntities.Count++;
                 }
             }
-
-            Debug.Log("ENTITIES CONTACTS" + _contactsEntities.Count);
         }
     }
 }
