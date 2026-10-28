@@ -3,7 +3,6 @@ using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.EntitiesCore.Systems;
 using Assets._Project.Ecs.Utilities.Conditions;
 using System;
-using UnityEngine;
 
 namespace Assets._Project.Ecs.Gameplay.Features.AplyDamage
 {
