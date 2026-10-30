@@ -18,7 +18,7 @@ namespace Assets._Project.Ecs.Gameplay
         {
             if (sequenceType == SequenceType.Numbers)
             {
-                _entity = _entitiesFactory.CreateTeleportingGhost(Vector3.zero);
+                _entity = _entitiesFactory.CreateHero(Vector3.zero);
                 _entitiesFactory.CreateWalkingGhost(Vector3.zero + Vector3.forward * 5);
             }
 
@@ -33,10 +33,18 @@ namespace Assets._Project.Ecs.Gameplay
             if (_isRunning == false)
                 return;
 
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                _entity.TeleportRequest.Invoke();
-            }
+            if (Input.GetKeyDown(KeyCode.R))
+                _entity.StartAttackRequest.Invoke();
+
+            Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+
+            _entity.MoveDirection.Value = input;
+            _entity.RotationDirection.Value = input;
+
+            //if (Input.GetKeyDown(KeyCode.Space))
+            //{
+            //    _entity.TeleportRequest.Invoke();
+            //}
         }
 
     }
