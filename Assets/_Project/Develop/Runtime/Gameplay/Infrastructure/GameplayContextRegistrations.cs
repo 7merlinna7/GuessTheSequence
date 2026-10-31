@@ -9,6 +9,7 @@ using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.EntitiesCore.Mono;
+using Assets._Project.Ecs.Gameplay.Features.AI;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 {
@@ -25,7 +26,15 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             container.RegisterAsSingle(CreateEntitiesLifeContext);
             container.RegisterAsSingle(CreateMonoEntitiesFactory).NonLazy();
             container.RegisterAsSingle(CreateCollidersRegistryService);
+            container.RegisterAsSingle(CreateBrainsFactory);
+            container.RegisterAsSingle(CreateAIBrainsContext);
         }
+
+        private static AIBrainsContext CreateAIBrainsContext(DIContainer c)
+            => new AIBrainsContext();
+
+        private static BrainsFactory CreateBrainsFactory(DIContainer c)
+            => new BrainsFactory(c);
 
         private static CollidersRegistryService CreateCollidersRegistryService(DIContainer c)
             => new CollidersRegistryService();

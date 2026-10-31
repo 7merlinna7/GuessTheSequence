@@ -3,6 +3,7 @@ using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 using Assets._Project.Ecs.Gameplay;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
+using Assets._Project.Ecs.Gameplay.Features.AI;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         private TestGameplay _testGameplay;
         private bool _isRunning;
         private EntitiesLifeContext _lifeContext;
+        private AIBrainsContext _brainsContext;
 
 
         public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
@@ -33,8 +35,10 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
         public override IEnumerator Initialize()
         {
-            _testGameplay = new TestGameplay(_container.Resolve<EntitiesFactory>());
+            _testGameplay = new TestGameplay();
+            _testGameplay.Initialize(_container);
             _lifeContext = _container.Resolve<EntitiesLifeContext>();
+            _brainsContext = _container.Resolve<AIBrainsContext>();
 
             yield break;
         }
@@ -47,6 +51,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
         private void Update()
         {
+            _brainsContext?.Update(Time.deltaTime);
+
             if (_isRunning == false)
                 return;
             
