@@ -10,11 +10,5 @@ namespace Assets._Project.Ecs.Gameplay.Common
         {
             entity.AddTransform(GetComponent<Transform>());
         }
-
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(GetComponent<Transform>().position, 3f);
-        }
     }
 }

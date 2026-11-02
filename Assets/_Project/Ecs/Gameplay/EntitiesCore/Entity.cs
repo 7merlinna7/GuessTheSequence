@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 {
-    public partial class Entity 
+    public partial class Entity : IDisposable 
     {
         private readonly Dictionary<Type, IEntityComponent> _components = new();
         private readonly List<IEntitySystem> _systems = new();

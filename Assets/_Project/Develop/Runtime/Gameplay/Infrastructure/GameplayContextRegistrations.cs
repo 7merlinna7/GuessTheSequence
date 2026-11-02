@@ -10,6 +10,7 @@ using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.EntitiesCore.Mono;
 using Assets._Project.Ecs.Gameplay.Features.AI;
+using Assets._Project.Ecs.Gameplay.Features.InputFeature;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 {
@@ -28,7 +29,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             container.RegisterAsSingle(CreateCollidersRegistryService);
             container.RegisterAsSingle(CreateBrainsFactory);
             container.RegisterAsSingle(CreateAIBrainsContext);
+            container.RegisterAsSingle<IInputService>(CreateDesktopInput);
         }
+
+        private static DesktopInput CreateDesktopInput(DIContainer c)
+            => new DesktopInput();
 
         private static AIBrainsContext CreateAIBrainsContext(DIContainer c)
             => new AIBrainsContext();

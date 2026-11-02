@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Assets._Project.Develop.Runtime.Utilities.StateMachineCore
 {
-    public class StateMachine<TState> : IDisposable where TState : class, IState
+    public class StateMachine<TState> : State ,IDisposable, IUpdatableState where TState : class, IState
     {
         private List<StateNode<TState>> _states = new();
         private StateNode<TState> _currentState;
@@ -65,8 +65,9 @@ namespace Assets._Project.Develop.Runtime.Utilities.StateMachineCore
             _disposables.Clear();
         }
 
-        public void Enter()
+        public override void Enter()
         {
+            base.Enter();
             if (_currentState == null)
                 SwitchState(_states[0]);
             else
@@ -75,8 +76,9 @@ namespace Assets._Project.Develop.Runtime.Utilities.StateMachineCore
             _isRunning = true;
         }
 
-        public void Exit()
+        public override void Exit()
         {
+            base.Exit();
             _currentState?.State.Exit();
             _isRunning = false;
         }
