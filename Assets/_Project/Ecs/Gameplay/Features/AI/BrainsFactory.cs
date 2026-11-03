@@ -93,10 +93,16 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
             disposables.Add(idleTimer);
             disposables.Add(idleState.Entered.Subscribe(idleTimer.Restart));
 
-            FuncCondition teleportToIdleCondition = new FuncCondition(() => entity.InTeleportProcess.Value == false);
+            ReactiveVariable<bool> inTeleportProcess = entity.InTeleportProcess;
+
+            FuncCondition teleportToIdleCondition = new FuncCondition(() =>
+            {
+                Debug.Log(inTeleportProcess.Value == false);
+                return inTeleportProcess.Value == false;
+            });
             FuncCondition idleToTeleportCondition = new FuncCondition(() => idleTimer.IsOver);
 
-            AIStateMachine stateMachine = new AIStateMachine();
+            AIStateMachine stateMachine = new AIStateMachine(disposables);
             stateMachine.AddState(idleState);
             stateMachine.AddState(teleportState);
 
@@ -145,7 +151,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
             TeleportationState teleportationState = new TeleportationState(entity);
             RotateRandomState rotateRandomState = new RotateRandomState(entity);
 
-            FuncCondition fromTeleportToRotateCondition = new FuncCondition(() => entity.InTeleportProcess.Value == false);
+            //FuncCondition fromTeleportToRotateCondition = new FuncCondition(() => entity.InTeleportProcess.Value == false);
 
             FuncCondition fromRotateToTeleportCondition = new FuncCondition(() => rotateRandomState.InRotateProcess == false);
 
@@ -154,7 +160,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
             stateMachine.AddState(teleportationState);
 
             stateMachine.AddTransition(rotateRandomState,teleportationState,fromRotateToTeleportCondition);
-            stateMachine.AddTransition(teleportationState,rotateRandomState,fromTeleportToRotateCondition);
+            //stateMachine.AddTransition(teleportationState,rotateRandomState,fromTeleportToRotateCondition);
 
 
             return stateMachine;

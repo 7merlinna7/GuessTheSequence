@@ -29,7 +29,7 @@ namespace Assets._Project.Ecs.Gameplay
             {
                 _entity = _entitiesFactory.CreateHero(Vector3.zero);
                 _entity.AddCurrentTarget();
-                _brainsFactory.CreateMainHeroBrain(_entity, new NearestDamagebleTargetSelector(_entity));
+                //_brainsFactory.CreateMainHeroBrain(_entity, new NearestDamagebleTargetSelector(_entity));
 
                 //_entitiesFactory.CreateTeleportingGhost(Vector3.zero + Vector3.forward * 6 + Vector3.left * 2);
 

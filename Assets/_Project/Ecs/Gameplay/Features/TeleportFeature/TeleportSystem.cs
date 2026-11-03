@@ -45,8 +45,8 @@ namespace Assets._Project.Ecs.Gameplay.Features.TeleportFeature
             {
                 _transform.position += direction.normalized * _teleportationRadius.Value;
 
-                _teleportEvent.Invoke();
                 _inTeleportProcess.Value = true;
+                _teleportEvent.Invoke(); 
             }
         }
     }

@@ -57,9 +57,8 @@ namespace Assets._Project.Develop.Runtime.Utilities.Timer
             {
                 _currentTime.Value -= Time.deltaTime;
                 yield return null;
-                Debug.Log(_currentTime.Value);
             }
-
+            Debug.Log(_currentTime.Value);
             _cooldownEnded.Invoke();
         }
     }

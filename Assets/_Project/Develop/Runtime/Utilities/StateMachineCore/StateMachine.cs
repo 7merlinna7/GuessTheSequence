@@ -1,7 +1,9 @@
-﻿using Assets._Project.Ecs.Utilities.Conditions;
+﻿using Assets._Project.Ecs.Gameplay.Features.AI.States;
+using Assets._Project.Ecs.Utilities.Conditions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Utilities.StateMachineCore
 {
@@ -32,11 +34,13 @@ namespace Assets._Project.Develop.Runtime.Utilities.StateMachineCore
 
         public void Update(float deltaTime)
         {
+            Debug.Log(CurrentState.GetType());
             if (_isRunning == false)
                 return;
 
             foreach (StateTransition<TState> transition in _currentState.Transitions)
             {
+
                 if (transition.Condition.Evaluate())
                 {
                     SwitchState(transition.ToState);
