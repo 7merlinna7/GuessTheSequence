@@ -1,6 +1,7 @@
 ﻿using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Utilities.Conditions;
+using System.Numerics;
 
 namespace Assets._Project.Ecs.Gameplay.Features.TeleportFeature
 {
@@ -46,7 +47,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.TeleportFeature
 
     public class TeleportRequest : IEntityComponent
     {
-        public ReactiveEvent Value;
+        public ReactiveEvent<UnityEngine.Vector3> Value;
     }
 
     public class TeleportEvent : IEntityComponent
@@ -62,5 +63,10 @@ namespace Assets._Project.Ecs.Gameplay.Features.TeleportFeature
     public class RechargeEnergyTimerIsOver : IEntityComponent
     {
         public ReactiveEvent Value;
+    }
+
+    public class InTeleportProcess :IEntityComponent
+    {
+        public ReactiveVariable<bool> Value;
     }
 }

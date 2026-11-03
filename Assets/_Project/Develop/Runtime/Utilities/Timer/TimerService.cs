@@ -56,7 +56,8 @@ namespace Assets._Project.Develop.Runtime.Utilities.Timer
             while (IsOver == false)
             {
                 _currentTime.Value -= Time.deltaTime;
-                yield return null; 
+                yield return null;
+                Debug.Log(_currentTime.Value);
             }
 
             _cooldownEnded.Invoke();

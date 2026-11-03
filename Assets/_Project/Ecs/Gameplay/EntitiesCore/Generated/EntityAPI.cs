@@ -191,24 +191,24 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 
 		public Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleportRequest TeleportRequestC => GetComponent<Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleportRequest>();
 
-		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent TeleportRequest => TeleportRequestC.Value;
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<UnityEngine.Vector3> TeleportRequest => TeleportRequestC.Value;
 
-		public bool TryGetTeleportRequest(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent value)
+		public bool TryGetTeleportRequest(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<UnityEngine.Vector3> value)
 		{
 			bool result = TryGetComponent (out Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleportRequest component);
 			if (result)
 				value = component.Value;
 			else
-				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent);
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<UnityEngine.Vector3>);
 			return result;
 		}
 
 		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddTeleportRequest()
 		{
-			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleportRequest() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent() });
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleportRequest() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<UnityEngine.Vector3>() });
 		}
 
-		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddTeleportRequest(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent value)
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddTeleportRequest(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<UnityEngine.Vector3> value)
 		{
 			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleportRequest() {Value = value}); 
 		}
@@ -283,6 +283,30 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddRechargeEnergyTimerIsOver(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent value)
 		{
 			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.RechargeEnergyTimerIsOver() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.TeleportFeature.InTeleportProcess InTeleportProcessC => GetComponent<Assets._Project.Ecs.Gameplay.Features.TeleportFeature.InTeleportProcess>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> InTeleportProcess => InTeleportProcessC.Value;
+
+		public bool TryGetInTeleportProcess(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> value)
+		{
+			bool result = TryGetComponent (out Assets._Project.Ecs.Gameplay.Features.TeleportFeature.InTeleportProcess component);
+			if (result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean>);
+			return result;
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddInTeleportProcess()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.InTeleportProcess() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean>() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddInTeleportProcess(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.InTeleportProcess() {Value = value}); 
 		}
 
 		public Assets._Project.Ecs.Gameplay.Features.Sensors.BodyCollider BodyColliderC => GetComponent<Assets._Project.Ecs.Gameplay.Features.Sensors.BodyCollider>();

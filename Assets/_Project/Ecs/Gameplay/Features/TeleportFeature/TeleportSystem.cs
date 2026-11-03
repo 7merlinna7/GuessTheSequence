@@ -4,14 +4,16 @@ using Assets._Project.Ecs.Gameplay.EntitiesCore.Systems;
 using Assets._Project.Ecs.Utilities.Conditions;
 using System;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Assets._Project.Ecs.Gameplay.Features.TeleportFeature
 {
     public class TeleportSystem : IInitializableSystem, IDisposableSystem
     {
-        private ReactiveEvent _teleportRequest;
+        private ReactiveEvent<Vector3> _teleportRequest;
         private ReactiveEvent _teleportEvent;
+
+        private ReactiveVariable<bool> _inTeleportProcess;
+
 
         private Transform _transform;
         private ReactiveVariable<float> _teleportationRadius;
@@ -26,6 +28,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.TeleportFeature
 
             _transform = entity.Transform;
             _teleportationRadius = entity.TeleprtationRadius;
+            _inTeleportProcess = entity.InTeleportProcess;
 
             _canTeleport = entity.CanTeleport;
             _requestDisposable = _teleportRequest.Subscribe(OnTeleportRequest);
@@ -36,20 +39,15 @@ namespace Assets._Project.Ecs.Gameplay.Features.TeleportFeature
             _requestDisposable.Dispose();
         }
 
-        private void OnTeleportRequest()
+        private void OnTeleportRequest(Vector3 direction)
         {
             if (_canTeleport.Evaluate())
             {
-                _transform.position += GetTeleportationPoint();
+                _transform.position += direction.normalized * _teleportationRadius.Value;
 
                 _teleportEvent.Invoke();
+                _inTeleportProcess.Value = true;
             }
-        }
-
-        private Vector3 GetTeleportationPoint()
-        { 
-           Vector2 rand = Random.insideUnitCircle* _teleportationRadius.Value;
-            return new Vector3(rand.x, 0, rand.y);
         }
     }
 }

@@ -16,10 +16,13 @@ namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures
         private ReactiveEvent _dealExplotionDamageEvent;
         private IDisposable _eventDisposable;
 
+        private ReactiveVariable<bool> _inTeleportProcess;
+
         public void OnInit(Entity entity)
         {
             _contacts = entity.ContactEntitiesBuffer;
             _damage = entity.ExplotionDamage;
+            _inTeleportProcess = entity.InTeleportProcess;
 
             _dealExplotionDamageEvent = entity.DealExplotionDamageEvent;
             _eventDisposable = _dealExplotionDamageEvent.Subscribe(DealDamage);
@@ -38,8 +41,10 @@ namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures
 
                     if (contactEntity.HasComponent<TakeDamageRequest>())
                         contactEntity.TakeDamageRequest.Invoke(_damage.Value);
-                Debug.Log("DealDamage");
             }
+            _inTeleportProcess.Value = false;
+
+            Debug.Log(_inTeleportProcess.Value);
         }
     }
 }

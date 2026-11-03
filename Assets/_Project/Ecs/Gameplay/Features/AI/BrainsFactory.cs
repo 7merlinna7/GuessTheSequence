@@ -8,6 +8,7 @@ using Assets._Project.Ecs.Utilities.Conditions;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Assets._Project.Ecs.Gameplay.Features.AI
 {
@@ -65,7 +66,51 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
             return brain;
         }
 
-        public StateMachineBrain CreateGhostBrain(Entity entity)
+        public StateMachineBrain CreateSmartTeleportingGhostBrain(Entity entity, ITargetSelector targetSelector)
+        {
+            AIStateMachine combatState = CreateSmartTeleportingGhost(entity);
+
+            FindTargetState findTargetState = new FindTargetState(targetSelector, _entitiesLifeContext, entity);
+            AIParallelState parallelState = new AIParallelState(findTargetState, combatState);
+
+            AIStateMachine rootStateMachine = new AIStateMachine();
+            rootStateMachine.AddState(parallelState);
+
+            StateMachineBrain brain = new StateMachineBrain(rootStateMachine);
+            _brainsContext.SetFor(entity, brain);
+
+            return brain;
+        }
+
+        public StateMachineBrain CreateCommonTeleportingGhostBrain(Entity entity)
+        {
+            List<IDisposable> disposables = new List<IDisposable>();
+
+            AIStateMachine teleportState = CreateCommonTeleportingGhost(entity);
+            EmptyState idleState = new EmptyState();
+
+            TimerService idleTimer = _timerServiceFactory.Create(2f);
+            disposables.Add(idleTimer);
+            disposables.Add(idleState.Entered.Subscribe(idleTimer.Restart));
+
+            FuncCondition teleportToIdleCondition = new FuncCondition(() => entity.InTeleportProcess.Value == false);
+            FuncCondition idleToTeleportCondition = new FuncCondition(() => idleTimer.IsOver);
+
+            AIStateMachine stateMachine = new AIStateMachine();
+            stateMachine.AddState(idleState);
+            stateMachine.AddState(teleportState);
+
+            stateMachine.AddTransition(idleState, teleportState, idleToTeleportCondition);
+            stateMachine.AddTransition(teleportState, idleState, teleportToIdleCondition);
+
+            StateMachineBrain brain = new StateMachineBrain(stateMachine);
+
+            _brainsContext.SetFor(entity,brain);
+
+            return brain;
+        }
+
+        public StateMachineBrain CreateWalkingGhostBrain(Entity entity)
         {
             AIStateMachine stateMachine = CreateRandomMovementStateMashine(entity);
             StateMachineBrain brain = new StateMachineBrain(stateMachine);
@@ -73,6 +118,46 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
             _brainsContext.SetFor(entity, brain);
 
             return brain;
+        }
+
+        ////////////////////////////////////////////////
+        
+        private AIStateMachine CreateSmartTeleportingGhost(Entity entity)
+        {
+            TeleportationState smartTeleportationState = new TeleportationState(entity);
+            EmptyState idleState = new EmptyState();
+
+            FuncCondition teleportToIdleCondition = new FuncCondition(() => entity.CurrentTeleportEnergy.Value < entity.MaxTeleportEnergy.Value * 0.4f);
+            FuncCondition idleToTeleportCondition = new FuncCondition(() => entity.CurrentTeleportEnergy.Value >= entity.MaxTeleportEnergy.Value * 0.4f);
+
+            AIStateMachine stateMachine = new AIStateMachine();
+            stateMachine.AddState(smartTeleportationState);
+            stateMachine.AddState(idleState);
+
+            stateMachine.AddTransition(smartTeleportationState, idleState, teleportToIdleCondition);
+            stateMachine.AddTransition(idleState, smartTeleportationState, idleToTeleportCondition);
+
+            return stateMachine;
+        }
+
+        private AIStateMachine CreateCommonTeleportingGhost(Entity entity)
+        {
+            TeleportationState teleportationState = new TeleportationState(entity);
+            RotateRandomState rotateRandomState = new RotateRandomState(entity);
+
+            FuncCondition fromTeleportToRotateCondition = new FuncCondition(() => entity.InTeleportProcess.Value == false);
+
+            FuncCondition fromRotateToTeleportCondition = new FuncCondition(() => rotateRandomState.InRotateProcess == false);
+
+            AIStateMachine stateMachine = new AIStateMachine();
+            stateMachine.AddState(rotateRandomState);
+            stateMachine.AddState(teleportationState);
+
+            stateMachine.AddTransition(rotateRandomState,teleportationState,fromRotateToTeleportCondition);
+            stateMachine.AddTransition(teleportationState,rotateRandomState,fromTeleportToRotateCondition);
+
+
+            return stateMachine;
         }
 
         private AIStateMachine CreateRandomMovementStateMashine(Entity entity)

@@ -221,19 +221,21 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .AddContactEntitiesBuffer(new Buffer<Entity>(64))
                 
                 //телепорт
-                .AddMaxTeleportEnergy(new ReactiveVariable<float>(100))
-                .AddCurrentTeleportEnergy(new ReactiveVariable<float>(100))
-                .AddEnergyToTeleport(new ReactiveVariable<float>(20))
+                .AddRotationDirection()
+                .AddMaxTeleportEnergy(new ReactiveVariable<float>(150))
+                .AddCurrentTeleportEnergy(new ReactiveVariable<float>(150))
+                .AddEnergyToTeleport(new ReactiveVariable<float>(50))
 
                 .AddTeleportEnergyRechargeCoefficient(new ReactiveVariable<float>(0.1f))
                 .AddMaxTeleportEnergyRechargeTime(new ReactiveVariable<float>(1))
                 .AddCurrentTeleportEnergyRechargeTime(new ReactiveVariable<float>(1))
 
-                .AddTeleprtationRadius(new ReactiveVariable<float>(2))
+                .AddTeleprtationRadius(new ReactiveVariable<float>(5))
 
                 .AddExplotionRadius(new ReactiveVariable<float>(3))
                 .AddExplotionDamage(new ReactiveVariable<float>(50))
 
+                .AddInTeleportProcess()
                 .AddTeleportRequest()
                 .AddTeleportEvent()
                 .AddDealExplotionDamageEvent()
@@ -284,7 +286,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
             return entity;
         }
 
-        public Entity CreateWalkingGhost(Vector3 position)
+        public Entity CreateWalkingGhost(Vector3 position, float health)
         {
            Entity entity = CreateEmpty();
 
@@ -299,8 +301,8 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .AddRotationDirection()
                 .AddRotationSpeed(new ReactiveVariable<float>(900))
                 //health
-                .AddMaxHealth(new ReactiveVariable<float>(100))
-                .AddCurrentHealth(new ReactiveVariable<float>(100))
+                .AddMaxHealth(new ReactiveVariable<float>(health))
+                .AddCurrentHealth(new ReactiveVariable<float>(health))
                 //death
                 .AddIsDead()
                 .AddInDeathProcess()

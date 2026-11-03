@@ -12,6 +12,7 @@ namespace Assets._Project.Ecs.Gameplay
         private EntitiesFactory _entitiesFactory;
         private Entity _entity;
         private Entity _ghost;
+        private Entity _teleportingGhost;
         private bool _isRunning;
 
         private BrainsFactory _brainsFactory;
@@ -30,11 +31,21 @@ namespace Assets._Project.Ecs.Gameplay
                 _entity.AddCurrentTarget();
                 _brainsFactory.CreateMainHeroBrain(_entity, new NearestDamagebleTargetSelector(_entity));
 
-                _ghost = _entitiesFactory.CreateWalkingGhost(Vector3.zero + Vector3.forward * 5);
+                //_entitiesFactory.CreateTeleportingGhost(Vector3.zero + Vector3.forward * 6 + Vector3.left * 2);
+
+                _ghost = _entitiesFactory.CreateTeleportingGhost(Vector3.zero + Vector3.forward * 5);
+                _brainsFactory.CreateCommonTeleportingGhostBrain(_ghost);
             }
 
             if (sequenceType == SequenceType.Letters)
-                _entity = _entitiesFactory.CreateCharacterControllerEntity(Vector3.zero);
+            {
+                _entitiesFactory.CreateWalkingGhost(Vector3.zero + Vector3.forward * 6 + Vector3.left * 2, 100f);
+                _entitiesFactory.CreateWalkingGhost(Vector3.zero + Vector3.forward * 6 + Vector3.right * 2, 80f);
+
+                _teleportingGhost = _entitiesFactory.CreateTeleportingGhost(Vector3.zero);
+                _teleportingGhost.AddCurrentTarget();
+                _brainsFactory.CreateSmartTeleportingGhostBrain(_teleportingGhost, new MinHealthTargetSelector(_entity));
+            }
 
             _isRunning = true;
         }
@@ -46,19 +57,6 @@ namespace Assets._Project.Ecs.Gameplay
 
             if (Input.GetKeyDown(KeyCode.R))
                 _entity.StartAttackRequest.Invoke();
-
-            if (Input.GetKeyDown(KeyCode.I))
-                _brainsFactory.CreateGhostBrain(_ghost);
-
-            //Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-
-            //_entity.MoveDirection.Value = input;
-            //_entity.RotationDirection.Value = input;
-
-            //if (Input.GetKeyDown(KeyCode.Space))
-            //{
-            //    _entity.TeleportRequest.Invoke();
-            //}
         }
 
     }
