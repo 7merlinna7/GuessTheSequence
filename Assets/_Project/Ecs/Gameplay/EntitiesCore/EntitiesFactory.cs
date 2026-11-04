@@ -222,6 +222,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 
                 //телепорт
                 .AddRotationDirection()
+                .AddRotationSpeed(new ReactiveVariable<float>(500))
                 .AddMaxTeleportEnergy(new ReactiveVariable<float>(150))
                 .AddCurrentTeleportEnergy(new ReactiveVariable<float>(150))
                 .AddEnergyToTeleport(new ReactiveVariable<float>(50))
@@ -254,19 +255,25 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
             ICompositeCondition canApplyDamage = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.IsDead.Value == false));
 
+            ICompositeCondition canRotate = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+
             ICompositeCondition canTeleport = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.IsDead.Value == false))
-                .Add(new FuncCondition(() => entity.CurrentTeleportEnergy.Value >= entity.EnergyToTeleport.Value));
+                .Add(new FuncCondition(() => entity.CurrentTeleportEnergy.Value >= entity.EnergyToTeleport.Value))
+                .Add(new FuncCondition(() => entity.InTeleportProcess.Value == false));
 
             entity
                 .AddMustDie(mustDie)
                 .AddMustSelfRelease(mustSelfRealese)
                 .AddCanApplayDamage(canApplyDamage)
                 .AddCanTeleport(canTeleport)
+                .AddCanRotate(canRotate)
                 ;
 
             //компоненты систем
             entity
+                .AddSystem(new RigidbodyRotationSystem())
                 .AddSystem(new ExplotionContactsDetectingSystem())
                 .AddSystem(new ExplotionContactsEntitiesFilterSystem(_collidersRegistryService))
                 .AddSystem(new DealDamageOnExplotionSystem())

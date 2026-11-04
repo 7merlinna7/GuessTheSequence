@@ -52,8 +52,6 @@ namespace Assets._Project.Ecs.Gameplay.Features.TeleportFeature
             _currentEnergy.Value = MathF.Min(
                 _maxEnergy.Value ,
                 _currentEnergy.Value + _maxEnergy.Value * _rechargeCoefficient.Value);
-
-            Debug.Log("Energy "+ _currentEnergy.Value);
         }
     }
 }

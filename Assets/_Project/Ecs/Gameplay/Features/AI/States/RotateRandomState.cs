@@ -10,6 +10,8 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI.States
         private ReactiveVariable<Vector3> _rotationDirection;
         private ReactiveVariable<float> _teleportationRadius;
 
+        private Vector3 _randomDirection;
+
         private bool _inRotateprocess;
         public bool InRotateProcess => _inRotateprocess;
 
@@ -31,15 +33,16 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI.States
 
         public void Update(float deltaTime)
         {
+            _rotationDirection.Value = _randomDirection;
         }
 
         private void RotateToRandomDirection()
         {
             _inRotateprocess = true;
+
             Vector2 rand = Random.insideUnitCircle * _teleportationRadius.Value;
-            Vector3 direction = new Vector3(rand.x, 0, rand.y);
-            _rotationDirection.Value = direction;
-            _transform.rotation = Quaternion.LookRotation(_rotationDirection.Value);
+            _randomDirection = new Vector3(rand.x, 0, rand.y);
+            
             _inRotateprocess = false;
         }
     }

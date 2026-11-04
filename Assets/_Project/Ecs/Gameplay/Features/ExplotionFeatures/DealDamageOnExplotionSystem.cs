@@ -42,10 +42,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures
                     if (contactEntity.HasComponent<TakeDamageRequest>())
                         contactEntity.TakeDamageRequest.Invoke(_damage.Value);
             }
-            Debug.Log(_inTeleportProcess.Value);
             _inTeleportProcess.Value = false;
-
-            Debug.Log(_inTeleportProcess.Value);
         }
     }
 }
