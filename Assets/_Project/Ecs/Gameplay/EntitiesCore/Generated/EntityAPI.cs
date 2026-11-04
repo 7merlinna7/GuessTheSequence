@@ -189,6 +189,25 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.CanTeleport() {Value = value}); 
 		}
 
+		public Assets._Project.Ecs.Gameplay.Features.TeleportFeature.CanTeleportToTarget CanTeleportToTargetC => GetComponent<Assets._Project.Ecs.Gameplay.Features.TeleportFeature.CanTeleportToTarget>();
+
+		public Assets._Project.Ecs.Utilities.Conditions.ICompositeCondition CanTeleportToTarget => CanTeleportToTargetC.Value;
+
+		public bool TryGetCanTeleportToTarget(out Assets._Project.Ecs.Utilities.Conditions.ICompositeCondition value)
+		{
+			bool result = TryGetComponent (out Assets._Project.Ecs.Gameplay.Features.TeleportFeature.CanTeleportToTarget component);
+			if (result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Ecs.Utilities.Conditions.ICompositeCondition);
+			return result;
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddCanTeleportToTarget(Assets._Project.Ecs.Utilities.Conditions.ICompositeCondition value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.CanTeleportToTarget() {Value = value}); 
+		}
+
 		public Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleportRequest TeleportRequestC => GetComponent<Assets._Project.Ecs.Gameplay.Features.TeleportFeature.TeleportRequest>();
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<UnityEngine.Vector3> TeleportRequest => TeleportRequestC.Value;

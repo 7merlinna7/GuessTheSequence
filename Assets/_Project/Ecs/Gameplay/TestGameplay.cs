@@ -40,8 +40,8 @@ namespace Assets._Project.Ecs.Gameplay
 
             if (sequenceType == SequenceType.Letters)
             {
-                _entitiesFactory.CreateWalkingGhost(Vector3.zero + Vector3.forward * 6 + Vector3.left * 2, 100f);
-                _entitiesFactory.CreateWalkingGhost(Vector3.zero + Vector3.forward * 6 + Vector3.right * 2, 80f);
+                _entitiesFactory.CreateWalkingGhost(Vector3.zero + Vector3.forward * 6 + Vector3.left * 3, 100f);
+                _entitiesFactory.CreateWalkingGhost(Vector3.zero + Vector3.forward * 6 + Vector3.right * 3, 80f);
 
                 _teleportingGhost = _entitiesFactory.CreateTeleportingGhost(Vector3.zero);
                 _teleportingGhost.AddCurrentTarget();
@@ -57,7 +57,7 @@ namespace Assets._Project.Ecs.Gameplay
                 return;
 
             if (Input.GetKeyDown(KeyCode.R))
-                _entity.StartAttackRequest.Invoke();
+                _entitiesFactory.CreateWalkingGhost(Vector3.zero + Vector3.forward * 8 + Vector3.right * 3, 80f);
         }
 
     }

@@ -223,11 +223,11 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 //телепорт
                 .AddRotationDirection()
                 .AddRotationSpeed(new ReactiveVariable<float>(300))
-                .AddMaxTeleportEnergy(new ReactiveVariable<float>(150))
-                .AddCurrentTeleportEnergy(new ReactiveVariable<float>(150))
+                .AddMaxTeleportEnergy(new ReactiveVariable<float>(100))
+                .AddCurrentTeleportEnergy(new ReactiveVariable<float>(100))
                 .AddEnergyToTeleport(new ReactiveVariable<float>(50))
 
-                .AddTeleportEnergyRechargeCoefficient(new ReactiveVariable<float>(0.1f))
+                .AddTeleportEnergyRechargeCoefficient(new ReactiveVariable<float>(0.2f))
                 .AddMaxTeleportEnergyRechargeTime(new ReactiveVariable<float>(1))
                 .AddCurrentTeleportEnergyRechargeTime(new ReactiveVariable<float>(1))
 
@@ -263,11 +263,18 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .Add(new FuncCondition(() => entity.CurrentTeleportEnergy.Value >= entity.EnergyToTeleport.Value))
                 .Add(new FuncCondition(() => entity.InTeleportProcess.Value == false));
 
+            ICompositeCondition canTeleportToTarget = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false))
+                .Add(new FuncCondition(() => entity.CurrentTeleportEnergy.Value >= entity.EnergyToTeleport.Value))
+                .Add(new FuncCondition(() => entity.InTeleportProcess.Value == false))
+                .Add(new FuncCondition(() => entity.CurrentTarget!= null));
+
             entity
                 .AddMustDie(mustDie)
                 .AddMustSelfRelease(mustSelfRealese)
                 .AddCanApplayDamage(canApplyDamage)
                 .AddCanTeleport(canTeleport)
+                .AddCanTeleportToTarget(canTeleportToTarget)
                 .AddCanRotate(canRotate)
                 ;
 

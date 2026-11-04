@@ -45,6 +45,11 @@ namespace Assets._Project.Ecs.Gameplay.Features.TeleportFeature
         public ICompositeCondition Value;
     }
 
+    public class CanTeleportToTarget : IEntityComponent
+    {
+        public ICompositeCondition Value;
+    }
+
     public class TeleportRequest : IEntityComponent
     {
         public ReactiveEvent<UnityEngine.Vector3> Value;
