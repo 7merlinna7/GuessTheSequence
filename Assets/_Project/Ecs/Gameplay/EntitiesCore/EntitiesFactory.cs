@@ -222,7 +222,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 
                 //телепорт
                 .AddRotationDirection()
-                .AddRotationSpeed(new ReactiveVariable<float>(500))
+                .AddRotationSpeed(new ReactiveVariable<float>(300))
                 .AddMaxTeleportEnergy(new ReactiveVariable<float>(150))
                 .AddCurrentTeleportEnergy(new ReactiveVariable<float>(150))
                 .AddEnergyToTeleport(new ReactiveVariable<float>(50))
@@ -321,7 +321,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .AddContactsDetectingMask(1 << LayerMask.NameToLayer("Characters"))
                 .AddContactCollidersBuffer(new Buffer<Collider>(64))
                 .AddContactEntitiesBuffer(new Buffer<Entity>(64))
-                .AddBodyContactDamage(new ReactiveVariable<float>(50))
+                .AddBodyContactDamage(new ReactiveVariable<float>(0))
                 ;
 
             //компоненты условий

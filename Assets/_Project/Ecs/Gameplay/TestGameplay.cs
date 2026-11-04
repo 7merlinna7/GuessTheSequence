@@ -3,7 +3,6 @@ using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.Features.AI;
 using Assets._Project.Ecs.Gameplay.Features.AI.States;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace Assets._Project.Ecs.Gameplay
 {
@@ -12,6 +11,7 @@ namespace Assets._Project.Ecs.Gameplay
         private EntitiesFactory _entitiesFactory;
         private Entity _entity;
         private Entity _ghost;
+        private Entity _ghost2;
         private Entity _teleportingGhost;
         private bool _isRunning;
 
@@ -29,9 +29,10 @@ namespace Assets._Project.Ecs.Gameplay
             {
                 _entity = _entitiesFactory.CreateHero(Vector3.zero);
                 _entity.AddCurrentTarget();
-                //_brainsFactory.CreateMainHeroBrain(_entity, new NearestDamagebleTargetSelector(_entity));
+                _brainsFactory.CreateMainHeroBrain(_entity, new NearestDamagebleTargetSelector(_entity));
 
-                //_entitiesFactory.CreateTeleportingGhost(Vector3.zero + Vector3.forward * 6 + Vector3.left * 2);
+                _ghost2 = _entitiesFactory.CreateTeleportingGhost(Vector3.zero + Vector3.forward * 6 + Vector3.left * 2);
+                _brainsFactory.CreateCommonTeleportingGhostBrain(_ghost2);
 
                 _ghost = _entitiesFactory.CreateTeleportingGhost(Vector3.zero + Vector3.forward * 5);
                 _brainsFactory.CreateCommonTeleportingGhostBrain(_ghost);
@@ -44,7 +45,7 @@ namespace Assets._Project.Ecs.Gameplay
 
                 _teleportingGhost = _entitiesFactory.CreateTeleportingGhost(Vector3.zero);
                 _teleportingGhost.AddCurrentTarget();
-                _brainsFactory.CreateSmartTeleportingGhostBrain(_teleportingGhost, new MinHealthTargetSelector(_entity));
+                _brainsFactory.CreateSmartTeleportingGhostBrain(_teleportingGhost, new MinHealthTargetSelector(_teleportingGhost));
             }
 
             _isRunning = true;

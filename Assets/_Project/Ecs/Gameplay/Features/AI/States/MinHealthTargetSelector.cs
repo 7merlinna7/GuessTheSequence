@@ -40,11 +40,11 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI.States
 
             foreach (Entity target in selectedTargets)
             {
-                float distance = GetTargetHealth(target);
+                float health = GetTargetHealth(target);
 
-                if (distance < minHealth)
+                if (health < minHealth)
                 {
-                    minHealth = distance;
+                    minHealth = health;
                     targetWithMinHealth = target;
                 }
             }
