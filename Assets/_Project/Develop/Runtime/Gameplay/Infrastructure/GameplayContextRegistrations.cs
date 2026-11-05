@@ -30,7 +30,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             container.RegisterAsSingle(CreateBrainsFactory);
             container.RegisterAsSingle(CreateAIBrainsContext);
             container.RegisterAsSingle<IInputService>(CreateDesktopInput);
+            container.RegisterAsSingle(CreateMouseInput);
+            
         }
+
+        private static MouseInput CreateMouseInput(DIContainer c)
+            => new MouseInput();
 
         private static DesktopInput CreateDesktopInput(DIContainer c)
             => new DesktopInput();

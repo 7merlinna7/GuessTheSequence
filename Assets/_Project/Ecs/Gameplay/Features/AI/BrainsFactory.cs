@@ -3,13 +3,12 @@ using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Develop.Runtime.Utilities.Timer;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.Features.AI.States;
+using Assets._Project.Ecs.Gameplay.Features.Attack;
 using Assets._Project.Ecs.Gameplay.Features.InputFeature;
-using Assets._Project.Ecs.Gameplay.Features.TeleportFeature;
 using Assets._Project.Ecs.Utilities.Conditions;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Assets._Project.Ecs.Gameplay.Features.AI
 {
@@ -79,12 +78,10 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
             float minEnergyToRecharge = entity.MaxTeleportEnergy.Value * 0.4f;
 
             ICompositeCondition fromCombatToIdleCondition = new CompositeCondition(LogicOperations.Or)
-                .Add(new FuncCondition(() => entity.CurrentTeleportEnergy.Value < minEnergyToRecharge))
-                .Add(new FuncCondition(() => currentTarget == null));
+                .Add(new FuncCondition(() => entity.CurrentTeleportEnergy.Value < minEnergyToRecharge));
 
             ICompositeCondition fromIdleToCombatCondition = new CompositeCondition()
-                .Add(new FuncCondition(() => entity.CurrentTeleportEnergy.Value > minEnergyToRecharge))
-                .Add(new FuncCondition(() => currentTarget != null));
+                .Add(new FuncCondition(() => entity.CurrentTeleportEnergy.Value > minEnergyToRecharge));
 
             behaviour.AddState(combatState);
             behaviour.AddState(idleState);
@@ -214,6 +211,14 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
             stateMachine.AddTransition(emptyState,randomMovementState,idleTimerEndedCondition);
 
             return stateMachine;
+        }
+
+        private AIStateMachine CreatePlayerInputAttackStateMachine(Entity entity, IInputService inputService)
+        {
+            PlayerInputRotationState rotationState = new PlayerInputRotationState(entity,inputService);
+            AttackTriggerState attackTriggerState = new AttackTriggerState(entity);
+
+            return null;
         }
 
         private AIStateMachine CreateAutoAttackStateMachine(Entity entity)
