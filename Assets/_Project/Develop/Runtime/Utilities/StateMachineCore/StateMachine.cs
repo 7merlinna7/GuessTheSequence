@@ -34,7 +34,6 @@ namespace Assets._Project.Develop.Runtime.Utilities.StateMachineCore
 
         public void Update(float deltaTime)
         {
-            Debug.Log(CurrentState.GetType());
             if (_isRunning == false)
                 return;
 

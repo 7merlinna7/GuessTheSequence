@@ -22,5 +22,12 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI.States
         {
             _rotationDirection.Value = _inputService.Direction;
         }
+
+        public override void Exit()
+        {
+            base.Exit();
+
+            _rotationDirection.Value = Vector3.zero;
+        }
     }
 }

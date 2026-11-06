@@ -107,6 +107,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .AddIsMoving()
                 .AddRotationDirection()
                 .AddRotationSpeed(new ReactiveVariable<float>(900))
+                .AddMouseRotationSpeed(new ReactiveVariable<float>(400))
                 //health
                 .AddMaxHealth(new ReactiveVariable<float>(100))
                 .AddCurrentHealth(new ReactiveVariable<float>(100))
@@ -174,8 +175,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
             //компоненты систем
             entity
                 .AddSystem(new RigidbodyMovementSystem())
-                .AddSystem(new RigidbodyRotationSystem())
-
+                .AddSystem(new MouseRotationSystem())
                 .AddSystem(new AttackCancelSystem())
                 .AddSystem(new StartAttackSystem())
                 .AddSystem(new AttackProcessTimerSystem())

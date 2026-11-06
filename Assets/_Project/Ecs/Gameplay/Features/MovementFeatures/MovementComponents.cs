@@ -39,4 +39,9 @@ namespace Assets._Project.Ecs.Gameplay.Features.MovementFeatures
     {
         public ICompositeCondition Value;
     }
+
+    public class MouseRotationSpeed : IEntityComponent
+    {
+        public ReactiveVariable<float> Value;
+    }
 }

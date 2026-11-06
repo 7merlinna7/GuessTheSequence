@@ -605,6 +605,30 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.MovementFeatures.CanRotate() {Value = value}); 
 		}
 
+		public Assets._Project.Ecs.Gameplay.Features.MovementFeatures.MouseRotationSpeed MouseRotationSpeedC => GetComponent<Assets._Project.Ecs.Gameplay.Features.MovementFeatures.MouseRotationSpeed>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> MouseRotationSpeed => MouseRotationSpeedC.Value;
+
+		public bool TryGetMouseRotationSpeed(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			bool result = TryGetComponent (out Assets._Project.Ecs.Gameplay.Features.MovementFeatures.MouseRotationSpeed component);
+			if (result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>);
+			return result;
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddMouseRotationSpeed()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.MovementFeatures.MouseRotationSpeed() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddMouseRotationSpeed(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.MovementFeatures.MouseRotationSpeed() {Value = value}); 
+		}
+
 		public Assets._Project.Ecs.Gameplay.Features.LifeCycle.CurrentHealth CurrentHealthC => GetComponent<Assets._Project.Ecs.Gameplay.Features.LifeCycle.CurrentHealth>();
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> CurrentHealth => CurrentHealthC.Value;
