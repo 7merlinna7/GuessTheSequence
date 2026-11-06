@@ -107,7 +107,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .AddIsMoving()
                 .AddRotationDirection()
                 .AddRotationSpeed(new ReactiveVariable<float>(900))
-                .AddMouseRotationSpeed(new ReactiveVariable<float>(400))
+                .AddMouseRotationSpeed(new ReactiveVariable<float>(200))
                 //health
                 .AddMaxHealth(new ReactiveVariable<float>(100))
                 .AddCurrentHealth(new ReactiveVariable<float>(100))
