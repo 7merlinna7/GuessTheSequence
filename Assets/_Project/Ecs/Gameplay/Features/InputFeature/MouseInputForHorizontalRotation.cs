@@ -2,7 +2,7 @@
 
 namespace Assets._Project.Ecs.Gameplay.Features.InputFeature
 {
-    public class MouseInput : IInputService
+    public class MouseInputForHorizontalRotation : IInputService
     {
         private const string mouseXName = "Mouse X";
 

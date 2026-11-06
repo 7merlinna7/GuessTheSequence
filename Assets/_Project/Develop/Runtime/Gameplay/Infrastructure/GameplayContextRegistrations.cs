@@ -34,8 +34,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             
         }
 
-        private static MouseInput CreateMouseInput(DIContainer c)
-            => new MouseInput();
+        private static MouseInputForHorizontalRotation CreateMouseInput(DIContainer c)
+            => new MouseInputForHorizontalRotation();
 
         private static DesktopInput CreateDesktopInput(DIContainer c)
             => new DesktopInput();

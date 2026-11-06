@@ -18,7 +18,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
         private readonly TimerServiceFactory _timerServiceFactory;
         private readonly AIBrainsContext _brainsContext;
         private readonly IInputService _inputInputService;
-        private readonly MouseInput _mouseInput;
+        private readonly MouseInputForHorizontalRotation _mouseInput;
         private readonly EntitiesLifeContext _entitiesLifeContext;
 
         public BrainsFactory(DIContainer container)
@@ -28,7 +28,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
             _brainsContext = _container.Resolve<AIBrainsContext>();
             _inputInputService = _container.Resolve<IInputService>();
             _entitiesLifeContext = _container.Resolve<EntitiesLifeContext>();
-            _mouseInput = _container.Resolve<MouseInput>();
+            _mouseInput = _container.Resolve<MouseInputForHorizontalRotation>();
         }
 
         public StateMachineBrain CreateMainHeroBrain(Entity entity)
