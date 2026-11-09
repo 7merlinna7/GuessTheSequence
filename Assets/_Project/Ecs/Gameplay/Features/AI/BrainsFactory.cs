@@ -114,8 +114,6 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
 
             FuncCondition rotateToTeleportCondition = new FuncCondition(() => rotateToTargetState.InRotateProcess == false);
 
-            //FuncCondition teleportToRotateCondition = new FuncCondition(() => entity.InTeleportProcess.Value == false);
-
             TimerService idleTimer = _timerServiceFactory.Create(2f);
             disposables.Add(idleTimer);
             disposables.Add(rotateToTargetState.Entered.Subscribe(idleTimer.Restart));
@@ -138,8 +136,6 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
             ICompositeCondition idleToRotateCondition = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.CurrentTeleportEnergy.Value > entity.MaxTeleportEnergy.Value * 0.4f))
                 .Add(new FuncCondition(() => entity.CurrentTarget != null));
-
-            //FuncCondition idleToTeleportCondition = new FuncCondition(() => entity.CurrentTeleportEnergy.Value >= entity.MaxTeleportEnergy.Value * 0.4f);
 
             AIStateMachine stateMachine = new AIStateMachine();
 
@@ -230,7 +226,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
                         return false;
 
                     float angleToTarget = Quaternion.Angle(transform.rotation, Quaternion.LookRotation(target.Transform.position - transform.position));
-                    return angleToTarget < 1f;
+                    return angleToTarget < 3f;
                 }));
 
             ReactiveVariable<bool> inAttackProcess = entity.InAttackProcess;

@@ -49,11 +49,11 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 //death
                 .AddIsDead()
                 //takeDamage
-                .AddContactsDetectingMask(1 << LayerMask.NameToLayer("Characters"))
+                .AddContactsDetectingMask(Layers.CharactersMask)
                 .AddContactCollidersBuffer(new Buffer<Collider>(64))
                 .AddContactEntitiesBuffer(new Buffer<Entity>(64))
                 .AddBodyContactDamage(new ReactiveVariable<float>(damage))
-                .AddDeathMask(1 << LayerMask.NameToLayer("Characters"))
+                .AddDeathMask(Layers.CharactersMask)
                 .AddIsTouchDeathMask()
                 ;
 
@@ -217,7 +217,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .AddTakeDamageRequest()
                 .AddTakeDamageEvent()
                 //урон при косании
-                .AddContactsDetectingMask(1 << LayerMask.NameToLayer("Characters"))
+                .AddContactsDetectingMask(Layers.CharactersMask)
                 .AddContactCollidersBuffer(new Buffer<Collider>(64))
                 .AddContactEntitiesBuffer(new Buffer<Entity>(64))
                 
@@ -319,7 +319,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 //takeDamage
                 .AddTakeDamageRequest()
                 .AddTakeDamageEvent()
-                .AddContactsDetectingMask(1 << LayerMask.NameToLayer("Characters"))
+                .AddContactsDetectingMask(Layers.CharactersMask)
                 .AddContactCollidersBuffer(new Buffer<Collider>(64))
                 .AddContactEntitiesBuffer(new Buffer<Entity>(64))
                 .AddBodyContactDamage(new ReactiveVariable<float>(config.BodyContactDamage))
@@ -361,8 +361,6 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .AddSystem(new DisableCollidersOnDeathSystem())
                 .AddSystem(new DeathProcessTimerSystem())
                 .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));
-
-            _entitiesLifeContext.Add(entity);
 
             return entity;
         }

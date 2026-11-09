@@ -1,4 +1,5 @@
-﻿using Assets._Project.Develop.Runtime.Infrastructure;
+﻿using Assets._Project.Develop.Runtime.Configs.Entities;
+using Assets._Project.Develop.Runtime.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 using Assets._Project.Ecs.Gameplay;
@@ -12,6 +13,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 {
     public class GameplayBootstrap : SceneBootstrap
     {
+        [SerializeField] private HeroConfig _heroConfig;
+        [SerializeField] private GhostConfig _ghostConfig;
+
         private DIContainer _container;
         private GameplayInputArgs _inputArgs;
         private TestGameplay _testGameplay;
@@ -36,7 +40,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         public override IEnumerator Initialize()
         {
             _testGameplay = new TestGameplay();
-            _testGameplay.Initialize(_container);
+            _testGameplay.Initialize(_container,_heroConfig,_ghostConfig);
             _lifeContext = _container.Resolve<EntitiesLifeContext>();
             _brainsContext = _container.Resolve<AIBrainsContext>();
 
