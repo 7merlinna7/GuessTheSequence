@@ -8,7 +8,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.StagesFeature
         IReadonlyEvent Completed {  get; }
 
         void Start();
-        void Update();
+        void Update(float deltaTime);
         void CleanUp();
     }
 }

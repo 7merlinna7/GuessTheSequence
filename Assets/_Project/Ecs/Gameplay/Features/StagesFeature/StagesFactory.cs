@@ -1,0 +1,33 @@
+﻿using Assets._Project.Develop.Runtime.Configs.Stages;
+using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Ecs.Gameplay.EntitiesCore;
+using Assets._Project.Ecs.Gameplay.Features.Enemies;
+using System;
+
+namespace Assets._Project.Ecs.Gameplay.Features.StagesFeature
+{
+    public class StagesFactory 
+    {
+        private readonly DIContainer _container;
+
+        public StagesFactory(DIContainer container)
+        {
+            _container = container;
+        }
+
+        public IStage Create(StageConfig stageConfig)
+        {
+            switch (stageConfig)
+            {
+                case ClearAllEnemiesStageConfig clearAllEnemiesStageConfig:
+                    return new ClearAllEnemiesStage(
+                        clearAllEnemiesStageConfig,
+                        _container.Resolve<EnemiesFactory>(),
+                        _container.Resolve<EntitiesLifeContext>());
+
+                default:
+                    throw new ArgumentException($"Not supported {stageConfig.GetType()} type config");
+            }
+        }
+    }
+}

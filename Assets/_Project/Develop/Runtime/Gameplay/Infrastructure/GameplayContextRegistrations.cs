@@ -12,6 +12,7 @@ using Assets._Project.Ecs.Gameplay.EntitiesCore.Mono;
 using Assets._Project.Ecs.Gameplay.Features.AI;
 using Assets._Project.Ecs.Gameplay.Features.Enemies;
 using Assets._Project.Ecs.Gameplay.Features.InputFeature;
+using Assets._Project.Ecs.Gameplay.Features.StagesFeature;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 {
@@ -31,8 +32,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             container.RegisterAsSingle(CreateBrainsFactory);
             container.RegisterAsSingle(CreateAIBrainsContext);
             container.RegisterAsSingle(CreateEnemiesFactory);
+            container.RegisterAsSingle(CreateStagesFactory);
             container.RegisterAsSingle<IInputService>(CreateDesktopInput);
         }
+
+        private static StagesFactory CreateStagesFactory(DIContainer c)
+            => new StagesFactory(c);
 
         private static EnemiesFactory CreateEnemiesFactory(DIContainer c)
             => new EnemiesFactory(c);
