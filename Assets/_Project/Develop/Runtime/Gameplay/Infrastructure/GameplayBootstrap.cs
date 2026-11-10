@@ -13,7 +13,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 {
     public class GameplayBootstrap : SceneBootstrap
     {
-        [SerializeField] private HeroConfig _heroConfig;
         [SerializeField] private GhostConfig _ghostConfig;
 
         private DIContainer _container;
@@ -40,7 +39,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         public override IEnumerator Initialize()
         {
             _testGameplay = new TestGameplay();
-            _testGameplay.Initialize(_container,_heroConfig,_ghostConfig);
+            _testGameplay.Initialize(_container,_ghostConfig);
             _lifeContext = _container.Resolve<EntitiesLifeContext>();
             _brainsContext = _container.Resolve<AIBrainsContext>();
 
@@ -49,16 +48,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
         public override void Run()
         {
-            _testGameplay.Start(_inputArgs.LevelType);
+            _testGameplay.Start();
             _isRunning = true;
         }
 
         private void Update()
         {
-            _brainsContext?.Update(Time.deltaTime);
-
             if (_isRunning == false)
                 return;
+
+            _brainsContext?.Update(Time.deltaTime);
             
             _testGameplay.Update();
             _lifeContext?.Update(Time.deltaTime);

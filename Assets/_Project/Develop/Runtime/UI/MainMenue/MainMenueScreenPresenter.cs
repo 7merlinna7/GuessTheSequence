@@ -40,7 +40,6 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
 
             CreatePlayerStatistics();
             CreateWallet();
-            CreateLevelSelector();
 
             foreach (IPresenter presenter in _childPresenters )
                 presenter.Initialize();
@@ -79,10 +78,5 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
             _childPresenters.Add(walletPresenter);
         }
 
-        private void CreateLevelSelector()
-        {
-            LevelSelectionPresenter levelSelectionPresenter = _mainMenuePresentersFactory.CreateLevelSelectionPresenter(_screen.LevelSelectionView);
-            _childPresenters.Add(levelSelectionPresenter);
-        }
     }
 }

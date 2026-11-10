@@ -35,7 +35,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.Attack.Shoot
 
         private void OnAttackDelayEnd()
         {
-            _entitiesFactory.CreateProjectile(_shootPoint.position,_shootPoint.forward,_damage.Value);
+           
         }
 
         public void OnDispose()

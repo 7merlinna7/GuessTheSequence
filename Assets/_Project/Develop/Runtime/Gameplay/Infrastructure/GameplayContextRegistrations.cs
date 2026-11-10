@@ -1,5 +1,4 @@
 ﻿using Assets._Project.Develop.Runtime.Configs.Meta.Wallet;
-using Assets._Project.Develop.Runtime.Gameplay.SequenceFeature;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
@@ -33,17 +32,18 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             container.RegisterAsSingle(CreateAIBrainsContext);
             container.RegisterAsSingle(CreateEnemiesFactory);
             container.RegisterAsSingle(CreateStagesFactory);
-            container.RegisterAsSingle<IInputService>(CreateDesktopInput);
         }
+
+        //private static StageProviderService CreateStageProviderService(DIContainer c)
+        //    => new StageProviderService(
+        //        c.Resolve<ConfigsProviderService>().GetConfig<LevelListConfig>.GetBy(_inputArgs.LevelNumber)),
+        //        c.Resolve<StagesFactory>());
 
         private static StagesFactory CreateStagesFactory(DIContainer c)
             => new StagesFactory(c);
 
         private static EnemiesFactory CreateEnemiesFactory(DIContainer c)
             => new EnemiesFactory(c);
-
-        private static DesktopInput CreateDesktopInput(DIContainer c)
-            => new DesktopInput();
 
         private static AIBrainsContext CreateAIBrainsContext(DIContainer c)
             => new AIBrainsContext();
@@ -69,7 +69,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         }
 
         private static Gamemode CreateGamemode(DIContainer c)
-            => new Gamemode(c.Resolve<SequenceFactory>().Create());
+            => new Gamemode();
 
         private static GameCycle CreateGameCycle(DIContainer c)
         {

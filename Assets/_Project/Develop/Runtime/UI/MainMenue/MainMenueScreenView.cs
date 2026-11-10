@@ -14,7 +14,6 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
 
         [field: SerializeField] public TextTextListView StatisticView { get; private set; }
         [field: SerializeField] public IconTextView WalletView { get; private set; }
-        [field: SerializeField] public LevelSelectionView LevelSelectionView { get; private set; }
 
         [SerializeField] private Button _resetStatisticsButton;
 

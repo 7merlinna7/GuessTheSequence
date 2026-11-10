@@ -1,15 +1,11 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastructure.DI;
-using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Develop.Runtime.Utilities.Timer;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.Features.AI.States;
 using Assets._Project.Ecs.Gameplay.Features.InputFeature;
-using Assets._Project.Ecs.Gameplay.Features.TeleportFeature;
 using Assets._Project.Ecs.Utilities.Conditions;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Assets._Project.Ecs.Gameplay.Features.AI
 {
@@ -30,69 +26,6 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
             _entitiesLifeContext = _container.Resolve<EntitiesLifeContext>();
         }
 
-        public StateMachineBrain CreateMainHeroBrain(Entity entity, ITargetSelector targetSelector)
-        {
-            AIStateMachine combatState = CreateAutoAttackStateMachine(entity);
-
-            PlayerInputMovementState movementState = new PlayerInputMovementState(entity,_inputInputService);
-
-            ReactiveVariable<Entity> currentTarget = entity.CurrentTarget;
-
-            ICompositeCondition fromMovementToCombatStateContition = new CompositeCondition()
-                .Add(new FuncCondition(() => currentTarget.Value != null))
-                .Add(new FuncCondition(() => _inputInputService.Direction == Vector3.zero));
-
-            ICompositeCondition fromCombatToMovementStateCondition = new CompositeCondition(LogicOperations.Or)
-                .Add(new FuncCondition(() => currentTarget.Value == null))
-                .Add(new FuncCondition(() => _inputInputService.Direction != Vector3.zero));
-
-            AIStateMachine behaviour = new AIStateMachine();
-
-            behaviour.AddState(movementState);
-            behaviour.AddState(combatState);
-
-            behaviour.AddTransition(movementState,combatState,fromMovementToCombatStateContition);
-            behaviour.AddTransition(combatState,movementState,fromCombatToMovementStateCondition);
-
-            //parallel StateMachine
-            FindTargetState findTargetState = new FindTargetState(targetSelector,_entitiesLifeContext,entity);
-            AIParallelState parallelState = new AIParallelState(findTargetState,behaviour);
-
-            AIStateMachine rootStateMachine = new AIStateMachine();
-            rootStateMachine.AddState(parallelState);
-
-            StateMachineBrain brain = new StateMachineBrain(rootStateMachine);
-            _brainsContext.SetFor(entity,brain);
-
-            return brain;
-        }
-
-        public StateMachineBrain CreateSmartTeleportingGhostBrain(Entity entity, ITargetSelector targetSelector)
-        {
-            AIStateMachine combatState = CreateSmartTeleportingGhost(entity);
-
-            FindTargetState findTargetState = new FindTargetState(targetSelector, _entitiesLifeContext, entity);
-            AIParallelState parallelState = new AIParallelState(findTargetState, combatState);
-
-            AIStateMachine rootStateMachine = new AIStateMachine();
-            rootStateMachine.AddState(parallelState);
-
-            StateMachineBrain brain = new StateMachineBrain(rootStateMachine);
-            _brainsContext.SetFor(entity, brain);
-
-            return brain;
-        }
-
-        public StateMachineBrain CreateCommonTeleportingGhostBrain(Entity entity)
-        {
-            AIStateMachine teleportState = CreateCommonTeleportingGhost(entity);
-            StateMachineBrain brain = new StateMachineBrain(teleportState);
-
-            _brainsContext.SetFor(entity,brain);
-
-            return brain;
-        }
-
         public StateMachineBrain CreateWalkingGhostBrain(Entity entity)
         {
             AIStateMachine stateMachine = CreateRandomMovementStateMashine(entity);
@@ -101,81 +34,6 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
             _brainsContext.SetFor(entity, brain);
 
             return brain;
-        }
-
-        ////////////////////////////////////////////////
-        
-        private AIStateMachine CreateSmartTeleportingGhost(Entity entity)
-        {
-            List<IDisposable> disposables = new List<IDisposable>();
-
-            TeleportationState smartTeleportationState = new TeleportationState(entity);
-            RotateToTargetState rotateToTargetState = new RotateToTargetState(entity);
-
-            FuncCondition rotateToTeleportCondition = new FuncCondition(() => rotateToTargetState.InRotateProcess == false);
-
-            TimerService idleTimer = _timerServiceFactory.Create(2f);
-            disposables.Add(idleTimer);
-            disposables.Add(rotateToTargetState.Entered.Subscribe(idleTimer.Restart));
-
-            ICondition canTeleport = entity.CanTeleport;
-
-            ICompositeCondition teleportToRotateCondition = new CompositeCondition()
-                .Add(canTeleport)
-                .Add(new FuncCondition(() => idleTimer.IsOver));
-
-            ICompositeCondition teleportToIdleCondition = new CompositeCondition(LogicOperations.Or)
-                .Add(new FuncCondition(() => entity.CurrentTeleportEnergy.Value < entity.MaxTeleportEnergy.Value * 0.4f))
-                .Add(new FuncCondition(() =>
-                {
-                    Debug.Log(entity.CurrentTarget.GetType());
-                    return entity.CurrentTarget == null;
-                    }))
-                .Add(new FuncCondition(() => entity.InTeleportProcess.Value == false));
-
-            ICompositeCondition idleToRotateCondition = new CompositeCondition()
-                .Add(new FuncCondition(() => entity.CurrentTeleportEnergy.Value > entity.MaxTeleportEnergy.Value * 0.4f))
-                .Add(new FuncCondition(() => entity.CurrentTarget != null));
-
-            AIStateMachine stateMachine = new AIStateMachine();
-
-            stateMachine.AddState(rotateToTargetState);
-            stateMachine.AddState(smartTeleportationState);
-
-
-            stateMachine.AddTransition(rotateToTargetState, smartTeleportationState, rotateToTeleportCondition);
-            stateMachine.AddTransition(smartTeleportationState, rotateToTargetState, teleportToRotateCondition);
-
-            return stateMachine;
-        }
-
-        private AIStateMachine CreateCommonTeleportingGhost(Entity entity)
-        {
-            List<IDisposable> disposables = new List<IDisposable>();
-
-            TeleportationState teleportationState = new TeleportationState(entity);
-            RotateRandomState rotateRandomState = new RotateRandomState(entity);
-
-            ICondition canTeleport = entity.CanTeleport;
-
-            TimerService idleTimer = _timerServiceFactory.Create(2f);
-            disposables.Add(idleTimer);
-            disposables.Add(rotateRandomState.Entered.Subscribe(idleTimer.Restart));
-
-            ICompositeCondition fromTeleportToRotateCondition = new CompositeCondition()
-                .Add(canTeleport);
-
-            FuncCondition fromRotateToTeleportCondition = new FuncCondition(() => idleTimer.IsOver);
-
-            AIStateMachine stateMachine = new AIStateMachine();
-            stateMachine.AddState(rotateRandomState);
-            stateMachine.AddState(teleportationState);
-
-            stateMachine.AddTransition(rotateRandomState,teleportationState,fromRotateToTeleportCondition);
-            stateMachine.AddTransition(teleportationState,rotateRandomState,fromTeleportToRotateCondition);
-
-
-            return stateMachine;
         }
 
         private AIStateMachine CreateRandomMovementStateMashine(Entity entity)
@@ -202,43 +60,6 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
 
             stateMachine.AddTransition(randomMovementState,emptyState,movementTimerEndedCondition);
             stateMachine.AddTransition(emptyState,randomMovementState,idleTimerEndedCondition);
-
-            return stateMachine;
-        }
-
-        private AIStateMachine CreateAutoAttackStateMachine(Entity entity)
-        {
-            RotateToTargetState rotateToTargetState = new RotateToTargetState(entity);
-
-            AttackTriggerState attackTriggerState = new AttackTriggerState(entity);
-
-            ICondition canAttack = entity.CanStartAttack;
-            Transform transform = entity.Transform;
-            ReactiveVariable<Entity> currentTarget = entity.CurrentTarget;
-
-            ICompositeCondition fromRotateToAttackCondition = new CompositeCondition()
-                .Add(canAttack)
-                .Add(new FuncCondition(() =>
-                {
-                    Entity target = currentTarget.Value;
-
-                    if (target == null)
-                        return false;
-
-                    float angleToTarget = Quaternion.Angle(transform.rotation, Quaternion.LookRotation(target.Transform.position - transform.position));
-                    return angleToTarget < 3f;
-                }));
-
-            ReactiveVariable<bool> inAttackProcess = entity.InAttackProcess;
-
-            ICondition fromAttackToRotateStateCondition = new FuncCondition(()=> inAttackProcess.Value == false);
-
-            AIStateMachine stateMachine = new AIStateMachine();
-            stateMachine.AddState(rotateToTargetState);
-            stateMachine.AddState(attackTriggerState);
-
-            stateMachine.AddTransition(rotateToTargetState,attackTriggerState,fromRotateToAttackCondition);
-            stateMachine.AddTransition(attackTriggerState,rotateToTargetState,fromAttackToRotateStateCondition);
 
             return stateMachine;
         }

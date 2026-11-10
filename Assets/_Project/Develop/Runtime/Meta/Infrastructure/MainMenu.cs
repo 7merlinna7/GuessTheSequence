@@ -3,7 +3,6 @@ using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 using System.Collections;
-using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 {
@@ -25,29 +24,17 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 
         public void Start()
         {
-            //_coroutinesPerformer.StartPerform(WaitForPlayerInput(_sceneSwitcherService));
+            
         }
-
-        //private IEnumerator WaitForPlayerInput(SceneSwitcherService sceneSwitcherService)
-        //{
-        //    Debug.Log("Cохранение - S");
-
-        //    yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.S));
-        //        Debug.Log("Save");
-        //        _coroutinesPerformer.StartPerform(_dataProvider.Save());
-        //        yield return null;
-        //        Start();
-        //}
         
-        public void SelectLevel(SequenceType sequenceType)
+        public void SelectLevel()
         {
-            _coroutinesPerformer.StartPerform(SwitchToScene(Scenes.Gameplay, sequenceType, _sceneSwitcherService));
+            _coroutinesPerformer.StartPerform(SwitchToScene(Scenes.Gameplay, _sceneSwitcherService));
         }
 
-        private IEnumerator SwitchToScene(string scene, SequenceType sequenceType,SceneSwitcherService sceneSwitcherService)
+        private IEnumerator SwitchToScene(string scene,SceneSwitcherService sceneSwitcherService)
         {
-            GameplayInputArgs gameplayInputArgs = new GameplayInputArgs(sequenceType);
-            yield return sceneSwitcherService.ProcessSwitchTo(scene, gameplayInputArgs);
+            yield return sceneSwitcherService.ProcessSwitchTo(scene);
         }
     }
 }

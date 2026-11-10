@@ -1,4 +1,4 @@
-﻿using Assets._Project.Develop.Runtime.Gameplay.SequenceFeature;
+﻿
 using System;
 using UnityEngine;
 
@@ -11,24 +11,20 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         public event Action<string> SequenceCreated;
 
         private int _sequenceCount;
-        private Sequence _sequence;
 
         public bool IsRunning { get; private set; }
 
-        public Gamemode(Sequence sequence)
+        public Gamemode()
         {
-            _sequence = sequence;
+
         }
 
 
         public void Start()
         {
-            _sequence.Create();
-            SequenceCreated?.Invoke(_sequence.Get());
 
-            _sequenceCount = 0;
 
-            IsRunning = true;
+            //IsRunning = true;
         }
 
         public void Update()
@@ -36,24 +32,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             if (IsRunning == false)
                 return;
 
-            if (Input.anyKeyDown == true)
-            {
-                if (Input.GetKeyDown(_sequence.GetNextValueKeyCode()))
-                {
-                    _sequenceCount++;
-                }
-                else
-                {
-                    IsRunning = false;
-                    Defeat?.Invoke();
-                }
-            }
-
-            if (_sequenceCount == _sequence.SequenceLenth)
-            {
-                IsRunning = false;
-                Win?.Invoke();
-            }
+            Win.Invoke();
+            Defeat.Invoke();
+            SequenceCreated.Invoke("");
         }
     }
 }

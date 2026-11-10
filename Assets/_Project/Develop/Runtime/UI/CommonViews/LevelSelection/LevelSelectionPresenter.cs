@@ -1,7 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Meta.Infrastructure;
 using Assets._Project.Develop.Runtime.UI.Core;
-using System.Collections;
-using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.UI.CommonViews.LevelSelection
 {
@@ -18,17 +16,15 @@ namespace Assets._Project.Develop.Runtime.UI.CommonViews.LevelSelection
 
         public void Initialize()
         {
-            _view.LevelSelected += LevelSelected;
         }
 
         public void Dispose()
         {
-            _view.LevelSelected -= LevelSelected;
         }
 
-        private void LevelSelected(SequenceType levelType)
+        private void LevelSelected()
         {
-            _mainMenue.SelectLevel(levelType);
+            _mainMenue.SelectLevel();
         }
     }
 }
