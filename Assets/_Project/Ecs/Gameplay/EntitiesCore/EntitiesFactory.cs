@@ -50,6 +50,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 
             entity
                 //компоненты полей
+                .AddIsTower()
                 // health
                 .AddMaxHealth(new ReactiveVariable<float>(health))
                 .AddCurrentHealth(new ReactiveVariable<float>(health))

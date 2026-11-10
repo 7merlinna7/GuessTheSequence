@@ -10,7 +10,6 @@ using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.EntitiesCore.Mono;
 using Assets._Project.Ecs.Gameplay.Features.AI;
 using Assets._Project.Ecs.Gameplay.Features.Enemies;
-using Assets._Project.Ecs.Gameplay.Features.InputFeature;
 using Assets._Project.Ecs.Gameplay.Features.StagesFeature;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure

@@ -49,6 +49,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         public override void Run()
         {
             _testGameplay.Start();
+            Debug.Log("Level number "+ _inputArgs.LevelNumber);
             _isRunning = true;
         }
 

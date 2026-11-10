@@ -10,16 +10,18 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
     {
         private SceneSwitcherService _sceneSwitcherService;
         private ICoroutinesPerformer _coroutinesPerformer;
-        private PlayerDataProvider _dataProvider;
+        private LevelSelector _levelSelector;
+
 
         public MainMenu(
             SceneSwitcherService sceneSwitcherService,
             ICoroutinesPerformer coroutinesPerformer,
-            PlayerDataProvider dataProvider)
+            PlayerDataProvider dataProvider,
+            LevelSelector levelSelector)
         {
             _sceneSwitcherService = sceneSwitcherService;
             _coroutinesPerformer = coroutinesPerformer;
-            _dataProvider = dataProvider;
+            _levelSelector = levelSelector;
         }
 
         public void Start()
@@ -34,7 +36,8 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 
         private IEnumerator SwitchToScene(string scene,SceneSwitcherService sceneSwitcherService)
         {
-            yield return sceneSwitcherService.ProcessSwitchTo(scene);
+            GameplayInputArgs inputArgs = _levelSelector.SelectRandomLevel();
+            yield return sceneSwitcherService.ProcessSwitchTo(scene,inputArgs);
         }
     }
 }

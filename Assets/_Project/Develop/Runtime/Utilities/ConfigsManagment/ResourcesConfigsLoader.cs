@@ -1,3 +1,4 @@
+using Assets._Project.Develop.Runtime.Configs.Gameplay.Levels;
 using Assets._Project.Develop.Runtime.Configs.Meta.PlayerStatistics;
 using Assets._Project.Develop.Runtime.Configs.Meta.Wallet;
 using Assets._Project.Develop.Runtime.Utilites.AssetsManagment;
@@ -13,6 +14,7 @@ namespace Assets._Project.Develop.Runtime.Utilites.ConfigsManagment
         private readonly ResourcesAssetsLoader _resources;
         private readonly Dictionary<Type, string> _configResourcesPath = new()
         {
+            { typeof(LevelListConfig),"Configs/Gameplay/Levels/LevelListConfig"},
             { typeof(StartWalletConfig),"Configs/StartWalletConfig"},
             { typeof(WalletSettingsConfig),"Configs/WalletSettingsConfig"},
             { typeof(PlayerStatisticsStartConfig),"Configs/PlayerStatisticsStartConfig"},

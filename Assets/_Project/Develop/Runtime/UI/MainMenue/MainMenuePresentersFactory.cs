@@ -1,7 +1,6 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Meta.Features;
 using Assets._Project.Develop.Runtime.Meta.Infrastructure;
-using Assets._Project.Develop.Runtime.UI.CommonViews.LevelSelection;
 
 namespace Assets._Project.Develop.Runtime.UI.MainMenue
 {
@@ -19,13 +18,9 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
             return new MainMenueScreenPresenter(
                 view,_container.Resolve<MainMenuePopupService>(),
                 _container.Resolve<ProjectPresentersFactory>(),
+                _container.Resolve<MainMenu>(),
                 this,
                 _container.Resolve<PurchaseResetStatisticChecker>());
         }
-
-        public LevelSelectionPresenter CreateLevelSelectionPresenter(LevelSelectionView view)
-            => new LevelSelectionPresenter(
-                view,
-                _container.Resolve<MainMenu>());
     }
 }

@@ -39,6 +39,8 @@ namespace Assets._Project.Ecs.Gameplay.Features.Enemies
             }
 
             _lifeContext.Add(entity);
+            entity.AddCurrentTarget();
+            _brainsFactory.CreateWalkingGhostBrain(entity);
             return entity;
         }
     }

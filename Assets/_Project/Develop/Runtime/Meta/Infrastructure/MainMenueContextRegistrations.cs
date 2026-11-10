@@ -1,4 +1,5 @@
-﻿using Assets._Project.Develop.Runtime.Infrastructure.DI;
+﻿using Assets._Project.Develop.Runtime.Configs.Gameplay.Levels;
+using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Meta.Features;
 using Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
@@ -6,6 +7,7 @@ using Assets._Project.Develop.Runtime.UI;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.MainMenue;
 using Assets._Project.Develop.Runtime.Utilites.AssetsManagment;
+using Assets._Project.Develop.Runtime.Utilites.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
@@ -23,6 +25,14 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
             container.RegisterAsSingle(CreateMainMenuePresentersFactory);
             container.RegisterAsSingle(CreateMainMenueScreenPresenter).NonLazy();
             container.RegisterAsSingle(CreateMainMenuePopupService);
+            container.RegisterAsSingle(CreateLevelSelector);
+        }
+
+        private static LevelSelector CreateLevelSelector(DIContainer c)
+        {
+            int levelsCount = c.Resolve<ConfigsProviderService>().GetConfig<LevelListConfig>().LevelsList.Count;
+
+            return new LevelSelector(levelsCount);
         }
 
         private static MainMenuePopupService CreateMainMenuePopupService(DIContainer c)
@@ -42,7 +52,8 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
             => new MainMenu(
                 c.Resolve<SceneSwitcherService>(),
                 c.Resolve<ICoroutinesPerformer>(),
-                c.Resolve<PlayerDataProvider>());
+                c.Resolve<PlayerDataProvider>(),
+                c.Resolve<LevelSelector>());
 
         private static ScreenUIRoot CreateMainMenueUIRoot(DIContainer c)
         {

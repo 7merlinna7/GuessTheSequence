@@ -1,5 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Meta.Features;
-using Assets._Project.Develop.Runtime.UI.CommonViews.LevelSelection;
+using Assets._Project.Develop.Runtime.Meta.Infrastructure;
 using Assets._Project.Develop.Runtime.UI.CommonViews.PlayerStatistics;
 using Assets._Project.Develop.Runtime.UI.CommonViews.Wallet;
 using Assets._Project.Develop.Runtime.UI.Core;
@@ -12,7 +12,9 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
     {
         MainMenueScreenView _screen;
         private readonly MainMenuePopupService _popupService;
+
         private readonly PurchaseResetStatisticChecker _resetStatisticChecker;
+        private readonly MainMenu _mainMenue;
 
         private readonly ProjectPresentersFactory _projectPresentersFactory;
         private readonly MainMenuePresentersFactory _mainMenuePresentersFactory;
@@ -23,6 +25,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
             MainMenueScreenView screen,
             MainMenuePopupService popupService,
             ProjectPresentersFactory projectPresentersFactory,
+            MainMenu mainMenu,
             MainMenuePresentersFactory mainMenuePresentersFactory,
             PurchaseResetStatisticChecker resetStatisticChecker)
         {
@@ -30,12 +33,15 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
             _screen = screen;
             _popupService = popupService;
             _projectPresentersFactory = projectPresentersFactory;
+            _mainMenue = mainMenu;
             _mainMenuePresentersFactory = mainMenuePresentersFactory;
         }
 
         public void Initialize()
         {
             _screen.ResetStatisticsButtonClicked += OnResetStatisticsButtonClicked;
+            _screen.PlayButtonClicked += OnPlayButtonClicked;
+
             _resetStatisticChecker.StatisticsReset += OpenConfirmPopup;
 
             CreatePlayerStatistics();
@@ -48,6 +54,8 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
         public void Dispose()
         {
             _screen.ResetStatisticsButtonClicked -= OnResetStatisticsButtonClicked;
+            _screen.PlayButtonClicked -= OnPlayButtonClicked;
+
             _resetStatisticChecker.StatisticsReset -= OpenConfirmPopup;
 
             foreach (IPresenter presenter in _childPresenters)
@@ -59,6 +67,11 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
         private void OpenConfirmPopup(string text)
         {
             _popupService.OpenConfirmPopup().SetPopupText(text);
+        }
+
+        private void OnPlayButtonClicked()
+        {
+            _mainMenue.SelectLevel();
         }
 
         private void OnResetStatisticsButtonClicked()

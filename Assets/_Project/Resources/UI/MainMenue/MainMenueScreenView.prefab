@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.85098046, g: 0.54901963, b: 0.14117648, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -177,6 +177,7 @@ MonoBehaviour:
   <StatisticView>k__BackingField: {fileID: 9152799836221396455}
   <WalletView>k__BackingField: {fileID: 1686658893844322878}
   _resetStatisticsButton: {fileID: 1671743140931925486}
+  _playButton: {fileID: 7295811039317607236}
 --- !u!222 &-3162918542296161990
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -443,6 +444,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 3632848702455720081}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7295811039317607236 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6293100817628720085, guid: 0c6e28ef59a27b640aa18972eb65cd3c,
+    type: 3}
+  m_PrefabInstance: {fileID: 3632848702455720081}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4908841721163028586
 PrefabInstance:
   m_ObjectHideFlags: 0

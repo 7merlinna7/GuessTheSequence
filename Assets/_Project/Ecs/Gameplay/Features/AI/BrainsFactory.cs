@@ -2,7 +2,7 @@
 using Assets._Project.Develop.Runtime.Utilities.Timer;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.Features.AI.States;
-using Assets._Project.Ecs.Gameplay.Features.InputFeature;
+using Assets._Project.Ecs.Gameplay.Features.AI.States.TargetSelectors;
 using Assets._Project.Ecs.Utilities.Conditions;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,6 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
         private readonly DIContainer _container;
         private readonly TimerServiceFactory _timerServiceFactory;
         private readonly AIBrainsContext _brainsContext;
-        private readonly IInputService _inputInputService;
         private readonly EntitiesLifeContext _entitiesLifeContext;
 
         public BrainsFactory(DIContainer container)
@@ -22,46 +21,53 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
             _container = container;
             _timerServiceFactory = _container.Resolve<TimerServiceFactory>();
             _brainsContext = _container.Resolve<AIBrainsContext>();
-            _inputInputService = _container.Resolve<IInputService>();
             _entitiesLifeContext = _container.Resolve<EntitiesLifeContext>();
         }
 
         public StateMachineBrain CreateWalkingGhostBrain(Entity entity)
         {
-            AIStateMachine stateMachine = CreateRandomMovementStateMashine(entity);
-            StateMachineBrain brain = new StateMachineBrain(stateMachine);
+            //AIStateMachine stateMachine = CreateMoveToTargetStateMachine(entity);
+            //StateMachineBrain brain = new StateMachineBrain(stateMachine);
 
-            _brainsContext.SetFor(entity, brain);
+            //_brainsContext.SetFor(entity, brain);
 
-            return brain;
+            return null;
         }
 
-        private AIStateMachine CreateRandomMovementStateMashine(Entity entity)
+        private AIStateMachine CreateMoveToTargetStateMachine(Entity entity,ITargetSelector targetSelector)
         {
-            List<IDisposable> disposables = new List<IDisposable>();
+            FindTargetState findTargetState = new FindTargetState(targetSelector,_entitiesLifeContext,entity);
+            MoveToTargetState moveToTargetState = new MoveToTargetState(entity);
 
-            RandomMovementState randomMovementState = new RandomMovementState(entity,0.5f);
-            EmptyState emptyState = new EmptyState();
-
-            TimerService movementTimer = _timerServiceFactory.Create(2f);
-            disposables.Add(movementTimer);
-            disposables.Add(randomMovementState.Entered.Subscribe(movementTimer.Restart));
-
-            TimerService idleTimer = _timerServiceFactory.Create(3f);
-            disposables.Add(idleTimer);
-            disposables.Add(emptyState.Entered.Subscribe(idleTimer.Restart));
-
-            FuncCondition movementTimerEndedCondition = new FuncCondition(() => movementTimer.IsOver);
-            FuncCondition idleTimerEndedCondition = new FuncCondition(() => idleTimer.IsOver);
-
-            AIStateMachine stateMachine = new AIStateMachine(disposables);
-            stateMachine.AddState(randomMovementState);
-            stateMachine.AddState(emptyState);
-
-            stateMachine.AddTransition(randomMovementState,emptyState,movementTimerEndedCondition);
-            stateMachine.AddTransition(emptyState,randomMovementState,idleTimerEndedCondition);
-
-            return stateMachine;
+            return null;
         }
+
+        //private AIStateMachine CreateRandomMovementStateMashine(Entity entity)
+        //{
+        //    List<IDisposable> disposables = new List<IDisposable>();
+
+        //    RandomMovementState randomMovementState = new RandomMovementState(entity,0.5f);
+        //    EmptyState emptyState = new EmptyState();
+
+        //    TimerService movementTimer = _timerServiceFactory.Create(2f);
+        //    disposables.Add(movementTimer);
+        //    disposables.Add(randomMovementState.Entered.Subscribe(movementTimer.Restart));
+
+        //    TimerService idleTimer = _timerServiceFactory.Create(3f);
+        //    disposables.Add(idleTimer);
+        //    disposables.Add(emptyState.Entered.Subscribe(idleTimer.Restart));
+
+        //    FuncCondition movementTimerEndedCondition = new FuncCondition(() => movementTimer.IsOver);
+        //    FuncCondition idleTimerEndedCondition = new FuncCondition(() => idleTimer.IsOver);
+
+        //    AIStateMachine stateMachine = new AIStateMachine(disposables);
+        //    stateMachine.AddState(randomMovementState);
+        //    stateMachine.AddState(emptyState);
+
+        //    stateMachine.AddTransition(randomMovementState,emptyState,movementTimerEndedCondition);
+        //    stateMachine.AddTransition(emptyState,randomMovementState,idleTimerEndedCondition);
+
+        //    return stateMachine;
+        //}
     }
 }
