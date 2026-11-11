@@ -4,9 +4,26 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 	{
 		public Assets._Project.Ecs.Gameplay.Features.TowerFeature.IsTower IsTowerC => GetComponent<Assets._Project.Ecs.Gameplay.Features.TowerFeature.IsTower>();
 
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> IsTower => IsTowerC.Value;
+
+		public bool TryGetIsTower(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> value)
+		{
+			bool result = TryGetComponent (out Assets._Project.Ecs.Gameplay.Features.TowerFeature.IsTower component);
+			if (result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean>);
+			return result;
+		}
+
 		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddIsTower()
 		{
-			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TowerFeature.IsTower() ); 
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TowerFeature.IsTower() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean>() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddIsTower(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TowerFeature.IsTower() {Value = value}); 
 		}
 
 		public Assets._Project.Ecs.Gameplay.Features.TeleportFeature.MaxTeleportEnergy MaxTeleportEnergyC => GetComponent<Assets._Project.Ecs.Gameplay.Features.TeleportFeature.MaxTeleportEnergy>();
@@ -314,6 +331,30 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddInTeleportProcess(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> value)
 		{
 			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeleportFeature.InTeleportProcess() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.TeamsFeature.Team TeamC => GetComponent<Assets._Project.Ecs.Gameplay.Features.TeamsFeature.Team>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<Assets._Project.Ecs.Gameplay.Features.TeamsFeature.Teams> Team => TeamC.Value;
+
+		public bool TryGetTeam(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<Assets._Project.Ecs.Gameplay.Features.TeamsFeature.Teams> value)
+		{
+			bool result = TryGetComponent (out Assets._Project.Ecs.Gameplay.Features.TeamsFeature.Team component);
+			if (result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<Assets._Project.Ecs.Gameplay.Features.TeamsFeature.Teams>);
+			return result;
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddTeam()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeamsFeature.Team() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<Assets._Project.Ecs.Gameplay.Features.TeamsFeature.Teams>() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddTeam(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<Assets._Project.Ecs.Gameplay.Features.TeamsFeature.Teams> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.TeamsFeature.Team() {Value = value}); 
 		}
 
 		public Assets._Project.Ecs.Gameplay.Features.Sensors.BodyCollider BodyColliderC => GetComponent<Assets._Project.Ecs.Gameplay.Features.Sensors.BodyCollider>();
@@ -845,6 +886,78 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddExplotionDamage(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
 		{
 			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.ExplotionDamage() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.ExplodeRequest ExplodeRequestC => GetComponent<Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.ExplodeRequest>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent ExplodeRequest => ExplodeRequestC.Value;
+
+		public bool TryGetExplodeRequest(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent value)
+		{
+			bool result = TryGetComponent (out Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.ExplodeRequest component);
+			if (result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent);
+			return result;
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddExplodeRequest()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.ExplodeRequest() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddExplodeRequest(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.ExplodeRequest() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.ExplodeEvent ExplodeEventC => GetComponent<Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.ExplodeEvent>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent ExplodeEvent => ExplodeEventC.Value;
+
+		public bool TryGetExplodeEvent(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent value)
+		{
+			bool result = TryGetComponent (out Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.ExplodeEvent component);
+			if (result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent);
+			return result;
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddExplodeEvent()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.ExplodeEvent() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddExplodeEvent(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.ExplodeEvent() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.IsExplode IsExplodeC => GetComponent<Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.IsExplode>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> IsExplode => IsExplodeC.Value;
+
+		public bool TryGetIsExplode(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> value)
+		{
+			bool result = TryGetComponent (out Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.IsExplode component);
+			if (result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean>);
+			return result;
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddIsExplode()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.IsExplode() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean>() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddIsExplode(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.IsExplode() {Value = value}); 
 		}
 
 		public Assets._Project.Ecs.Gameplay.Features.ContactTakeDamage.BodyContactDamage BodyContactDamageC => GetComponent<Assets._Project.Ecs.Gameplay.Features.ContactTakeDamage.BodyContactDamage>();

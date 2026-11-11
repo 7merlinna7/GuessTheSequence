@@ -1,11 +1,14 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Develop.Runtime.Utilities.Timer;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.Features.AI.States;
 using Assets._Project.Ecs.Gameplay.Features.AI.States.TargetSelectors;
+using Assets._Project.Ecs.Gameplay.Features.TowerFeature;
 using Assets._Project.Ecs.Utilities.Conditions;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets._Project.Ecs.Gameplay.Features.AI
 {
@@ -24,50 +27,39 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
             _entitiesLifeContext = _container.Resolve<EntitiesLifeContext>();
         }
 
-        public StateMachineBrain CreateWalkingGhostBrain(Entity entity)
+        public StateMachineBrain CreateWalkingGhostBrain(Entity entity,ITargetSelector targetSelector)
         {
-            //AIStateMachine stateMachine = CreateMoveToTargetStateMachine(entity);
-            //StateMachineBrain brain = new StateMachineBrain(stateMachine);
+            FindTargetState findTargetState = new FindTargetState(targetSelector, _entitiesLifeContext, entity);
 
-            //_brainsContext.SetFor(entity, brain);
+            AIStateMachine behaviour = CreateMoveToTargetStateMachine(entity,targetSelector);
 
-            return null;
+            AIParallelState parallelState = new AIParallelState(findTargetState, behaviour);
+
+            AIStateMachine rootStateMachine = new AIStateMachine();
+            rootStateMachine.AddState(parallelState);
+
+            StateMachineBrain brain = new StateMachineBrain(rootStateMachine);
+            _brainsContext.SetFor(entity, brain);
+            return brain;
         }
 
         private AIStateMachine CreateMoveToTargetStateMachine(Entity entity,ITargetSelector targetSelector)
         {
-            FindTargetState findTargetState = new FindTargetState(targetSelector,_entitiesLifeContext,entity);
             MoveToTargetState moveToTargetState = new MoveToTargetState(entity);
+            ExplodeState explodeState = new ExplodeState();
 
-            return null;
+            ReactiveVariable <Entity> currentTarget = entity.CurrentTarget;
+
+            FuncCondition moveToExplodeCondition = new FuncCondition(()=> (currentTarget.Value.Transform.position - entity.Transform.position).magnitude < 0.5f);
+
+            AIStateMachine stateMachine = new AIStateMachine();
+
+            stateMachine.AddState(moveToTargetState);
+            stateMachine.AddState(explodeState);
+
+            stateMachine.AddTransition(moveToTargetState, explodeState, moveToExplodeCondition);
+
+            return stateMachine;
         }
-
-        //private AIStateMachine CreateRandomMovementStateMashine(Entity entity)
-        //{
-        //    List<IDisposable> disposables = new List<IDisposable>();
-
-        //    RandomMovementState randomMovementState = new RandomMovementState(entity,0.5f);
-        //    EmptyState emptyState = new EmptyState();
-
-        //    TimerService movementTimer = _timerServiceFactory.Create(2f);
-        //    disposables.Add(movementTimer);
-        //    disposables.Add(randomMovementState.Entered.Subscribe(movementTimer.Restart));
-
-        //    TimerService idleTimer = _timerServiceFactory.Create(3f);
-        //    disposables.Add(idleTimer);
-        //    disposables.Add(emptyState.Entered.Subscribe(idleTimer.Restart));
-
-        //    FuncCondition movementTimerEndedCondition = new FuncCondition(() => movementTimer.IsOver);
-        //    FuncCondition idleTimerEndedCondition = new FuncCondition(() => idleTimer.IsOver);
-
-        //    AIStateMachine stateMachine = new AIStateMachine(disposables);
-        //    stateMachine.AddState(randomMovementState);
-        //    stateMachine.AddState(emptyState);
-
-        //    stateMachine.AddTransition(randomMovementState,emptyState,movementTimerEndedCondition);
-        //    stateMachine.AddTransition(emptyState,randomMovementState,idleTimerEndedCondition);
-
-        //    return stateMachine;
-        //}
     }
 }

@@ -1,7 +1,10 @@
 ﻿using Assets._Project.Develop.Runtime.Configs.Entities;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.Features.AI;
+using Assets._Project.Ecs.Gameplay.Features.AI.States.TargetSelectors;
+using Assets._Project.Ecs.Gameplay.Features.TeamsFeature;
 using System;
 using UnityEngine;
 
@@ -31,7 +34,11 @@ namespace Assets._Project.Ecs.Gameplay.Features.Enemies
             {
                 case GhostConfig ghostConfig:
                     entity = _entitiesFactory.CreateWalkingGhost(position,ghostConfig);
-                    _brainsFactory.CreateWalkingGhostBrain(entity);
+                    entity
+                        .AddTeam(new ReactiveVariable<Teams>(Teams.Enemies))
+                        .AddCurrentTarget();
+
+                    _brainsFactory.CreateWalkingGhostBrain(entity,new TowerTargetSelector(entity));
                     break;
 
                 default:
@@ -39,8 +46,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.Enemies
             }
 
             _lifeContext.Add(entity);
-            entity.AddCurrentTarget();
-            _brainsFactory.CreateWalkingGhostBrain(entity);
+
             return entity;
         }
     }

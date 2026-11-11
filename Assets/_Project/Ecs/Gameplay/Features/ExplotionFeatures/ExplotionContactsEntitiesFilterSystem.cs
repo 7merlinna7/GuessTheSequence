@@ -12,7 +12,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures
         private Buffer<Collider> _contacts;
         private Buffer<Entity> _contactsEntities;
 
-        private ReactiveEvent _teleportEvent;
+        private ReactiveEvent _explodeRequest;
         private ReactiveEvent _dealExplotionDamageEvent;
         private IDisposable _eventDisposable;
 
@@ -28,10 +28,10 @@ namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures
             _contacts = entity.ContactCollidersBuffer;
             _contactsEntities = entity.ContactEntitiesBuffer;
 
-            _teleportEvent = entity.TeleportEvent;
+            _explodeRequest = entity.ExplodeRequest;
             _dealExplotionDamageEvent = entity.DealExplotionDamageEvent;
 
-            _eventDisposable = _teleportEvent.Subscribe(Filter);
+            _eventDisposable = _explodeRequest.Subscribe(Filter);
         }
 
         public void OnDispose()

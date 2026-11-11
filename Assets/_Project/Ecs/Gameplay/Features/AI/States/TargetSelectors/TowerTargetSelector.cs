@@ -1,27 +1,23 @@
 ﻿using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.Features.AplyDamage;
+using Assets._Project.Ecs.Gameplay.Features.TowerFeature;
 using Assets._Project.Ecs.Utilities.Conditions;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Assets._Project.Ecs.Gameplay.Features.AI.States.TargetSelectors
 {
-    public class ConditionTargetSelector : ITargetSelector
+    public class TowerTargetSelector : ITargetSelector
     {
-        private Entity _source;
-        private ICompositeCondition _condition;
-
-        public ConditionTargetSelector(Entity entity,ICompositeCondition conditionToSelect)
+        public TowerTargetSelector(Entity entity)
         {
-            _source = entity;
-            _condition = conditionToSelect;
         }
 
         public Entity SelectTargetFrom(IEnumerable<Entity> targets)
         {
             IEnumerable<Entity> selectedTargets = targets.Where(target =>
             {
-                bool result = _condition.Evaluate() && target.HasComponent<TakeDamageRequest>();
+                bool result = target.HasComponent<IsTower>() && target.HasComponent<TakeDamageRequest>();
 
                 if (target.TryGetCanApplayDamage(out ICompositeCondition canApplayDamage))
                 {

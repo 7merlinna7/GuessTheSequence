@@ -7,6 +7,6 @@ namespace Assets._Project.Ecs.Gameplay.Features.TowerFeature
 {
     public class IsTower :IEntityComponent
     {
-        ReactiveVariable<bool> Value = new ReactiveVariable<bool>(true);
+      public ReactiveVariable<bool> Value;
     }
 }

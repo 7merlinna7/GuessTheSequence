@@ -10,7 +10,9 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI.States
         private ReactiveVariable<Vector3> _moveDirection;
         private ReactiveVariable<Vector3> _rotationDirection;
         private Transform _source;
-        private Entity _currentTarget;
+        private ReactiveVariable<Entity> _currentTarget;
+
+        private bool _isRunning;
 
         public MoveToTargetState(Entity entity)
         {
@@ -18,12 +20,20 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI.States
             _rotationDirection = entity.RotationDirection;
 
             _source = entity.Transform;
-            _currentTarget = entity.CurrentTarget.Value;
+            _currentTarget = entity.CurrentTarget;
+
+            _isRunning = true;
         }
 
         public void Update(float deltaTime)
         {
-            Vector3 direction = (_currentTarget.Transform.position - _source.position).normalized;
+            if (_isRunning == false)
+                return;
+
+            if (_currentTarget == null)
+                return;
+
+            Vector3 direction = (_currentTarget.Value.Transform.position - _source.position).normalized;
 
             _rotationDirection.Value = direction;
             _moveDirection.Value = direction;

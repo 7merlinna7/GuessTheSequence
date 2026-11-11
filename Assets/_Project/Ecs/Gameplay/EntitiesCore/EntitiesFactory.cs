@@ -7,6 +7,7 @@ using Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures;
 using Assets._Project.Ecs.Gameplay.Features.LifeCycle;
 using Assets._Project.Ecs.Gameplay.Features.MovementFeatures;
 using Assets._Project.Ecs.Gameplay.Features.Sensors;
+using Assets._Project.Ecs.Gameplay.Features.TeamsFeature;
 using Assets._Project.Ecs.Utilities.Conditions;
 using UnityEngine;
 
@@ -27,14 +28,19 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
             _collidersRegistryService = _container.Resolve<CollidersRegistryService>();
         }
 
-        public Entity CreateExplotion(Vector3 position)
+        public Entity CreateExplotion(Vector3 position,Teams team)
         {
             Entity entity = CreateEmpty();
 
             entity
                 .AddExplotionRadius(new ReactiveVariable<float>(3))
                 .AddExplotionDamage(new ReactiveVariable<float>(50))
+                .AddTeam(new ReactiveVariable<Teams>(team))
+
+                .AddExplodeRequest()
                 .AddDealExplotionDamageEvent()
+
+                //systems
                 .AddSystem(new ExplotionContactsDetectingSystem())
                 .AddSystem(new ExplotionContactsEntitiesFilterSystem(_collidersRegistryService))
                 .AddSystem(new DealDamageOnExplotionSystem());
@@ -50,7 +56,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 
             entity
                 //компоненты полей
-                .AddIsTower()
+                .AddIsTower(new ReactiveVariable<bool>(true))
                 // health
                 .AddMaxHealth(new ReactiveVariable<float>(health))
                 .AddCurrentHealth(new ReactiveVariable<float>(health))
@@ -61,7 +67,8 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .AddDeathProcessCurrentTime()
                 //takeDamage
                 .AddTakeDamageRequest()
-                .AddTakeDamageEvent();
+                .AddTakeDamageEvent()
+                .AddTeam(new ReactiveVariable<Teams>(Teams.Player));
 
             //компоненты условий
             ICompositeCondition mustDie = new CompositeCondition()
@@ -100,6 +107,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 
             entity
                 //компоненты полей
+                .AddIsExplode()
                 //move
                 .AddMoveDirection()
                 .AddMoveSpeed(new ReactiveVariable<float>(config.MoveSpeed))
@@ -118,6 +126,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .AddTakeDamageRequest()
                 .AddTakeDamageEvent()
                 ;
+            ;
 
             //компоненты условий
             ICompositeCondition canMove = new CompositeCondition()
