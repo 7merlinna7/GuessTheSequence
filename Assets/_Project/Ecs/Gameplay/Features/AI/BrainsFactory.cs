@@ -46,11 +46,11 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
         private AIStateMachine CreateMoveToTargetStateMachine(Entity entity,ITargetSelector targetSelector)
         {
             MoveToTargetState moveToTargetState = new MoveToTargetState(entity);
-            ExplodeState explodeState = new ExplodeState();
+            ExplodeState explodeState = new ExplodeState(entity);
 
             ReactiveVariable <Entity> currentTarget = entity.CurrentTarget;
 
-            FuncCondition moveToExplodeCondition = new FuncCondition(()=> (currentTarget.Value.Transform.position - entity.Transform.position).magnitude < 0.5f);
+            FuncCondition moveToExplodeCondition = new FuncCondition(()=> (currentTarget.Value.Transform.position - entity.Transform.position).magnitude < 1.5f);
 
             AIStateMachine stateMachine = new AIStateMachine();
 

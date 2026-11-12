@@ -36,8 +36,6 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .AddExplotionRadius(new ReactiveVariable<float>(3))
                 .AddExplotionDamage(new ReactiveVariable<float>(50))
                 .AddTeam(new ReactiveVariable<Teams>(team))
-
-                .AddExplodeRequest()
                 .AddDealExplotionDamageEvent()
 
                 //systems
@@ -108,6 +106,8 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
             entity
                 //компоненты полей
                 .AddIsExplode()
+                .AddExplotionDamage(new ReactiveVariable<float>(50f))
+                .AddExplotionRadius(new ReactiveVariable<float>(3f))
                 //move
                 .AddMoveDirection()
                 .AddMoveSpeed(new ReactiveVariable<float>(config.MoveSpeed))
@@ -145,12 +145,16 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
             ICompositeCondition canApplyDamage = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.IsDead.Value == false));
 
+            ICompositeCondition canExplode = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+
             entity
                 .AddCanMove(canMove)
                 .AddCanRotate(canRotate)
                 .AddMustDie(mustDie)
                 .AddMustSelfRelease(mustSelfRealese)
-                .AddCanApplayDamage(canApplyDamage);
+                .AddCanApplayDamage(canApplyDamage)
+                .AddCanExplode(canExplode);
 
             //компоненты систем
             entity
@@ -160,7 +164,8 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .AddSystem(new DeathSystem())
                 .AddSystem(new DisableCollidersOnDeathSystem())
                 .AddSystem(new DeathProcessTimerSystem())
-                .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));
+                .AddSystem(new SelfReleaseSystem(_entitiesLifeContext))
+                ;
 
             return entity;
         }

@@ -4,6 +4,7 @@ using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.Features.AI;
 using Assets._Project.Ecs.Gameplay.Features.AI.States.TargetSelectors;
+using Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures;
 using Assets._Project.Ecs.Gameplay.Features.TeamsFeature;
 using System;
 using UnityEngine;
@@ -36,7 +37,8 @@ namespace Assets._Project.Ecs.Gameplay.Features.Enemies
                     entity = _entitiesFactory.CreateWalkingGhost(position,ghostConfig);
                     entity
                         .AddTeam(new ReactiveVariable<Teams>(Teams.Enemies))
-                        .AddCurrentTarget();
+                        .AddCurrentTarget()
+                        .AddSystem(new ExplodeAndSelfRealeseSystem(_entitiesFactory, entity));
 
                     _brainsFactory.CreateWalkingGhostBrain(entity,new TowerTargetSelector(entity));
                     break;

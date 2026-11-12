@@ -3,6 +3,7 @@ using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.EntitiesCore.Systems;
 using System;
+using UnityEngine;
 
 namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures
 {
@@ -15,13 +16,11 @@ namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures
         private ReactiveEvent _dealExplotionDamageEvent;
         private IDisposable _eventDisposable;
 
-        private ReactiveVariable<bool> _inTeleportProcess;
 
         public void OnInit(Entity entity)
         {
             _contacts = entity.ContactEntitiesBuffer;
             _damage = entity.ExplotionDamage;
-            _inTeleportProcess = entity.InTeleportProcess;
             _entity = entity;
 
             _dealExplotionDamageEvent = entity.DealExplotionDamageEvent;
@@ -40,8 +39,9 @@ namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures
                 Entity contactEntity = _contacts.Items[i];
 
                 EntitiesHelper.TryTakeDamageFrom(_entity, contactEntity, _damage.Value);
+
+                Debug.Log(contactEntity.CurrentHealth.Value +"/"+ contactEntity.MaxHealth.Value);
             }
-            _inTeleportProcess.Value = false;
         }
     }
 }

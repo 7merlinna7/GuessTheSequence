@@ -15,9 +15,14 @@ namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures
         private ReactiveVariable<bool> _isDead;
         private ReactiveVariable<bool> _isExplode;
 
-        public ExplodeAndSelfRealeseSystem(EntitiesFactory entitiesFactory)
+        public ExplodeAndSelfRealeseSystem(EntitiesFactory entitiesFactory, Entity entity)
         {
             _entitiesFactory = entitiesFactory;
+
+            _team = entity.Team;
+            _transform = entity.Transform;
+            _isDead = entity.IsDead;
+            _isExplode = entity.IsExplode;
         }
 
         public void OnInit(Entity entity)

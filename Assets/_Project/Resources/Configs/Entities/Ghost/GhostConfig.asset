@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GhostConfig
   m_EditorClassIdentifier: 
   <PrefabPath>k__BackingField: Entities/WalkingGhost
-  <MoveSpeed>k__BackingField: 10
+  <MoveSpeed>k__BackingField: 5
   <RotationSpeed>k__BackingField: 900
   <MaxHealth>k__BackingField: 100
   <BodyContactDamage>k__BackingField: 20

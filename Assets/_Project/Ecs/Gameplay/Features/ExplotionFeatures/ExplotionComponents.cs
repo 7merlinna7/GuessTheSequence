@@ -1,5 +1,6 @@
 ﻿using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
+using Assets._Project.Ecs.Utilities.Conditions;
 
 namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures
 {
@@ -26,5 +27,10 @@ namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures
     public class IsExplode :IEntityComponent
     {
         public ReactiveVariable<bool> Value;
+    }
+
+    public class CanExplode : IEntityComponent
+    {
+        public ICompositeCondition Value;
     }
 }

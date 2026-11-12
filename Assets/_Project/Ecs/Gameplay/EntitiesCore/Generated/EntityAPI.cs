@@ -960,6 +960,25 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.IsExplode() {Value = value}); 
 		}
 
+		public Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.CanExplode CanExplodeC => GetComponent<Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.CanExplode>();
+
+		public Assets._Project.Ecs.Utilities.Conditions.ICompositeCondition CanExplode => CanExplodeC.Value;
+
+		public bool TryGetCanExplode(out Assets._Project.Ecs.Utilities.Conditions.ICompositeCondition value)
+		{
+			bool result = TryGetComponent (out Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.CanExplode component);
+			if (result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Ecs.Utilities.Conditions.ICompositeCondition);
+			return result;
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddCanExplode(Assets._Project.Ecs.Utilities.Conditions.ICompositeCondition value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.CanExplode() {Value = value}); 
+		}
+
 		public Assets._Project.Ecs.Gameplay.Features.ContactTakeDamage.BodyContactDamage BodyContactDamageC => GetComponent<Assets._Project.Ecs.Gameplay.Features.ContactTakeDamage.BodyContactDamage>();
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> BodyContactDamage => BodyContactDamageC.Value;
