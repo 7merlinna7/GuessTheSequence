@@ -1,4 +1,4 @@
-﻿using Assets._Project.Develop.Runtime.Configs.Stages;
+﻿using Assets._Project.Develop.Runtime.Configs.Gameplay.Stages;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

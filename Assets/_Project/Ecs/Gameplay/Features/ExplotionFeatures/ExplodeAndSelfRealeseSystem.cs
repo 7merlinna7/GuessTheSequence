@@ -9,28 +9,26 @@ namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures
     public class ExplodeAndSelfRealeseSystem : IInitializableSystem, IUpdatableSystem
     {
         private readonly EntitiesFactory _entitiesFactory;
+        private readonly EntitiesLifeContext _lifeContext;
+
+        private Entity _source;
 
         private ReactiveVariable<Teams> _team;
         private Transform _transform;
-        private ReactiveVariable<bool> _isDead;
         private ReactiveVariable<bool> _isExplode;
 
-        public ExplodeAndSelfRealeseSystem(EntitiesFactory entitiesFactory, Entity entity)
+        public ExplodeAndSelfRealeseSystem(EntitiesFactory entitiesFactory, EntitiesLifeContext lifeContext)
         {
             _entitiesFactory = entitiesFactory;
-
-            _team = entity.Team;
-            _transform = entity.Transform;
-            _isDead = entity.IsDead;
-            _isExplode = entity.IsExplode;
+            _lifeContext = lifeContext;
         }
 
         public void OnInit(Entity entity)
         {
             _transform = entity.Transform;
-            _isDead = entity.IsDead;
             _isExplode = entity.IsExplode;
             _team = entity.Team;
+            _source = entity;
         }
 
         public void OnUpdate(float deltaTime)
@@ -42,7 +40,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures
         private void CreateExpotion()
         {
             _entitiesFactory.CreateExplotion(_transform.position,_team.Value);
-            _isDead.Value = true;
+            _lifeContext.Release(_source);
         }
     }
 }

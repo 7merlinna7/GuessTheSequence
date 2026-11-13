@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Configs.Entities;
+using Assets._Project.Develop.Runtime.Configs.Gameplay.Stages;
 using Assets._Project.Develop.Runtime.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
@@ -13,7 +14,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 {
     public class GameplayBootstrap : SceneBootstrap
     {
-        [SerializeField] private GhostConfig _ghostConfig;
+        [SerializeField] private StageConfig _ghostConfig;
 
         private DIContainer _container;
         private GameplayInputArgs _inputArgs;

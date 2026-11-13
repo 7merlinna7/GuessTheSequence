@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets._Project.Develop.Runtime.Configs.Stages
+namespace Assets._Project.Develop.Runtime.Configs.Gameplay.Stages
 {
     [CreateAssetMenu(menuName = "Configs/Gameplay/Levels/NewStageConfig", fileName = "StageConfig")]
     public class ClearAllEnemiesStageConfig : StageConfig

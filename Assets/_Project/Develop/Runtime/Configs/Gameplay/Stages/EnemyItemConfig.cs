@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 
-namespace Assets._Project.Develop.Runtime.Configs.Stages
+namespace Assets._Project.Develop.Runtime.Configs.Gameplay.Stages
 {
     [Serializable]
     public class EnemyItemConfig 

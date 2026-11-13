@@ -1,5 +1,6 @@
 ﻿using Assets._Project.Develop.Runtime.Configs.Entities;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Utilities;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Ecs.Gameplay.EntitiesCore.Mono;
 using Assets._Project.Ecs.Gameplay.Features.AplyDamage;
@@ -32,16 +33,28 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
         {
             Entity entity = CreateEmpty();
 
+            _monoEntitiesFactory.Create(entity, position, "Entities/Explotion");
+
             entity
+                .AddIsExplode()
                 .AddExplotionRadius(new ReactiveVariable<float>(3))
                 .AddExplotionDamage(new ReactiveVariable<float>(50))
                 .AddTeam(new ReactiveVariable<Teams>(team))
+                .AddExplodeRequest()
                 .AddDealExplotionDamageEvent()
 
-                //systems
-                .AddSystem(new ExplotionContactsDetectingSystem())
+                .AddContactsDetectingMask(Layers.CharactersMask | Layers.TowersMask)
+                .AddContactCollidersBuffer(new Buffer<Collider>(64))
+                .AddContactEntitiesBuffer(new Buffer<Entity>(64));
+
+
+            //systems
+            entity
+                .AddSystem(new ExplotionContactsDetectingSystem(_entitiesLifeContext))
                 .AddSystem(new ExplotionContactsEntitiesFilterSystem(_collidersRegistryService))
                 .AddSystem(new DealDamageOnExplotionSystem());
+
+            _entitiesLifeContext.Add(entity);
 
             return entity;
         }

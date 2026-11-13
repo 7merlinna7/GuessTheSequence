@@ -38,7 +38,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.Enemies
                     entity
                         .AddTeam(new ReactiveVariable<Teams>(Teams.Enemies))
                         .AddCurrentTarget()
-                        .AddSystem(new ExplodeAndSelfRealeseSystem(_entitiesFactory, entity));
+                        .AddSystem(new ExplodeAndSelfRealeseSystem(_entitiesFactory,_lifeContext));
 
                     _brainsFactory.CreateWalkingGhostBrain(entity,new TowerTargetSelector(entity));
                     break;
