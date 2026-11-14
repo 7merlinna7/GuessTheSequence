@@ -7,11 +7,13 @@ namespace Assets._Project.Ecs.Gameplay.Features.StagesFeature
     public class StageProviderService 
     {
         private ReactiveVariable<int> _currentStageNumber = new();
+        private ReactiveVariable<StageResult> _currentStageResult = new();
 
         private LevelConfig _levelConfig;
         private StagesFactory _stagesFactory;
 
         private IStage _currentStage;
+        private IDisposable _stageEndedDisposable;
 
         public StageProviderService(
             LevelConfig levelConfig,
@@ -22,6 +24,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.StagesFeature
         }
 
         public IReadonlyVariable<int> CurrentStageNumber => _currentStageNumber;
+        public IReadonlyVariable<StageResult> CurrentStageResult => _currentStageResult;
 
         public bool HasNextStage() => _currentStageNumber.Value < StagesCount;
 
@@ -36,11 +39,21 @@ namespace Assets._Project.Ecs.Gameplay.Features.StagesFeature
                 CleanUpCurrent();
 
             _currentStageNumber.Value++;
+            _currentStageResult.Value = StageResult.Uncompleted;
 
             _currentStage = _stagesFactory.Create(_levelConfig.StageConfigs[_currentStageNumber.Value - 1]);
         }
 
-        public void StartCurrent() => _currentStage.Start();
+        public void StartCurrent()
+        {
+            _stageEndedDisposable = _currentStage.Completed.Subscribe(OnStageCompleated);
+            _currentStage.Start();
+        }
+
+        private void OnStageCompleated()
+        {
+            _currentStageResult.Value = StageResult.Completed;
+        }
 
         public void UpdateCurrent(float deltaTime) => _currentStage.Update(deltaTime);
 
