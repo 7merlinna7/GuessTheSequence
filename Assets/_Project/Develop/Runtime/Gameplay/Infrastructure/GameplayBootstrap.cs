@@ -6,6 +6,7 @@ using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 using Assets._Project.Ecs.Gameplay;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.Features.AI;
+using Assets._Project.Ecs.Gameplay.Features.AI.States;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -14,11 +15,10 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 {
     public class GameplayBootstrap : SceneBootstrap
     {
-        [SerializeField] private StageConfig _ghostConfig;
-
         private DIContainer _container;
         private GameplayInputArgs _inputArgs;
-        private TestGameplay _testGameplay;
+
+        private GameplayStatesContext _gameplayStatesContext;
         private bool _isRunning;
         private EntitiesLifeContext _lifeContext;
         private AIBrainsContext _brainsContext;
@@ -39,17 +39,18 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
         public override IEnumerator Initialize()
         {
-            _testGameplay = new TestGameplay();
-            _testGameplay.Initialize(_container,_ghostConfig);
+            _gameplayStatesContext = _container.Resolve<GameplayStatesContext>();
             _lifeContext = _container.Resolve<EntitiesLifeContext>();
             _brainsContext = _container.Resolve<AIBrainsContext>();
+
+            _container.Resolve<EntitiesFactory>().CreateTower(Vector3.zero,100f);
 
             yield break;
         }
 
         public override void Run()
         {
-            _testGameplay.Start();
+            _gameplayStatesContext.Run();
             Debug.Log("Level number "+ _inputArgs.LevelNumber);
             _isRunning = true;
         }
@@ -60,9 +61,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
                 return;
 
             _brainsContext?.Update(Time.deltaTime);
-            
-            _testGameplay.Update();
             _lifeContext?.Update(Time.deltaTime);
+            _gameplayStatesContext?.Update(Time.deltaTime);
         }
 
     }

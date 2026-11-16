@@ -31,20 +31,20 @@ namespace Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders
 
             _readers.Add(reader);
         }
-        public IEnumerator Load()
+        public IEnumerator LoadAcync()
         {
             yield return _saveLoadService.Load<TData>(loadedData => _data = loadedData);
 
             SendDataToReaders();
         }
 
-        public IEnumerator Save()
+        public IEnumerator SaveAcync()
         {
             UpdateDataFromWriters();
 
             yield return _saveLoadService.Save(_data);
         }
-        public IEnumerator Exists(Action<bool> onExistsResult)
+        public IEnumerator ExistsAcync(Action<bool> onExistsResult)
         {
             yield return _saveLoadService.Exists<TData>(result => onExistsResult?.Invoke(result));
         }

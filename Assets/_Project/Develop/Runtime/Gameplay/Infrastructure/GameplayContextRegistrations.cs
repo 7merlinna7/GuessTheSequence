@@ -10,9 +10,11 @@ using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.EntitiesCore.Mono;
 using Assets._Project.Ecs.Gameplay.Features.AI;
+using Assets._Project.Ecs.Gameplay.Features.AI.States;
 using Assets._Project.Ecs.Gameplay.Features.Enemies;
 using Assets._Project.Ecs.Gameplay.Features.StagesFeature;
 using Assets._Project.Ecs.Gameplay.Features.TowerFeature;
+using Assets._Project.Ecs.Gameplay.States;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 {
@@ -35,7 +37,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             container.RegisterAsSingle(CreateEnemiesFactory);
             container.RegisterAsSingle(CreateStagesFactory);
             container.RegisterAsSingle(CreateStageProviderService);
+            container.RegisterAsSingle(CreateGameplayStatesFactory);
         }
+
+        private static GameplayStatesContext CreateGameplayStatesContext(DIContainer c)
+            => new GameplayStatesContext(c.Resolve<GameplayStatesFactory>().CreateGameplayStateMachine());
+
+        private static GameplayStatesFactory CreateGameplayStatesFactory(DIContainer c)
+            => new GameplayStatesFactory(c);
 
         private static TowerHolderService CreateTowerHolderService(DIContainer c)
             => new TowerHolderService(c.Resolve<EntitiesLifeContext>());

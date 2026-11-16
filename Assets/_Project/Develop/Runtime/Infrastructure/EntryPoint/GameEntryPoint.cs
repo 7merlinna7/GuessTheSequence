@@ -41,10 +41,10 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
 
             bool isPlayerDataSaveExists = false;
 
-            yield return playerDataProvider.Exists(result => isPlayerDataSaveExists = result);
+            yield return playerDataProvider.ExistsAcync(result => isPlayerDataSaveExists = result);
 
             if (isPlayerDataSaveExists)
-               yield return playerDataProvider.Load();
+               yield return playerDataProvider.LoadAcync();
             else
                 playerDataProvider.Reset();
 

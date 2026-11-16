@@ -3,6 +3,7 @@ using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 using Assets._Project.Ecs.Gameplay.Features.StagesFeature;
+using Assets._Project.Ecs.Gameplay.Features.TowerFeature;
 using Assets._Project.Ecs.Utilities.Conditions;
 using UnityEngine;
 
@@ -69,6 +70,7 @@ namespace Assets._Project.Ecs.Gameplay.States
         public GameplayStateMachine CreateGameplayStateMachine ()
         {
             StageProviderService stageProviderService = _container.Resolve<StageProviderService> ();
+            TowerHolderService towerHolderService = _container.Resolve<TowerHolderService>();
 
             GameplayStateMachine coreLoopState = CreateCoreLoopState();
             DefeatState defeatState = CreateDefeatState();
@@ -78,7 +80,24 @@ namespace Assets._Project.Ecs.Gameplay.States
                 .Add(new FuncCondition(() => stageProviderService.CurrentStageResult.Value == StageResult.Completed))
                 .Add(new FuncCondition(() => stageProviderService.HasNextStage() == false));
 
-            return null;
+            ICompositeCondition coreLoopStateToDefeatStateCondition = new CompositeCondition()
+                .Add(new FuncCondition(() =>
+                {
+                    if (towerHolderService.Tower != null)
+                        return towerHolderService.Tower.IsDead.Value;
+
+                    return false;
+                }));
+
+            GameplayStateMachine gameplayCycle = new GameplayStateMachine();
+            gameplayCycle.AddState(coreLoopState);
+            gameplayCycle.AddState(winState);
+            gameplayCycle.AddState(defeatState);
+
+            gameplayCycle.AddTransition(coreLoopState,defeatState,coreLoopStateToDefeatStateCondition);
+            gameplayCycle.AddTransition(coreLoopState,winState,coreLoopToWinStateCondition);
+
+            return gameplayCycle;
         }
     }
 }

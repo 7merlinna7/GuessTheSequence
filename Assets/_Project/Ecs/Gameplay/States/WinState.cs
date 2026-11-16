@@ -27,7 +27,7 @@ namespace Assets._Project.Ecs.Gameplay.States
         {
             base.Enter();
             Debug.Log("Win");
-            _playerDataProvider.Save();
+            _coroutinesPerformer.StartPerform(_playerDataProvider.SaveAcync());
             //апдейт статистики крч обработка победы
         }
 
