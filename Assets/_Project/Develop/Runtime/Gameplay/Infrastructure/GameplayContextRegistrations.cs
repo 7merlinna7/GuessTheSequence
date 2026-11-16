@@ -12,6 +12,7 @@ using Assets._Project.Ecs.Gameplay.EntitiesCore.Mono;
 using Assets._Project.Ecs.Gameplay.Features.AI;
 using Assets._Project.Ecs.Gameplay.Features.Enemies;
 using Assets._Project.Ecs.Gameplay.Features.StagesFeature;
+using Assets._Project.Ecs.Gameplay.Features.TowerFeature;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 {
@@ -27,6 +28,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             container.RegisterAsSingle(CreateEntitiesFactory);
             container.RegisterAsSingle(CreateEntitiesLifeContext);
             container.RegisterAsSingle(CreateMonoEntitiesFactory).NonLazy();
+            container.RegisterAsSingle(CreateTowerHolderService).NonLazy();
             container.RegisterAsSingle(CreateCollidersRegistryService);
             container.RegisterAsSingle(CreateBrainsFactory);
             container.RegisterAsSingle(CreateAIBrainsContext);
@@ -34,6 +36,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             container.RegisterAsSingle(CreateStagesFactory);
             container.RegisterAsSingle(CreateStageProviderService);
         }
+
+        private static TowerHolderService CreateTowerHolderService(DIContainer c)
+            => new TowerHolderService(c.Resolve<EntitiesLifeContext>());
 
         private static StageProviderService CreateStageProviderService(DIContainer c)
             => new StageProviderService(
