@@ -4,11 +4,7 @@ using Assets._Project.Develop.Runtime.Utilities.Timer;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.Features.AI.States;
 using Assets._Project.Ecs.Gameplay.Features.AI.States.TargetSelectors;
-using Assets._Project.Ecs.Gameplay.Features.TowerFeature;
 using Assets._Project.Ecs.Utilities.Conditions;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace Assets._Project.Ecs.Gameplay.Features.AI
 {
@@ -47,17 +43,23 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
         {
             MoveToTargetState moveToTargetState = new MoveToTargetState(entity);
             ExplodeState explodeState = new ExplodeState(entity);
+            EmptyState emptyState = new EmptyState();
 
             ReactiveVariable <Entity> currentTarget = entity.CurrentTarget;
 
-            FuncCondition moveToExplodeCondition = new FuncCondition(()=> (currentTarget.Value.Transform.position - entity.Transform.position).magnitude < 1.5f);
+            FuncCondition moveToExplodeCondition = new FuncCondition
+                (()=> (currentTarget.Value.Transform.position - entity.Transform.position).magnitude < 2f);
+
+            FuncCondition explodeToEmptyState = new FuncCondition(()=> entity.IsExplode.Value == false);
 
             AIStateMachine stateMachine = new AIStateMachine();
 
             stateMachine.AddState(moveToTargetState);
             stateMachine.AddState(explodeState);
+            stateMachine.AddState(emptyState);
 
             stateMachine.AddTransition(moveToTargetState, explodeState, moveToExplodeCondition);
+            stateMachine.AddTransition(explodeState, emptyState, explodeToEmptyState);
 
             return stateMachine;
         }

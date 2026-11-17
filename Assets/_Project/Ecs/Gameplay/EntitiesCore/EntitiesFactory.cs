@@ -5,6 +5,7 @@ using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Ecs.Gameplay.EntitiesCore.Mono;
 using Assets._Project.Ecs.Gameplay.Features.AplyDamage;
 using Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures;
+using Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.BombFeature;
 using Assets._Project.Ecs.Gameplay.Features.LifeCycle;
 using Assets._Project.Ecs.Gameplay.Features.MovementFeatures;
 using Assets._Project.Ecs.Gameplay.Features.Sensors;
@@ -29,7 +30,27 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
             _collidersRegistryService = _container.Resolve<CollidersRegistryService>();
         }
 
-        public Entity CreateExplotion(Vector3 position,Teams team)
+        public Entity CreateBomb(Vector3 position, Teams team)
+        {
+            Entity entity = CreateEmpty();
+
+            _monoEntitiesFactory.Create(entity, position, "Entities/Bomb");
+
+            entity
+                .AddIsExplode()
+                .AddTeam(new ReactiveVariable<Teams>(team))
+                .AddExplotionRadius(new ReactiveVariable<float>(3))
+                .AddExplotionDamage(new ReactiveVariable<float>(50))
+                .AddTeam(new ReactiveVariable<Teams>(team));
+
+            entity
+                .AddSystem(new BombExplodeSystem(this));
+
+
+            return entity;
+        }
+
+        public Entity CreateExplotion(Vector3 position,Teams team, float explotionRadius, float explotionDamage)
         {
             Entity entity = CreateEmpty();
 
@@ -37,8 +58,8 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 
             entity
                 .AddIsExplode()
-                .AddExplotionRadius(new ReactiveVariable<float>(3))
-                .AddExplotionDamage(new ReactiveVariable<float>(50))
+                .AddExplotionRadius(new ReactiveVariable<float>(explotionRadius))
+                .AddExplotionDamage(new ReactiveVariable<float>(explotionDamage))
                 .AddTeam(new ReactiveVariable<Teams>(team))
                 .AddExplodeRequest()
                 .AddDealExplotionDamageEvent()
@@ -46,7 +67,6 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .AddContactsDetectingMask(Layers.CharactersMask | Layers.TowersMask)
                 .AddContactCollidersBuffer(new Buffer<Collider>(64))
                 .AddContactEntitiesBuffer(new Buffer<Entity>(64));
-
 
             //systems
             entity
@@ -110,7 +130,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
             return entity;
         }
 
-        public Entity CreateWalkingGhost(Vector3 position,GhostConfig config)
+        public Entity CreateWalkingExplotionEntity(Vector3 position,GhostConfig config)
         {
            Entity entity = CreateEmpty();
 

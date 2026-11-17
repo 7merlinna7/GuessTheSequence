@@ -21,7 +21,7 @@ namespace Assets._Project.Ecs.Gameplay.States
         public override void Enter()
         {
             base.Enter();
-            Debug.Log("Win");
+            Debug.Log("Defeat");
             //апдейт статистики крч обработка defeat
         }
 

@@ -64,6 +64,5 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             _lifeContext?.Update(Time.deltaTime);
             _gameplayStatesContext?.Update(Time.deltaTime);
         }
-
     }
 }

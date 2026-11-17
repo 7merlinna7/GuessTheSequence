@@ -53,8 +53,11 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore.Mono
         {
             _entitiesLifeContext.Released += OnEntityReleased;
 
+
             foreach (Entity entity in _EntityToMono.Keys)
+            {
                 CleanupFor(entity);
+            }
 
             _EntityToMono.Clear();
         }

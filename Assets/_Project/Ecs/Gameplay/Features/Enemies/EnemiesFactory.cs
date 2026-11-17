@@ -34,7 +34,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.Enemies
             switch (config)
             {
                 case GhostConfig ghostConfig:
-                    entity = _entitiesFactory.CreateWalkingGhost(position,ghostConfig);
+                    entity = _entitiesFactory.CreateWalkingExplotionEntity(position,ghostConfig);
                     entity
                         .AddTeam(new ReactiveVariable<Teams>(Teams.Enemies))
                         .AddCurrentTarget()

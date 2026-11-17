@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c777db4a9b7b5f041a02d9c31eb68fd7, type: 3}
-  m_Name: NumbersSequenceConfig
+  m_Script: {fileID: 11500000, guid: 1efcfb33776d517408a3e415929f31a9, type: 3}
+  m_Name: PlayerConfig
   m_EditorClassIdentifier: 
-  <SequenceLenth>k__BackingField: 1
-  <SequenceType>k__BackingField: 0
+  <ExplotionDamage>k__BackingField: 50
+  <ExplotionRadius>k__BackingField: 3

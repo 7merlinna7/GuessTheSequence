@@ -38,6 +38,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             container.RegisterAsSingle(CreateStagesFactory);
             container.RegisterAsSingle(CreateStageProviderService);
             container.RegisterAsSingle(CreateGameplayStatesFactory);
+            container.RegisterAsSingle(CreateGameplayStatesContext);
         }
 
         private static GameplayStatesContext CreateGameplayStatesContext(DIContainer c)

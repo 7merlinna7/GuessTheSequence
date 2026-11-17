@@ -11,7 +11,8 @@ namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures
         private readonly EntitiesFactory _entitiesFactory;
         private readonly EntitiesLifeContext _lifeContext;
 
-        private Entity _source;
+        private ReactiveVariable<float> _explotionDamage;
+        private ReactiveVariable<float> _explotionRadius;
 
         private ReactiveVariable<Teams> _team;
         private Transform _transform;
@@ -28,19 +29,23 @@ namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures
             _transform = entity.Transform;
             _isExplode = entity.IsExplode;
             _team = entity.Team;
-            _source = entity;
+
+            _explotionDamage = entity.ExplotionDamage;
+            _explotionRadius = entity.ExplotionRadius;
         }
 
         public void OnUpdate(float deltaTime)
         {
             if (_isExplode.Value)
+            {
                 CreateExpotion();
+                _isExplode.Value = false;
+            }
         }
 
         private void CreateExpotion()
         {
-            _entitiesFactory.CreateExplotion(_transform.position,_team.Value);
-            _lifeContext.Release(_source);
+            _entitiesFactory.CreateExplotion(_transform.position,_team.Value,_explotionRadius.Value,_explotionDamage.Value);
         }
     }
 }
