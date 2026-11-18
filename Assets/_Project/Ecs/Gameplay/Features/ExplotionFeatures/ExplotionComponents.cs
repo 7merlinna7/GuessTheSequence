@@ -24,6 +24,11 @@ namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures
         public ReactiveEvent Value;
     }
 
+    public class Exploded : IEntityComponent
+    {
+        public ReactiveEvent Value;
+    }
+
     public class IsExplode :IEntityComponent
     {
         public ReactiveVariable<bool> Value;

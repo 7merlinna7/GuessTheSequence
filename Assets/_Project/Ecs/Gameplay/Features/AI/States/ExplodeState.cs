@@ -6,16 +6,16 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI.States
 {
     public class ExplodeState : State, IUpdatableState
     {
-        private ReactiveVariable<bool> _isExplode;
+        private ReactiveEvent _explodeEvent;
 
         public ExplodeState(Entity entity)
         {
-            _isExplode = entity.IsExplode;
+            _explodeEvent = entity.ExplodeEvent;
         }
 
         public void Update(float deltaTime)
         {
-           _isExplode.Value = true;
+            _explodeEvent?.Invoke();
         }
     }
 }

@@ -10,12 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5bef37b57e8a3aa4588951a13f7f651a, type: 3}
-  m_Name: StageConfig
+  m_Name: St1
   m_EditorClassIdentifier: 
   _enemyItems:
   - <SpawnPosition>k__BackingField: {x: -10, y: 0, z: 5}
     <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 7b904f59af8922248b8e641ccd271053,
       type: 2}
   - <SpawnPosition>k__BackingField: {x: 10, y: 0, z: 5}
+    <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 7b904f59af8922248b8e641ccd271053,
+      type: 2}
+  - <SpawnPosition>k__BackingField: {x: 10, y: 0, z: 5}
+    <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 7b904f59af8922248b8e641ccd271053,
+      type: 2}
+  - <SpawnPosition>k__BackingField: {x: 6, y: 0, z: 3}
+    <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 7b904f59af8922248b8e641ccd271053,
+      type: 2}
+  - <SpawnPosition>k__BackingField: {x: -6, y: 0, z: 4}
+    <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 7b904f59af8922248b8e641ccd271053,
+      type: 2}
+  - <SpawnPosition>k__BackingField: {x: 10, y: 0, z: -5}
     <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 7b904f59af8922248b8e641ccd271053,
       type: 2}

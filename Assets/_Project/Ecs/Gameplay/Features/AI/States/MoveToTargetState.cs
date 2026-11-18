@@ -31,7 +31,12 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI.States
             if (_isRunning == false)
                 return;
 
-            Vector3 direction = (_currentTarget.Value.Transform.position - _source.position).normalized;
+            Vector3 direction;
+
+            if (_currentTarget.Value != null)
+                direction = (_currentTarget.Value.Transform.position - _source.position).normalized;
+            else
+                direction = Vector3.zero;
 
             _rotationDirection.Value = direction;
             _moveDirection.Value = direction;

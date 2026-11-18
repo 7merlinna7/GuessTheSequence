@@ -19,6 +19,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.BombFeature
         private ReactiveVariable<float> _radius;
         private Transform _transform;
 
+        private ReactiveEvent _explodeEvent;
         private ReactiveVariable<bool> _isExplode;
         private ReactiveVariable<Teams> _team;
 
@@ -30,6 +31,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.BombFeature
         public void OnInit(Entity entity)
         {
             _isExplode = entity.IsExplode;
+            _explodeEvent = entity.ExplodeEvent;
 
             _contacts = entity.ContactCollidersBuffer;
             _contactsEntities = entity.ContactEntitiesBuffer;
@@ -45,7 +47,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.BombFeature
             AddContactsEntities();
 
             if (CheckContacts())
-                _isExplode.Value = true;
+                _explodeEvent?.Invoke();
         }
 
         private void GetEntitiesContactsColliders()

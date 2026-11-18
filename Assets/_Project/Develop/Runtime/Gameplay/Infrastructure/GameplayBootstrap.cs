@@ -1,7 +1,9 @@
 ﻿using Assets._Project.Develop.Runtime.Configs.Entities;
+using Assets._Project.Develop.Runtime.Configs.Gameplay.Levels;
 using Assets._Project.Develop.Runtime.Configs.Gameplay.Stages;
 using Assets._Project.Develop.Runtime.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Utilites.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 using Assets._Project.Ecs.Gameplay;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
@@ -43,7 +45,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             _lifeContext = _container.Resolve<EntitiesLifeContext>();
             _brainsContext = _container.Resolve<AIBrainsContext>();
 
-            _container.Resolve<EntitiesFactory>().CreateTower(Vector3.zero,100f);
+            LevelConfig levelConfig = _container.Resolve<ConfigsProviderService>().GetConfig<LevelListConfig>().GetBy(_inputArgs.LevelNumber);
+
+            _container.Resolve<EntitiesFactory>().CreateTower(Vector3.zero,levelConfig.TowerMaxHealth);
 
             yield break;
         }

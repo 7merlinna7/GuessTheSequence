@@ -24,6 +24,13 @@ namespace Assets._Project.Ecs.Gameplay.Features.TowerFeature
         public void Initialize()
         {
             _entitiesLifeContext.Added += OnEntityAdded;
+            _entitiesLifeContext.Released += OnEntityReleased;
+        }
+
+        private void OnEntityReleased(Entity entity)
+        {
+            if (entity.HasComponent<IsTower>())
+                _tower = null;
         }
 
         private void OnEntityAdded(Entity entity)

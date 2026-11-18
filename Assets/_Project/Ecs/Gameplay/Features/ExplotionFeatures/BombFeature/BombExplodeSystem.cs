@@ -2,15 +2,18 @@
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.EntitiesCore.Systems;
 using Assets._Project.Ecs.Gameplay.Features.TeamsFeature;
+using System;
 using UnityEngine;
 
 namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.BombFeature
 {
-    public class BombExplodeSystem : IInitializableSystem, IUpdatableSystem
+    public class BombExplodeSystem : IInitializableSystem, IDisposableSystem
     {
         private readonly EntitiesFactory _entitiesFactory;
 
-        private ReactiveVariable<bool> _isExplode;
+        private ReactiveEvent _exploded;
+        IDisposable _explodeEventDisposable;
+
         private ReactiveVariable<float> _damage;
         private ReactiveVariable<float> _radius;
         private ReactiveVariable<Teams> _team;
@@ -26,22 +29,22 @@ namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.BombFeature
             _damage = entity.ExplotionDamage;
             _radius = entity.ExplotionRadius;
             _team = entity.Team;
-            _isExplode = entity.IsExplode;
+            _exploded = entity.Exploded;
             _transform = entity.Transform;
+
+            _explodeEventDisposable = entity.ExplodeEvent.Subscribe(OnExplode);
         }
 
-        public void OnUpdate(float deltaTime)
+
+        public void OnDispose()
         {
-            if (_isExplode.Value)
-            {
-                Explode();
-                _isExplode.Value = false;
-            }
+            _explodeEventDisposable.Dispose();
         }
 
-        private void Explode()
+        private void OnExplode()
         {
             _entitiesFactory.CreateExplotion(_transform.position, _team.Value, _radius.Value, _damage.Value);
+            _exploded?.Invoke();
         }
     }
 }

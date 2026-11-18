@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7bb827a56a8dfd24ca96e2620f6971f3, type: 3}
-  m_Name: LevelConfig
+  m_Name: L2
   m_EditorClassIdentifier: 
   _stageConfigs:
-  - {fileID: 11400000, guid: a43dab84f3c599848811dd3d669357d1, type: 2}
-  - {fileID: 11400000, guid: a43dab84f3c599848811dd3d669357d1, type: 2}
-  - {fileID: 11400000, guid: a43dab84f3c599848811dd3d669357d1, type: 2}
+  - {fileID: 11400000, guid: 6678c89d205f00849ac7a847b5bdec1d, type: 2}
+  - {fileID: 11400000, guid: 6678c89d205f00849ac7a847b5bdec1d, type: 2}
+  <TowerMaxHealth>k__BackingField: 50

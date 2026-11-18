@@ -2,50 +2,49 @@
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.EntitiesCore.Systems;
 using Assets._Project.Ecs.Gameplay.Features.TeamsFeature;
+using System;
 using UnityEngine;
 
 namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures
 {
-    public class ExplodeAndSelfRealeseSystem : IInitializableSystem, IUpdatableSystem
+    public class ExplodeCreatorSystem : IInitializableSystem, IDisposableSystem
     {
         private readonly EntitiesFactory _entitiesFactory;
-        private readonly EntitiesLifeContext _lifeContext;
 
         private ReactiveVariable<float> _explotionDamage;
         private ReactiveVariable<float> _explotionRadius;
-
         private ReactiveVariable<Teams> _team;
-        private Transform _transform;
-        private ReactiveVariable<bool> _isExplode;
 
-        public ExplodeAndSelfRealeseSystem(EntitiesFactory entitiesFactory, EntitiesLifeContext lifeContext)
+        private Transform _transform;
+
+        private ReactiveEvent _exploded; 
+        private IDisposable _explodeEventDisposable;
+
+        public ExplodeCreatorSystem(EntitiesFactory entitiesFactory)
         {
             _entitiesFactory = entitiesFactory;
-            _lifeContext = lifeContext;
         }
 
         public void OnInit(Entity entity)
         {
             _transform = entity.Transform;
-            _isExplode = entity.IsExplode;
             _team = entity.Team;
-
             _explotionDamage = entity.ExplotionDamage;
             _explotionRadius = entity.ExplotionRadius;
+            _exploded = entity.Exploded;
+
+            _explodeEventDisposable = entity.ExplodeEvent.Subscribe(CreateExpotion);
         }
 
-        public void OnUpdate(float deltaTime)
+        public void OnDispose()
         {
-            if (_isExplode.Value)
-            {
-                CreateExpotion();
-                _isExplode.Value = false;
-            }
+            _explodeEventDisposable.Dispose();
         }
 
         private void CreateExpotion()
         {
             _entitiesFactory.CreateExplotion(_transform.position,_team.Value,_explotionRadius.Value,_explotionDamage.Value);
+            _exploded?.Invoke();
         }
     }
 }

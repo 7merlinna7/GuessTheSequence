@@ -37,18 +37,31 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
             _monoEntitiesFactory.Create(entity, position, "Entities/Bomb");
 
             entity
+                .AddIsDead()
+
                 .AddIsExplode()
+                .AddExplodeEvent()
+                .AddExploded()
                 .AddTeam(new ReactiveVariable<Teams>(team))
-                .AddExplotionRadius(new ReactiveVariable<float>(3))
-                .AddExplotionDamage(new ReactiveVariable<float>(100))
+                .AddExplotionRadius(new ReactiveVariable<float>(explotionRadius))
+                .AddExplotionDamage(new ReactiveVariable<float>(explotionDamage))
 
                 .AddContactsDetectingMask(Layers.CharactersMask | Layers.TowersMask)
                 .AddContactCollidersBuffer(new Buffer<Collider>(64))
-                .AddContactEntitiesBuffer(new Buffer<Entity>(64)); ;
+                .AddContactEntitiesBuffer(new Buffer<Entity>(64));
+
+            ICompositeCondition mustSelfRealese = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value));
+
+            entity
+                .AddMustSelfRelease(mustSelfRealese);
 
             entity
                 .AddSystem(new BombTriggerSystem(_collidersRegistryService))
-                .AddSystem(new BombExplodeSystem(this));
+                .AddSystem(new ExplodeCreatorSystem(this))
+                .AddSystem(new OnExplodeDeathSystem())
+                .AddSystem(new SelfReleaseSystem(_entitiesLifeContext))
+                ;
 
             _entitiesLifeContext.Add(entity);
 
@@ -144,6 +157,8 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
             entity
                 //компоненты полей
                 .AddIsExplode()
+                .AddExplodeEvent()
+                .AddExploded()
                 .AddExplotionDamage(new ReactiveVariable<float>(50f))
                 .AddExplotionRadius(new ReactiveVariable<float>(3f))
                 //move
@@ -163,6 +178,9 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 //takeDamage
                 .AddTakeDamageRequest()
                 .AddTakeDamageEvent()
+
+                .AddTeam(new ReactiveVariable<Teams>(Teams.Enemies))
+                .AddCurrentTarget()
                 ;
             ;
 
@@ -198,12 +216,16 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
             entity
                 .AddSystem(new RigidbodyMovementSystem())
                 .AddSystem(new RigidbodyRotationSystem())
+
                 .AddSystem(new ApplyDamageSystem())
                 .AddSystem(new DeathSystem())
                 .AddSystem(new DisableCollidersOnDeathSystem())
                 .AddSystem(new DeathProcessTimerSystem())
                 .AddSystem(new SelfReleaseSystem(_entitiesLifeContext))
-                ;
+
+
+                .AddSystem(new ExplodeCreatorSystem(this))
+                .AddSystem(new OnExplodeDeathSystem());
 
             return entity;
         }
