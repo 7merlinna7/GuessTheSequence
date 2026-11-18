@@ -13,6 +13,7 @@ namespace Assets._Project.Ecs.Gameplay.States.Player
 
         protected PlayerGameplayRayShooter _rayShooter;
         private PlayerInput _playerInput;
+        protected Teams _playerTeam = Teams.Player;
 
         public PlayerGameplayState(
             EntitiesFactory entitiesFactory,

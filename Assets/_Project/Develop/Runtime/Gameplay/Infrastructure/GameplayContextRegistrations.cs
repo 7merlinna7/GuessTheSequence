@@ -12,6 +12,8 @@ using Assets._Project.Ecs.Gameplay.EntitiesCore.Mono;
 using Assets._Project.Ecs.Gameplay.Features.AI;
 using Assets._Project.Ecs.Gameplay.Features.AI.States;
 using Assets._Project.Ecs.Gameplay.Features.Enemies;
+using Assets._Project.Ecs.Gameplay.Features.InputFeature;
+using Assets._Project.Ecs.Gameplay.Features.InputFeature.RaycastFeature;
 using Assets._Project.Ecs.Gameplay.Features.StagesFeature;
 using Assets._Project.Ecs.Gameplay.Features.TowerFeature;
 using Assets._Project.Ecs.Gameplay.States;
@@ -39,7 +41,15 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             container.RegisterAsSingle(CreateStageProviderService);
             container.RegisterAsSingle(CreateGameplayStatesFactory);
             container.RegisterAsSingle(CreateGameplayStatesContext);
+            container.RegisterAsSingle(CreatePlayerGameplayRayShooter);
+            container.RegisterAsSingle(CreatePlayerInput);
         }
+
+        private static PlayerInput CreatePlayerInput(DIContainer c)
+            => new PlayerInput();
+
+        private static PlayerGameplayRayShooter CreatePlayerGameplayRayShooter(DIContainer c)
+            => new PlayerGameplayRayShooter();
 
         private static GameplayStatesContext CreateGameplayStatesContext(DIContainer c)
             => new GameplayStatesContext(c.Resolve<GameplayStatesFactory>().CreateGameplayStateMachine());

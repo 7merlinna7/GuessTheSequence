@@ -1,4 +1,5 @@
-﻿using Assets._Project.Ecs.Gameplay.EntitiesCore;
+﻿using Assets._Project.Develop.Runtime.Utilities.Reactive;
+using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using UnityEngine;
 
 namespace Assets._Project.Ecs.Gameplay.Common
@@ -16,5 +17,10 @@ namespace Assets._Project.Ecs.Gameplay.Common
     public class TransformComponent : IEntityComponent
     {
         public Transform Value;
+    }
+
+    public class TriggerEvent : IEntityComponent
+    {
+        public ReactiveEvent Value;
     }
 }

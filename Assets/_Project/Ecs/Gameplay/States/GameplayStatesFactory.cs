@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace Assets._Project.Ecs.Gameplay.States
 {
-    public class GameplayStatesFactory 
+    public class GameplayStatesFactory
     {
         private readonly DIContainer _container;
 
@@ -56,7 +56,7 @@ namespace Assets._Project.Ecs.Gameplay.States
             StageProcessState stageProcessState = new StageProcessState(_container.Resolve<StageProviderService>());
 
             FuncCondition preperationToProcessStateCondition =
-                new FuncCondition(()=> Input.GetKeyDown(KeyCode.Space));
+                new FuncCondition(() => Input.GetKeyDown(KeyCode.Space));
 
             FuncCondition stageProcessToPreperationStateCondition =
                 new FuncCondition(() => stageProviderService.CurrentStageResult.Value == StageResult.Completed);
@@ -66,7 +66,7 @@ namespace Assets._Project.Ecs.Gameplay.States
             coreLoopState.AddState(stageProcessState);
             coreLoopState.AddState(preperationState);
 
-            coreLoopState.AddTransition(stageProcessState,preperationState,stageProcessToPreperationStateCondition);
+            coreLoopState.AddTransition(stageProcessState, preperationState, stageProcessToPreperationStateCondition);
             coreLoopState.AddTransition(preperationState, stageProcessState, preperationToProcessStateCondition);
 
             return coreLoopState;
@@ -74,28 +74,38 @@ namespace Assets._Project.Ecs.Gameplay.States
 
         public GameplayStateMachine CreatePlayerStateMachine()
         {
-            PlayerGameplayRayShooter rayShooter = new PlayerGameplayRayShooter();
-            PlayerInput playerInput = new PlayerInput();
+            StageProviderService stageProviderService = _container.Resolve<StageProviderService>();
+            PlayerGameplayRayShooter rayShooter = _container.Resolve<PlayerGameplayRayShooter>();
+            PlayerInput playerInput = _container.Resolve<PlayerInput>();
             EntitiesFactory entitiesFactory = _container.Resolve<EntitiesFactory>();
 
-            PlayerAttackState playerAttackState = new PlayerAttackState(entitiesFactory,rayShooter,playerInput);
+            PlayerAttackState playerAttackState = new PlayerAttackState(entitiesFactory, rayShooter, playerInput);
             PlayerPreperationState playerPreperationState = new PlayerPreperationState(entitiesFactory, rayShooter, playerInput);
+
+            FuncCondition preperationToProcessStateCondition = new FuncCondition(() => Input.GetKeyDown(KeyCode.Space));
+
+            FuncCondition stageProcessToPreperationStateCondition =
+                new FuncCondition(() => stageProviderService.CurrentStageResult.Value == StageResult.Completed);
 
             GameplayStateMachine playerStateMachine = new GameplayStateMachine();
             playerStateMachine.AddState(playerAttackState);
+            playerStateMachine.AddState(playerPreperationState);
+
+            playerStateMachine.AddTransition(playerAttackState,playerPreperationState,stageProcessToPreperationStateCondition);
+            playerStateMachine.AddTransition(playerPreperationState, playerAttackState, preperationToProcessStateCondition);
 
             return playerStateMachine;
         }
 
-        public GameplayStateMachine CreateGameplayStateMachine ()
+        public GameplayStateMachine CreateGameplayStateMachine()
         {
-            StageProviderService stageProviderService = _container.Resolve<StageProviderService> ();
+            StageProviderService stageProviderService = _container.Resolve<StageProviderService>();
             TowerHolderService towerHolderService = _container.Resolve<TowerHolderService>();
 
             GameplayStateMachine coreLoopState = CreateCoreLoopState();
             GameplayStateMachine playerGameplayState = CreatePlayerStateMachine();
 
-            GameplayParallelState gameplayLoopState = new GameplayParallelState(coreLoopState,playerGameplayState);
+            GameplayParallelState gameplayLoopState = new GameplayParallelState(coreLoopState, playerGameplayState);
 
             DefeatState defeatState = CreateDefeatState();
             WinState winState = CreateWinState();
@@ -118,8 +128,8 @@ namespace Assets._Project.Ecs.Gameplay.States
             gameplayCycle.AddState(winState);
             gameplayCycle.AddState(defeatState);
 
-            gameplayCycle.AddTransition(gameplayLoopState, defeatState,gameplayLoopToDefeatStateCondition);
-            gameplayCycle.AddTransition(gameplayLoopState, winState,gameplayLoopToWinStateCondition);
+            gameplayCycle.AddTransition(gameplayLoopState, defeatState, gameplayLoopToDefeatStateCondition);
+            gameplayCycle.AddTransition(gameplayLoopState, winState, gameplayLoopToWinStateCondition);
 
             return gameplayCycle;
         }

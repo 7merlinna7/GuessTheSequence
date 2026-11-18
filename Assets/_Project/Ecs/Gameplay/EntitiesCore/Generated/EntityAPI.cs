@@ -1151,5 +1151,29 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 			return AddComponent(new Assets._Project.Ecs.Gameplay.Common.TransformComponent() {Value = value}); 
 		}
 
+		public Assets._Project.Ecs.Gameplay.Common.TriggerEvent TriggerEventC => GetComponent<Assets._Project.Ecs.Gameplay.Common.TriggerEvent>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent TriggerEvent => TriggerEventC.Value;
+
+		public bool TryGetTriggerEvent(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent value)
+		{
+			bool result = TryGetComponent (out Assets._Project.Ecs.Gameplay.Common.TriggerEvent component);
+			if (result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent);
+			return result;
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddTriggerEvent()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Common.TriggerEvent() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddTriggerEvent(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Common.TriggerEvent() {Value = value}); 
+		}
+
 	}
 }

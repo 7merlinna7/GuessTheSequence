@@ -2,7 +2,6 @@
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.EntitiesCore.Systems;
 using Assets._Project.Ecs.Gameplay.Features.TeamsFeature;
-using System.Collections;
 using UnityEngine;
 
 namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.BombFeature
@@ -15,6 +14,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.BombFeature
         private ReactiveVariable<float> _damage;
         private ReactiveVariable<float> _radius;
         private ReactiveVariable<Teams> _team;
+        private Transform _transform;
 
         public BombExplodeSystem(EntitiesFactory entitiesFactory)
         {
@@ -26,17 +26,22 @@ namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.BombFeature
             _damage = entity.ExplotionDamage;
             _radius = entity.ExplotionRadius;
             _team = entity.Team;
+            _isExplode = entity.IsExplode;
+            _transform = entity.Transform;
         }
 
         public void OnUpdate(float deltaTime)
         {
             if (_isExplode.Value)
+            {
                 Explode();
+                _isExplode.Value = false;
+            }
         }
 
         private void Explode()
         {
-            _entitiesFactory.CreateExplotion(Vector3.zero, _team.Value, _radius.Value, _damage.Value);
+            _entitiesFactory.CreateExplotion(_transform.position, _team.Value, _radius.Value, _damage.Value);
         }
     }
 }

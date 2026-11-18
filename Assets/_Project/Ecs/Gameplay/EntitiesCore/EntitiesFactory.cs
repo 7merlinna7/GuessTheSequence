@@ -30,7 +30,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
             _collidersRegistryService = _container.Resolve<CollidersRegistryService>();
         }
 
-        public Entity CreateBomb(Vector3 position, Teams team)
+        public Entity CreateBomb(Vector3 position, Teams team,float explotionRadius, float explotionDamage)
         {
             Entity entity = CreateEmpty();
 
@@ -40,12 +40,17 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .AddIsExplode()
                 .AddTeam(new ReactiveVariable<Teams>(team))
                 .AddExplotionRadius(new ReactiveVariable<float>(3))
-                .AddExplotionDamage(new ReactiveVariable<float>(50))
-                .AddTeam(new ReactiveVariable<Teams>(team));
+                .AddExplotionDamage(new ReactiveVariable<float>(100))
+
+                .AddContactsDetectingMask(Layers.CharactersMask | Layers.TowersMask)
+                .AddContactCollidersBuffer(new Buffer<Collider>(64))
+                .AddContactEntitiesBuffer(new Buffer<Entity>(64)); ;
 
             entity
+                .AddSystem(new BombTriggerSystem(_collidersRegistryService))
                 .AddSystem(new BombExplodeSystem(this));
 
+            _entitiesLifeContext.Add(entity);
 
             return entity;
         }
