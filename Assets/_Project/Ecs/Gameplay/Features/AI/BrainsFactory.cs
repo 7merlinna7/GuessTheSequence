@@ -24,11 +24,13 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
             _entitiesLifeContext = _container.Resolve<EntitiesLifeContext>();
         }
 
-        public StateMachineBrain CreateWalkingGhostBrain(Entity entity,ITargetSelector targetSelector)
+        public StateMachineBrain CreateWalkingGhostBrain(Entity entity)
         {
-            FindTargetState findTargetState = new FindTargetState(targetSelector, _entitiesLifeContext, entity);
+            TowerHolderService towerHolderService = _container.Resolve<TowerHolderService>();
 
-            AIStateMachine behaviour = CreateMoveToTargetStateMachine(entity,targetSelector);
+            FindTargetState findTargetState = new FindTargetState(entity,towerHolderService);
+
+            AIStateMachine behaviour = CreateMoveToTargetStateMachine(entity,towerHolderService);
 
             AIParallelState parallelState = new AIParallelState(findTargetState, behaviour);
 
@@ -40,10 +42,8 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
             return brain;
         }
 
-        private AIStateMachine CreateMoveToTargetStateMachine(Entity entity, ITargetSelector targetSelector)
+        private AIStateMachine CreateMoveToTargetStateMachine(Entity entity, TowerHolderService towerHolderService)
         {
-            TowerHolderService towerHolderService = _container.Resolve<TowerHolderService>();
-
             MoveToTargetState moveToTargetState = new MoveToTargetState(entity);
             ExplodeState explodeState = new ExplodeState(entity);
             EmptyState emptyState = new EmptyState();
@@ -52,8 +52,8 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
 
             FuncCondition moveToExplodeCondition = new FuncCondition(() =>
                 {
-                    if (towerHolderService.Tower != null)
-                        return ((currentTarget.Value.Transform.position - entity.Transform.position).magnitude < 2f);
+                    if (towerHolderService.Tower.IsDead.Value == false)
+                        return ((towerHolderService.Tower.Transform.position - entity.Transform.position).magnitude < 2f);
 
                     return false;
                 });

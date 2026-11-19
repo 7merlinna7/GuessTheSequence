@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: WalletSettingsConfig
   m_EditorClassIdentifier: 
   <WalletBalanceWinUpdate>k__BackingField: 100
-  <WalletBalanceDefeatUpdate>k__BackingField: 50
+  <WalletBalanceDefeatUpdate>k__BackingField: 0

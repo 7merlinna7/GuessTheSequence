@@ -28,15 +28,10 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI.States
 
         public void Update(float deltaTime)
         {
-            if (_isRunning == false)
+            if (_isRunning == false || _currentTarget.Value.Transform == null)
                 return;
 
-            Vector3 direction;
-
-            if (_currentTarget.Value != null)
-                direction = (_currentTarget.Value.Transform.position - _source.position).normalized;
-            else
-                direction = Vector3.zero;
+            Vector3 direction = (_currentTarget.Value.Transform.position - _source.position).normalized;
 
             _rotationDirection.Value = direction;
             _moveDirection.Value = direction;

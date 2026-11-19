@@ -13,7 +13,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
         MainMenueScreenView _screen;
         private readonly MainMenuePopupService _popupService;
 
-        private readonly PurchaseResetStatisticChecker _resetStatisticChecker;
+        private readonly PurchaseChecker _resetStatisticChecker;
         private readonly MainMenu _mainMenue;
 
         private readonly ProjectPresentersFactory _projectPresentersFactory;
@@ -27,7 +27,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
             ProjectPresentersFactory projectPresentersFactory,
             MainMenu mainMenu,
             MainMenuePresentersFactory mainMenuePresentersFactory,
-            PurchaseResetStatisticChecker resetStatisticChecker)
+            PurchaseChecker resetStatisticChecker)
         {
             _resetStatisticChecker = resetStatisticChecker;
             _screen = screen;

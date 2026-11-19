@@ -1,26 +1,23 @@
 ﻿using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Develop.Runtime.Utilities.StateMachineCore;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
-using Assets._Project.Ecs.Gameplay.Features.AI.States.TargetSelectors;
+using Assets._Project.Ecs.Gameplay.Features.TowerFeature;
+using System;
 
 namespace Assets._Project.Ecs.Gameplay.Features.AI.States
 {
     public class FindTargetState : State, IUpdatableState
     {
-        private ITargetSelector _targetSelector;
-        private EntitiesLifeContext _entitiesLifeContext;
         private ReactiveVariable<Entity> _currentTarget;
 
-        public FindTargetState(ITargetSelector targetSelector, EntitiesLifeContext lifeContext, Entity entity)
+        public FindTargetState(Entity entity,TowerHolderService towerHolderService)
         {
-            _targetSelector = targetSelector;
-            _entitiesLifeContext = lifeContext;
             _currentTarget = entity.CurrentTarget;
+            _currentTarget.Value = towerHolderService.Tower;
         }
 
         public void Update(float deltaTime)
         {
-            _currentTarget.Value = _targetSelector.SelectTargetFrom(_entitiesLifeContext.Entities);
         }
     }
 }

@@ -20,7 +20,6 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
         public static void Process(DIContainer container)
         {
             container.RegisterAsSingle(CreateMainMenu);
-            container.RegisterAsSingle(CreatePurchaseResetStatisticChecker);
             container.RegisterAsSingle(CreateMainMenueUIRoot).NonLazy();
             container.RegisterAsSingle(CreateMainMenuePresentersFactory);
             container.RegisterAsSingle(CreateMainMenueScreenPresenter).NonLazy();
@@ -43,10 +42,6 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
                 c.Resolve<ScreenUIRoot>());
         }
 
-        private static PurchaseResetStatisticChecker CreatePurchaseResetStatisticChecker(DIContainer c)
-            => new PurchaseResetStatisticChecker(
-                c.Resolve<WalletService>(),
-                c.Resolve<PlayerStatisticsService>());
 
         private static MainMenu CreateMainMenu(DIContainer c)
             => new MainMenu(

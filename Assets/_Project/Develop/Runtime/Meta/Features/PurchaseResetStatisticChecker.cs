@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Meta.Features
 {
-    public class PurchaseResetStatisticChecker 
+    public class PurchaseChecker 
     {
         public event Action<string> StatisticsReset;
 
@@ -13,11 +13,27 @@ namespace Assets._Project.Develop.Runtime.Meta.Features
         private PlayerStatisticsService _playerStatistics;
 
         private int _resetStatisticsPrice = 200;
+        private int _bombPrice = 50;
 
-        public PurchaseResetStatisticChecker(WalletService wallet, PlayerStatisticsService playerStatistics)
+        public PurchaseChecker(WalletService wallet, PlayerStatisticsService playerStatistics)
         {
             _wallet = wallet;
             _playerStatistics = playerStatistics;
+        }
+
+        public bool GetBomb()
+        {
+            if (_wallet.Enough(CurrencyTypes.Gold, _bombPrice))
+            {
+                _wallet.Spend(CurrencyTypes.Gold, _bombPrice);
+                Debug.Log("Мина куплена");
+                return true;
+            }
+            else
+            {
+                Debug.Log("Не достаточно золота для покупки мины");
+                return false;
+            }
         }
 
         public void Reset()

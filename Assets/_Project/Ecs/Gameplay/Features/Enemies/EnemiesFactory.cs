@@ -36,7 +36,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.Enemies
                 case GhostConfig ghostConfig:
                     entity = _entitiesFactory.CreateWalkingExplotionEntity(position,ghostConfig);
 
-                    _brainsFactory.CreateWalkingGhostBrain(entity,new TowerTargetSelector(entity));
+                    _brainsFactory.CreateWalkingGhostBrain(entity);
                     break;
 
                 default:

@@ -1,4 +1,9 @@
-﻿using Assets._Project.Develop.Runtime.Infrastructure.DI;
+﻿using Assets._Project.Develop.Runtime.Configs.Meta.Wallet;
+using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Meta.Features;
+using Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics;
+using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.Utilites.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
@@ -37,14 +42,19 @@ namespace Assets._Project.Ecs.Gameplay.States
             return new WinState(
                 _container.Resolve<PlayerDataProvider>(),
                 _container.Resolve<SceneSwitcherService>(),
-                _container.Resolve<ICoroutinesPerformer>());
+                _container.Resolve<ICoroutinesPerformer>(),
+                _container.Resolve<PlayerStatisticsService>(),
+                _container.Resolve<WalletService>(),
+                _container.Resolve<ConfigsProviderService>().GetConfig<WalletSettingsConfig>());
         }
 
         public DefeatState CreateDefeatState()
         {
             return new DefeatState(
                 _container.Resolve<SceneSwitcherService>(),
-                _container.Resolve<ICoroutinesPerformer>());
+                _container.Resolve<ICoroutinesPerformer>(),
+                _container.Resolve<PlayerDataProvider>(),
+                _container.Resolve<PlayerStatisticsService>());
         }
 
         public GameplayStateMachine CreateCoreLoopState()
@@ -77,10 +87,11 @@ namespace Assets._Project.Ecs.Gameplay.States
             StageProviderService stageProviderService = _container.Resolve<StageProviderService>();
             PlayerGameplayRayShooter rayShooter = _container.Resolve<PlayerGameplayRayShooter>();
             PlayerInput playerInput = _container.Resolve<PlayerInput>();
+            PurchaseChecker purchaseChecker = _container.Resolve<PurchaseChecker>();
             EntitiesFactory entitiesFactory = _container.Resolve<EntitiesFactory>();
 
             PlayerAttackState playerAttackState = new PlayerAttackState(entitiesFactory, rayShooter, playerInput);
-            PlayerPreperationState playerPreperationState = new PlayerPreperationState(entitiesFactory, rayShooter, playerInput);
+            PlayerPreperationState playerPreperationState = new PlayerPreperationState(entitiesFactory, rayShooter, playerInput,purchaseChecker);
 
             FuncCondition preperationToProcessStateCondition = new FuncCondition(() => Input.GetKeyDown(KeyCode.Space));
 

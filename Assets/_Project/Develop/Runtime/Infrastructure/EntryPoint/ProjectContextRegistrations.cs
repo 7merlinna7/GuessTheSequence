@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Meta.Features;
 using Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.UI;
@@ -51,7 +52,14 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
             container.RegisterAsSingle(CreateViewsFactory);
 
             container.RegisterAsSingle(CreateTimerService);
+
+            container.RegisterAsSingle(CreatePurchaseChecker);
         }
+
+        private static PurchaseChecker CreatePurchaseChecker(DIContainer c)
+         => new PurchaseChecker(
+        c.Resolve<WalletService>(),
+        c.Resolve<PlayerStatisticsService>());
 
         private static TimerServiceFactory CreateTimerService(DIContainer c)
             => new TimerServiceFactory(c);

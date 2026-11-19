@@ -20,7 +20,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
                 _container.Resolve<ProjectPresentersFactory>(),
                 _container.Resolve<MainMenu>(),
                 this,
-                _container.Resolve<PurchaseResetStatisticChecker>());
+                _container.Resolve<PurchaseChecker>());
         }
     }
 }
