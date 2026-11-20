@@ -6,6 +6,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 {
     public partial class Entity : IDisposable 
     {
+        public event Action<Entity> Initialized;
         private readonly Dictionary<Type, IEntityComponent> _components = new();
         private readonly List<IEntitySystem> _systems = new();
 
@@ -22,6 +23,8 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
             foreach (IInitializableSystem initializable in _initializables)
                 initializable.OnInit(this);
             _isInit = true;
+
+            Initialized?.Invoke(this);
         }
 
         public void Update(float deltaTime)
