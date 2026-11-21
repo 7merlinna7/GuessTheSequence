@@ -7,15 +7,21 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI.States
     public class ExplodeState : State, IUpdatableState
     {
         private ReactiveEvent _explodeEvent;
+        private bool _isRunning;
 
         public ExplodeState(Entity entity)
         {
             _explodeEvent = entity.ExplodeEvent;
+            _isRunning = true;
         }
 
         public void Update(float deltaTime)
         {
+            if(_isRunning == false)
+                return;
+
             _explodeEvent?.Invoke();
+            _isRunning = false;
         }
     }
 }

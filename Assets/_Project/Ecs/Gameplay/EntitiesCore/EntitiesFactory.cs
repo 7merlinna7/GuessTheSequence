@@ -9,6 +9,7 @@ using Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.BombFeature;
 using Assets._Project.Ecs.Gameplay.Features.LifeCycle;
 using Assets._Project.Ecs.Gameplay.Features.MovementFeatures;
 using Assets._Project.Ecs.Gameplay.Features.Sensors;
+using Assets._Project.Ecs.Gameplay.Features.SpawnFeature;
 using Assets._Project.Ecs.Gameplay.Features.TeamsFeature;
 using Assets._Project.Ecs.Utilities.Conditions;
 using UnityEngine;
@@ -123,25 +124,18 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
             ICompositeCondition mustDie = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.CurrentHealth.Value <= 0));
 
-            ICompositeCondition mustSelfRealese = new CompositeCondition()
-                .Add(new FuncCondition(() => entity.IsDead.Value))
-                .Add(new FuncCondition(() => entity.InDeathProcess.Value == false));
-
             ICompositeCondition canApplyDamage = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.IsDead.Value == false));
 
             entity
                 .AddMustDie(mustDie)
-                .AddMustSelfRelease(mustSelfRealese)
                 .AddCanApplayDamage(canApplyDamage);
 
             //компоненты систем
             entity
                 .AddSystem(new ApplyDamageSystem())
                 .AddSystem(new DeathSystem())
-                .AddSystem(new DisableCollidersOnDeathSystem())
-                .AddSystem(new DeathProcessTimerSystem())
-                .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));
+                .AddSystem(new DisableCollidersOnDeathSystem());
 
             _entitiesLifeContext.Add(entity);
 
@@ -181,28 +175,37 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 
                 .AddTeam(new ReactiveVariable<Teams>(Teams.Enemies))
                 .AddCurrentTarget()
+                //spawn
+                .AddSpawnInitialTime(new ReactiveVariable<float>(config.SpawnProcessTime))
+                .AddSpawnCurrentTime()
+                .AddInSpawnProcess()
                 ;
             ;
 
             //компоненты условий
             ICompositeCondition canMove = new CompositeCondition()
-                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+                .Add(new FuncCondition(() => entity.IsDead.Value == false))
+                .Add(new FuncCondition(() => entity.InSpawnProcess.Value == false));
 
             ICompositeCondition canRotate = new CompositeCondition()
-                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+                .Add(new FuncCondition(() => entity.IsDead.Value == false))
+                .Add(new FuncCondition(() => entity.InSpawnProcess.Value == false));
 
             ICompositeCondition mustDie = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.CurrentHealth.Value <= 0));
 
             ICompositeCondition mustSelfRealese = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.IsDead.Value))
-                .Add(new FuncCondition(() => entity.InDeathProcess.Value == false));
+                .Add(new FuncCondition(() => entity.InDeathProcess.Value == false))
+                .Add(new FuncCondition(() => entity.InSpawnProcess.Value == false));
 
             ICompositeCondition canApplyDamage = new CompositeCondition()
-                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+                .Add(new FuncCondition(() => entity.IsDead.Value == false))
+                .Add(new FuncCondition(() => entity.InSpawnProcess.Value == false));
 
             ICompositeCondition canExplode = new CompositeCondition()
-                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+                .Add(new FuncCondition(() => entity.IsDead.Value == false))
+                .Add(new FuncCondition(() => entity.InSpawnProcess.Value == false));
 
             entity
                 .AddCanMove(canMove)
@@ -214,6 +217,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 
             //компоненты систем
             entity
+                .AddSystem(new SpawnProcessTimerSystem())
                 .AddSystem(new RigidbodyMovementSystem())
                 .AddSystem(new RigidbodyRotationSystem())
 

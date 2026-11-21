@@ -13,6 +13,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI.States
         public FindTargetState(Entity entity,TowerHolderService towerHolderService)
         {
             _currentTarget = entity.CurrentTarget;
+
             _currentTarget.Value = towerHolderService.Tower;
         }
 

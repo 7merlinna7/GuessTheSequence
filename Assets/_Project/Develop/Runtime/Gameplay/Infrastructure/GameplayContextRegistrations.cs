@@ -27,8 +27,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         {
             _inputArgs = args;
 
-            container.RegisterAsSingle(CreateGamemode);
-            container.RegisterAsSingle(CreateGameCycle);
             container.RegisterAsSingle(CreateEntitiesFactory);
             container.RegisterAsSingle(CreateEntitiesLifeContext);
             container.RegisterAsSingle(CreateMonoEntitiesFactory).NonLazy();
@@ -93,23 +91,5 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
                 c.Resolve<EntitiesLifeContext>(),
                 c.Resolve<CollidersRegistryService>());
         }
-
-        private static Gamemode CreateGamemode(DIContainer c)
-            => new Gamemode();
-
-        private static GameCycle CreateGameCycle(DIContainer c)
-        {
-            WalletSettingsConfig config = c.Resolve<ConfigsProviderService>().GetConfig<WalletSettingsConfig>();
-
-           return new GameCycle(
-                c.Resolve<ICoroutinesPerformer>(),
-                c.Resolve<SceneSwitcherService>(),
-                c.Resolve<Gamemode>(),
-                c.Resolve<WalletService>(),
-                c.Resolve<PlayerStatisticsService>(),
-                config.WalletBalanceWinUpdate,
-                config.WalletBalanceDefeatUpdate);
-        }
-
     }
 }

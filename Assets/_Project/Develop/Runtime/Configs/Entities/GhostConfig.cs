@@ -12,5 +12,6 @@ namespace Assets._Project.Develop.Runtime.Configs.Entities
         [field: SerializeField,Min(0)] public float MaxHealth { get; private set; } = 100;
         [field: SerializeField,Min(0)] public float BodyContactDamage { get; private set; } = 20;
         [field: SerializeField,Min(0)] public float DeathProcessTime { get; private set; } = 0;
+        [field: SerializeField,Min(0)] public float SpawnProcessTime { get; private set; } = 2;
     }
 }

@@ -1,8 +1,4 @@
-﻿using Assets._Project.Develop.Runtime.Gameplay.Infrastructure;
-using Assets._Project.Develop.Runtime.Infrastructure.DI;
-using Assets._Project.Develop.Runtime.UI.CommonViews.SequenceFeature;
-using Assets._Project.Develop.Runtime.UI.Core;
-using Assets._Project.Develop.Runtime.UI.MainMenue;
+﻿using Assets._Project.Develop.Runtime.Infrastructure.DI;
 
 namespace Assets._Project.Develop.Runtime.UI.CommonViews.Gameplay
 {
@@ -15,7 +11,5 @@ namespace Assets._Project.Develop.Runtime.UI.CommonViews.Gameplay
             _container = container;
         }
 
-        public GameplayScreenPresenter CreateGameplayScreenPresenter(SequenceView view)
-            => new GameplayScreenPresenter(view, _container.Resolve<GameCycle>(),_container.Resolve<GameplayPopupService>());
     }
 }

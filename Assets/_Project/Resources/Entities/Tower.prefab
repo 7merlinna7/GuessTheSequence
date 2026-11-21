@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4481116606722897001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 229005419655217148}
+  m_Layer: 8
+  m_Name: DamageEffectPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &229005419655217148
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4481116606722897001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.07, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8990402870579593978}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8937567025798173463
 GameObject:
   m_ObjectHideFlags: 0
@@ -35,6 +66,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1570738039724598297}
+  - {fileID: 229005419655217148}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1617110591170695000
@@ -191,13 +223,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8274077260532194656, guid: e66e47acabbcbae4693cd4edf04a45b5,
         type: 3}
+      propertyPath: m_Icon
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8274077260532194656, guid: e66e47acabbcbae4693cd4edf04a45b5,
+        type: 3}
       propertyPath: m_Name
       value: View
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8274077260532194656, guid: e66e47acabbcbae4693cd4edf04a45b5,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7637199582376907158}
   m_SourcePrefab: {fileID: 100100000, guid: e66e47acabbcbae4693cd4edf04a45b5, type: 3}
 --- !u!4 &1570738039724598297 stripped
 Transform:
@@ -205,3 +246,24 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4530781946065411873}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5491013033785541185 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8274077260532194656, guid: e66e47acabbcbae4693cd4edf04a45b5,
+    type: 3}
+  m_PrefabInstance: {fileID: 4530781946065411873}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7637199582376907158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5491013033785541185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a78678a0c8d4d824194ef5b6c5828db1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _applayDamageEffectPrefab: {fileID: 19801142, guid: c83fb3ef04bb383408bb2064b89690b2,
+    type: 3}
+  _effectSpawnPoint: {fileID: 229005419655217148}
