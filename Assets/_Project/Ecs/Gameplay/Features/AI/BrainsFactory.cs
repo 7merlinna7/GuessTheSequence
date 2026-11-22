@@ -46,7 +46,6 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
                     if (towerHolderService.Tower.IsDead.Value == false)
                     {
                         Vector3 entityPosition = new Vector3(entity.Transform.position.x, 0, entity.Transform.position.z);
-                        Debug.Log((towerHolderService.Tower.Transform.position - entityPosition).magnitude);
 
                         return ((towerHolderService.Tower.Transform.position - entityPosition).magnitude < 2f);
                     }
