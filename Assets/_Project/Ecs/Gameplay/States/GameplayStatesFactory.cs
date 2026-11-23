@@ -3,6 +3,7 @@ using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Meta.Features;
 using Assets._Project.Develop.Runtime.Meta.Features.PlayerStatistics;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.UI.Gameplay;
 using Assets._Project.Develop.Runtime.Utilites.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
@@ -41,20 +42,20 @@ namespace Assets._Project.Ecs.Gameplay.States
         {
             return new WinState(
                 _container.Resolve<PlayerDataProvider>(),
-                _container.Resolve<SceneSwitcherService>(),
                 _container.Resolve<ICoroutinesPerformer>(),
                 _container.Resolve<PlayerStatisticsService>(),
                 _container.Resolve<WalletService>(),
-                _container.Resolve<ConfigsProviderService>().GetConfig<WalletSettingsConfig>());
+                _container.Resolve<ConfigsProviderService>().GetConfig<WalletSettingsConfig>(),
+                _container.Resolve<GameplayPopupService>());
         }
 
         public DefeatState CreateDefeatState()
         {
             return new DefeatState(
-                _container.Resolve<SceneSwitcherService>(),
                 _container.Resolve<ICoroutinesPerformer>(),
                 _container.Resolve<PlayerDataProvider>(),
-                _container.Resolve<PlayerStatisticsService>());
+                _container.Resolve<PlayerStatisticsService>(),
+                _container.Resolve<GameplayPopupService>());
         }
 
         public GameplayStateMachine CreateCoreLoopState()

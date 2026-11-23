@@ -6,6 +6,9 @@
         public const string StatisticView = nameof(StatisticView);
         public const string MainMenueScreen = nameof(MainMenueScreen);
         public const string ConfirmPopup = nameof(ConfirmPopup);
-        public const string SequenceView = nameof(SequenceView);
+        public const string GameplayScreen = nameof(GameplayScreen);
+        public const string WinPopup = nameof(WinPopup);
+        public const string DefeatPopup = nameof(DefeatPopup);
+
     }
 }
