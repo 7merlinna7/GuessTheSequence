@@ -1,7 +1,10 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.UI.CommonViews;
 using Assets._Project.Develop.Runtime.UI.Gameplay.ResultPopups;
+using Assets._Project.Develop.Runtime.UI.Gameplay.Stages;
 using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
+using Assets._Project.Ecs.Gameplay.Features.StagesFeature;
 
 namespace Assets._Project.Develop.Runtime.UI.Gameplay
 {
@@ -12,6 +15,11 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
         public GameplayPresentersFactory(DIContainer container)
         {
             _container = container;
+        }
+
+        public StagePresenter CreateStagePresenter(IconTextView view)
+        {
+            return new StagePresenter(view,_container.Resolve<StageProviderService>());
         }
 
         public WinPopupPresenter CreateWinPopupPresenter(WinPopupView winPopupView)
@@ -32,7 +40,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
 
         public GameplayScreenPresenter CreateScreenPresenter(GameplayScreenView view)
         {
-            return new GameplayScreenPresenter(view);
+            return new GameplayScreenPresenter(view,this);
         }
     }
 }

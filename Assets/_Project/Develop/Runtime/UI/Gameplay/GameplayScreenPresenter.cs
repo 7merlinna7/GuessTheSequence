@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.UI.Core;
+using Assets._Project.Develop.Runtime.UI.Gameplay.Stages;
 using System.Collections.Generic;
 
 namespace Assets._Project.Develop.Runtime.UI.Gameplay
@@ -6,16 +7,20 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
     public class GameplayScreenPresenter : IPresenter
     {
         private readonly GameplayScreenView _screen;
+        private readonly GameplayPresentersFactory _presentersFactory;
 
         private readonly List<IPresenter> _childPresenters = new();
 
-        public GameplayScreenPresenter(GameplayScreenView screen)
+        public GameplayScreenPresenter(GameplayScreenView screen, GameplayPresentersFactory presentersFactory)
         {
             _screen = screen;
+            _presentersFactory = presentersFactory;
         }
 
         public void Initialize()
         {
+            CreateStageNumber();
+
             foreach (IPresenter presenter in _childPresenters)
                 presenter.Initialize();
         }
@@ -26,6 +31,13 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
                 presenter.Dispose();
 
             _childPresenters.Clear();
+        }
+
+        private void CreateStageNumber()
+        {
+            StagePresenter stagePresenter = _presentersFactory.CreateStagePresenter(_screen.StageNumberView);
+
+            _childPresenters.Add(stagePresenter);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Ecs.Gameplay.EntitiesCore;
+using Assets._Project.Ecs.Gameplay.Features.LifeCycle;
 using System;
 using System.Collections.Generic;
 
@@ -49,6 +50,9 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
         {
             foreach (EntityToBrain entityToBrain in _entityToBrains)
             {
+                if (entityToBrain.Entity.InDeathProcess.Value == true) 
+                    return;
+
                 entityToBrain.Brain.Dispose();
                 _entityToBrains.Clear();
             }
