@@ -16,4 +16,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a43dab84f3c599848811dd3d669357d1, type: 2}
   - {fileID: 11400000, guid: a43dab84f3c599848811dd3d669357d1, type: 2}
   - {fileID: 11400000, guid: a43dab84f3c599848811dd3d669357d1, type: 2}
-  <TowerMaxHealth>k__BackingField: 50
+  <TowerMaxHealth>k__BackingField: 200

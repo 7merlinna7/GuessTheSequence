@@ -21,6 +21,11 @@ namespace Assets._Project.Ecs.Gameplay.Features.LifeCycle
         public ReactiveVariable<bool> Value;
     }
 
+    public class HealthBarPoint : IEntityComponent
+    {
+        public Transform Value;
+    }
+
     public class MustDie : IEntityComponent
     {
         public ICompositeCondition Value;

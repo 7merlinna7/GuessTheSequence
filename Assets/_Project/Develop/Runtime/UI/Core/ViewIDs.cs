@@ -9,6 +9,8 @@
         public const string GameplayScreen = nameof(GameplayScreen);
         public const string WinPopup = nameof(WinPopup);
         public const string DefeatPopup = nameof(DefeatPopup);
+        public const string SimpleHealthBar = nameof(SimpleHealthBar);
+        public const string TowerHealthBar = nameof(TowerHealthBar);
 
     }
 }

@@ -17,7 +17,9 @@ namespace Assets._Project.Develop.Runtime.UI.Core
             {ViewIDs.ConfirmPopup,"UI/ConfirmPopup"},
             {ViewIDs.GameplayScreen,"UI/Gameplay/GameplayScreenView"},
             {ViewIDs.WinPopup,"UI/Gameplay/WinPopup"},
-            {ViewIDs.DefeatPopup,"UI/Gameplay/DefeatPopup"}
+            {ViewIDs.DefeatPopup,"UI/Gameplay/DefeatPopup"},
+            {ViewIDs.SimpleHealthBar,"UI/Gameplay/HealthBars/SimpleHealthBar"},
+            {ViewIDs.TowerHealthBar,"UI/Gameplay/HealthBars/TowerHealthBar"}
         };
         public ViewsFactory(ResourcesAssetsLoader resourcesAssetsLoader)
         {

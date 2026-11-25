@@ -50,7 +50,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
         {
             foreach (EntityToBrain entityToBrain in _entityToBrains)
             {
-                if (entityToBrain.Entity.InDeathProcess.Value == true) 
+                if (entityToBrain.Entity.InDeathProcess.Value == true)
                     return;
 
                 entityToBrain.Brain.Dispose();

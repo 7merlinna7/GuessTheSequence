@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.UI.Core;
+using Assets._Project.Develop.Runtime.UI.Gameplay.HealthDisplay;
 using Assets._Project.Develop.Runtime.UI.Gameplay.Stages;
 using System.Collections.Generic;
 
@@ -11,6 +12,8 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
 
         private readonly List<IPresenter> _childPresenters = new();
 
+        private EntitiesHealthDisplayPresenter _entitiesHealthDisplayPresenter;
+
         public GameplayScreenPresenter(GameplayScreenView screen, GameplayPresentersFactory presentersFactory)
         {
             _screen = screen;
@@ -20,6 +23,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
         public void Initialize()
         {
             CreateStageNumber();
+            CreateEntitiesHealthDisplay();
 
             foreach (IPresenter presenter in _childPresenters)
                 presenter.Initialize();
@@ -33,11 +37,22 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
             _childPresenters.Clear();
         }
 
+        public void LateUpdate()
+        {
+            _entitiesHealthDisplayPresenter.LateUpdate();
+        }
+
         private void CreateStageNumber()
         {
             StagePresenter stagePresenter = _presentersFactory.CreateStagePresenter(_screen.StageNumberView);
 
             _childPresenters.Add(stagePresenter);
+        }
+
+        private void CreateEntitiesHealthDisplay()
+        {
+            _entitiesHealthDisplayPresenter = _presentersFactory.CreateEntitiesHealthDisplayPresenter(_screen.EntitiesHealthDisplay);
+            _childPresenters.Add(_entitiesHealthDisplayPresenter);
         }
     }
 }

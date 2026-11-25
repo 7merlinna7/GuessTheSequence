@@ -3,6 +3,7 @@ using Assets._Project.Develop.Runtime.Configs.Gameplay.Levels;
 using Assets._Project.Develop.Runtime.Configs.Gameplay.Stages;
 using Assets._Project.Develop.Runtime.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.UI.Gameplay;
 using Assets._Project.Develop.Runtime.Utilites.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 using Assets._Project.Ecs.Gameplay;
@@ -25,6 +26,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         private EntitiesLifeContext _lifeContext;
         private AIBrainsContext _brainsContext;
 
+        private GameplayScreenPresenter _screenPresenter;
+
 
         public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
         {
@@ -44,6 +47,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             _gameplayStatesContext = _container.Resolve<GameplayStatesContext>();
             _lifeContext = _container.Resolve<EntitiesLifeContext>();
             _brainsContext = _container.Resolve<AIBrainsContext>();
+
+            _screenPresenter = _container.Resolve<GameplayScreenPresenter>();
 
             LevelConfig levelConfig = _container.Resolve<ConfigsProviderService>().GetConfig<LevelListConfig>().GetBy(_inputArgs.LevelNumber);
 
@@ -67,6 +72,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             _brainsContext?.Update(Time.deltaTime);
             _lifeContext?.Update(Time.deltaTime);
             _gameplayStatesContext?.Update(Time.deltaTime);
+        }
+
+        private void LateUpdate()
+        {
+            _screenPresenter?.LateUpdate();
         }
     }
 }

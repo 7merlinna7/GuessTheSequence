@@ -3,6 +3,8 @@ using Assets._Project.Develop.Runtime.Meta.Infrastructure;
 using Assets._Project.Develop.Runtime.UI.CommonViews.PlayerStatistics;
 using Assets._Project.Develop.Runtime.UI.CommonViews.Wallet;
 using Assets._Project.Develop.Runtime.UI.Core;
+using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
+using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using System;
 using System.Collections.Generic;
 
@@ -17,7 +19,10 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
         private readonly MainMenu _mainMenue;
 
         private readonly ProjectPresentersFactory _projectPresentersFactory;
-        private readonly MainMenuePresentersFactory _mainMenuePresentersFactory;
+
+        private readonly PlayerDataProvider _playerDataProvider;
+        private readonly ICoroutinesPerformer _coroutinesPerformer;
+
 
         private readonly List<IPresenter> _childPresenters = new();
 
@@ -26,15 +31,17 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
             MainMenuePopupService popupService,
             ProjectPresentersFactory projectPresentersFactory,
             MainMenu mainMenu,
-            MainMenuePresentersFactory mainMenuePresentersFactory,
-            PurchaseChecker resetStatisticChecker)
+            PurchaseChecker resetStatisticChecker,
+            PlayerDataProvider playerDataProvider,
+            ICoroutinesPerformer coroutinesPerformer)
         {
             _resetStatisticChecker = resetStatisticChecker;
             _screen = screen;
             _popupService = popupService;
             _projectPresentersFactory = projectPresentersFactory;
             _mainMenue = mainMenu;
-            _mainMenuePresentersFactory = mainMenuePresentersFactory;
+            _playerDataProvider = playerDataProvider;
+            _coroutinesPerformer = coroutinesPerformer;
         }
 
         public void Initialize()
@@ -77,6 +84,8 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenue
         private void OnResetStatisticsButtonClicked()
         {
             _resetStatisticChecker.Reset();
+            _coroutinesPerformer.StartPerform(_playerDataProvider.SaveAcync());
+
         }
 
         private void CreatePlayerStatistics()
