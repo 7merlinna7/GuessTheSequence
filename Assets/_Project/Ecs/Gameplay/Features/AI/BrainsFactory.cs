@@ -18,7 +18,6 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
         private readonly TimerServiceFactory _timerServiceFactory;
         private readonly AIBrainsContext _brainsContext;
         private readonly IInputService _inputInputService;
-        private readonly MouseInputForHorizontalRotation _mouseInput;
         private readonly EntitiesLifeContext _entitiesLifeContext;
 
         public BrainsFactory(DIContainer container)
@@ -28,12 +27,11 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
             _brainsContext = _container.Resolve<AIBrainsContext>();
             _inputInputService = _container.Resolve<IInputService>();
             _entitiesLifeContext = _container.Resolve<EntitiesLifeContext>();
-            _mouseInput = _container.Resolve<MouseInputForHorizontalRotation>();
         }
 
         public StateMachineBrain CreateMainHeroBrain(Entity entity)
         {
-            AIStateMachine combatState = CreatePlayerInputAttackStateMachine(entity,_mouseInput);
+            AIStateMachine combatState = CreatePlayerInputAttackStateMachine(entity,_container.Resolve<PlayerGameplayRayShooter>());
             PlayerInputMovementState movementState = new PlayerInputMovementState(entity,_inputInputService);
 
             ICompositeCondition fromMovementToCombatStateContition = new CompositeCondition()
@@ -203,17 +201,18 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
             return stateMachine;
         }
 
-        private AIStateMachine CreatePlayerInputAttackStateMachine(Entity entity, IInputService inputService)
+        private AIStateMachine CreatePlayerInputAttackStateMachine(Entity entity, PlayerGameplayRayShooter rayShooter)
         {
-            PlayerInputRotationState rotationState = new PlayerInputRotationState(entity,inputService);
+            MouseInput mouseInput = _container.Resolve<MouseInput>();
+
+            PlayerInputRotationState rotationState = new PlayerInputRotationState(entity,rayShooter);
             AttackTriggerState attackTriggerState = new AttackTriggerState(entity);
 
             ICondition canAttack = entity.CanStartAttack;
             ReactiveVariable<bool> inAttackProcess = entity.InAttackProcess;
 
-            ICompositeCondition anyMouseButtonclicked = new CompositeCondition(LogicOperations.Or)
-                .Add(new FuncCondition(() =>Input.GetKeyDown(KeyCode.Mouse0)))
-                .Add(new FuncCondition(() => Input.GetKeyDown(KeyCode.Mouse1)));
+            ICompositeCondition anyMouseButtonclicked = new CompositeCondition()
+                .Add(new FuncCondition(() => mouseInput.IsMouseButtonClicked));
 
             ICompositeCondition fromRotateToAttackCondition = new CompositeCondition()
                 .Add(anyMouseButtonclicked)

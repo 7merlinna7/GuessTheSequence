@@ -31,11 +31,15 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             container.RegisterAsSingle(CreateAIBrainsContext);
             container.RegisterAsSingle<IInputService>(CreateDesktopInput);
             container.RegisterAsSingle(CreateMouseInput);
+            container.RegisterAsSingle(CreatePlayerGameplayRayShooter);
             
         }
 
-        private static MouseInputForHorizontalRotation CreateMouseInput(DIContainer c)
-            => new MouseInputForHorizontalRotation();
+        private static PlayerGameplayRayShooter CreatePlayerGameplayRayShooter(DIContainer c)
+            => new PlayerGameplayRayShooter();
+
+        private static MouseInput CreateMouseInput(DIContainer c)
+            => new MouseInput();
 
         private static DesktopInput CreateDesktopInput(DIContainer c)
             => new DesktopInput();

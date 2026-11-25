@@ -8,19 +8,21 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI.States
 {
     public class PlayerInputRotationState : State, IUpdatableState
     {
-        private IInputService _inputService;
+        private PlayerGameplayRayShooter _rayShooter;
         private ReactiveVariable<Vector3> _rotationDirection;
+        private Transform _transform;
 
-        public PlayerInputRotationState(Entity entity,IInputService inputService)
+        public PlayerInputRotationState(Entity entity, PlayerGameplayRayShooter rayShooter)
         {
             _rotationDirection = entity.RotationDirection;
+            _transform = entity.Transform;
 
-            _inputService = inputService;
+            _rayShooter = rayShooter;
         }
 
         public void Update(float deltaTime)
         {
-            _rotationDirection.Value = _inputService.Direction;
+            _rotationDirection.Value = _rayShooter.Shoot() - _transform.position;
         }
 
         public override void Exit()
