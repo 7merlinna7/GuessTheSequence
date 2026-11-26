@@ -89,7 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _colliders:
-  - {fileID: 5974379575565474855, guid: b9db23cb14dc00a4c9fa69a623aaffe6, type: 3}
+  - {fileID: -6867070889995306602}
 --- !u!54 &928662506001360235
 Rigidbody:
   m_ObjectHideFlags: 0

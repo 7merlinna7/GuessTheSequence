@@ -52,11 +52,11 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 //death
                 .AddIsDead()
                 //Damage
-                .AddContactsDetectingMask((Layers.CharactersMask | Layers.TowersMask))
+                .AddContactsDetectingMask((Layers.TowersMask))
                 .AddContactCollidersBuffer(new Buffer<Collider>(64))
                 .AddContactEntitiesBuffer(new Buffer<Entity>(64))
                 .AddBodyContactDamage(new ReactiveVariable<float>(damage))
-                .AddDeathMask((Layers.CharactersMask | Layers.TowersMask))
+                .AddDeathMask((Layers.TowersMask)) //ДОБАВИТЬ ЧТО УМИРАЕТ ПРИ КОСАНИИ ДРУГОЙ КОМАНДЫ
                 .AddIsTouchDeathMask()
                 ;
 
