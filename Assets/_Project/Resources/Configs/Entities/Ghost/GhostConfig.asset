@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af37c0fb6b98826448759618336a677d, type: 3}
   m_Name: GhostConfig
   m_EditorClassIdentifier: 
-  <PrefabPath>k__BackingField: Entities/WalkingGhost
+  <PrefabPath>k__BackingField: Entities/Enemies/WalkingEnemy
   <MoveSpeed>k__BackingField: 1
   <RotationSpeed>k__BackingField: 900
   <MaxHealth>k__BackingField: 100

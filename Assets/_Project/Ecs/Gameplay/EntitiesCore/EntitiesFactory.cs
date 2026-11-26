@@ -4,6 +4,9 @@ using Assets._Project.Develop.Runtime.Utilities;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Ecs.Gameplay.EntitiesCore.Mono;
 using Assets._Project.Ecs.Gameplay.Features.AplyDamage;
+using Assets._Project.Ecs.Gameplay.Features.Attack;
+using Assets._Project.Ecs.Gameplay.Features.Attack.RangeAttack.Shoot;
+using Assets._Project.Ecs.Gameplay.Features.ContactTakeDamage;
 using Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures;
 using Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.BombFeature;
 using Assets._Project.Ecs.Gameplay.Features.LifeCycle;
@@ -30,6 +33,71 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
             _monoEntitiesFactory = _container.Resolve<MonoEntitiesFactory>();
             _collidersRegistryService = _container.Resolve<CollidersRegistryService>();
         }
+
+        public Entity CreateProjectile(Vector3 position, Vector3 direction, float damage,Teams team)
+        {
+            Entity entity = CreateEmpty();
+
+            _monoEntitiesFactory.Create(entity, position, "Entities/Projectile");
+
+            entity
+                //компоненты полей
+                .AddTeam(new ReactiveVariable<Teams>(team))
+                //move
+                .AddMoveDirection(new ReactiveVariable<Vector3>(direction))
+                .AddMoveSpeed(new ReactiveVariable<float>(10))
+                .AddIsMoving()
+                .AddRotationDirection(new ReactiveVariable<Vector3>(direction))
+                .AddRotationSpeed(new ReactiveVariable<float>(9999))
+                //death
+                .AddIsDead()
+                //Damage
+                .AddContactsDetectingMask(( Layers.TowersMask))
+                .AddContactCollidersBuffer(new Buffer<Collider>(64))
+                .AddContactEntitiesBuffer(new Buffer<Entity>(64))
+                .AddBodyContactDamage(new ReactiveVariable<float>(damage))
+                .AddDeathMask(( Layers.TowersMask))
+                .AddIsTouchDeathMask()
+
+                ;
+
+            //компоненты условий
+            ICompositeCondition canMove = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+
+            ICompositeCondition canRotate = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+
+            ICompositeCondition mustDie = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsTouchDeathMask.Value == true));
+
+            ICompositeCondition mustSelfRealese = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value));
+
+
+            entity
+                .AddCanMove(canMove)
+                .AddCanRotate(canRotate)
+                .AddMustDie(mustDie)
+                .AddMustSelfRelease(mustSelfRealese);
+
+            //компоненты систем
+            entity
+                .AddSystem(new RigidbodyMovementSystem())
+                .AddSystem(new RigidbodyRotationSystem())
+                .AddSystem(new BodyContactsDetectingSystem())
+                .AddSystem(new BodyContactsEntitiesFilterSystem(_collidersRegistryService))
+                .AddSystem(new DealDamageOnContactSystem())
+                .AddSystem(new DeathMaskTouchDetectorSystem())
+                .AddSystem(new DeathSystem())
+                .AddSystem(new DisableCollidersOnDeathSystem())
+                .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));
+
+            _entitiesLifeContext.Add(entity);
+
+            return entity;
+        }
+
 
         public Entity CreateBomb(Vector3 position, Teams team,float explotionRadius, float explotionDamage)
         {
@@ -142,11 +210,121 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
             return entity;
         }
 
+        public Entity CreateRangeWalkingEntity(Vector3 position,RangeEnemyConfig config)
+        {
+            Entity entity = CreateEmpty();
+
+            _monoEntitiesFactory.Create(entity, position, config.PrefabPath);
+
+            entity
+                //компоненты полей
+                //spawn
+                .AddSpawnInitialTime(new ReactiveVariable<float>(config.SpawnProcessTime))
+                .AddSpawnCurrentTime()
+                .AddInSpawnProcess()
+                //move
+                .AddMoveDirection()
+                .AddMoveSpeed(new ReactiveVariable<float>(config.MoveSpeed))
+                .AddIsMoving()
+                //rotation
+                .AddRotationDirection()
+                .AddRotationSpeed(new ReactiveVariable<float>(config.RotationSpeed))
+                //health
+                .AddMaxHealth(new ReactiveVariable<float>(config.MaxHealth))
+                .AddCurrentHealth(new ReactiveVariable<float>(config.MaxHealth))
+                //death
+                .AddIsDead()
+                .AddInDeathProcess()
+                .AddDeathProcessInitialTime(new ReactiveVariable<float>(config.DeathProcessTime))
+                .AddDeathProcessCurrentTime()
+                //takeDamage
+                .AddTakeDamageRequest()
+                .AddTakeDamageEvent()
+                //target
+                .AddTeam(new ReactiveVariable<Teams>(Teams.Enemies))
+                .AddCurrentTarget()
+                //--------------------------------------------------------------------------------------
+                //attack
+                //stats
+                .AddInstantAttackDamage(new ReactiveVariable<float>(config.InstantAttackDamage)) //урон атаки
+                .AddAttackRange(new ReactiveVariable<float>(config.AttackRange))                 //дальность атаки
+                .AddAttackDelayTime(new ReactiveVariable<float>(config.AttackDelayTime))         //задержка перед атакой
+                //events
+                .AddStartAttackRequest()
+                .AddAttackDelayEndEvent()
+                .AddStartAttackEvent()
+                .AddEndAttackEvent()
+                //bool
+                .AddInAttackProcess()
+                .AddInAttackCooldown()
+                //timers
+                .AddAttackProcessInitialTime(new ReactiveVariable<float>(config.AttackProcessInitialTime)) //длительность атаки
+                .AddAttackProcessCurrentTime()
+
+                .AddAttackCooldownInitialTime(new ReactiveVariable<float>(config.AttackCooldownInitialTime)) //перезарядка атаки
+                .AddAttackCooldownCurrentTime()
+                ;
+
+            //компоненты условий
+            ICompositeCondition canMove = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false))
+                .Add(new FuncCondition(() => entity.InSpawnProcess.Value == false));
+
+            ICompositeCondition canRotate = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false))
+                .Add(new FuncCondition(() => entity.InSpawnProcess.Value == false));
+
+            ICompositeCondition mustDie = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.CurrentHealth.Value <= 0));
+
+            ICompositeCondition mustSelfRealese = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value))
+                .Add(new FuncCondition(() => entity.InDeathProcess.Value == false))
+                .Add(new FuncCondition(() => entity.InSpawnProcess.Value == false));
+
+            ICompositeCondition canApplyDamage = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false))
+                .Add(new FuncCondition(() => entity.InSpawnProcess.Value == false));
+
+            ICompositeCondition canStartAttack = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false))
+                .Add(new FuncCondition(() => entity.InSpawnProcess.Value == false));
+
+            entity
+                .AddCanMove(canMove)
+                .AddCanRotate(canRotate)
+                .AddMustDie(mustDie)
+                .AddMustSelfRelease(mustSelfRealese)
+                .AddCanApplayDamage(canApplyDamage)
+                .AddCanStartAttack(canStartAttack);
+
+            entity
+                .AddSystem(new SpawnProcessTimerSystem())
+
+                .AddSystem(new RigidbodyMovementSystem())
+                .AddSystem(new RigidbodyRotationSystem())
+
+                .AddSystem(new StartAttackSystem())
+                .AddSystem(new AttackProcessTimerSystem())
+                .AddSystem(new AttackDelayEndTriggerSystem())
+                .AddSystem(new InstantShootSystem(this))
+                .AddSystem(new EndAttackSystem())
+                .AddSystem(new AttackCooldownTymerSystem())
+
+                .AddSystem(new ApplyDamageSystem())
+                .AddSystem(new DeathSystem())
+                .AddSystem(new DisableCollidersOnDeathSystem())
+                .AddSystem(new DeathProcessTimerSystem())
+                .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));
+
+            return entity;
+        }
+
         public Entity CreateWalkingExplotionEntity(Vector3 position,GhostConfig config)
         {
            Entity entity = CreateEmpty();
 
-            _monoEntitiesFactory.Create(entity, position, "Entities/WalkingGhost");
+            _monoEntitiesFactory.Create(entity, position,config.PrefabPath);
 
             entity
                 //компоненты полей

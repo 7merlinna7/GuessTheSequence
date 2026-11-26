@@ -35,5 +35,12 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI.States
             _rotationDirection.Value = direction;
             _moveDirection.Value = direction;
         }
+
+        public override void Exit()
+        {
+            base.Exit();
+
+            _moveDirection.Value = Vector3.zero;
+        }
     }
 }

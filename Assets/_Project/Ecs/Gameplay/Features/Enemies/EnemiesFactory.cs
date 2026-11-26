@@ -39,6 +39,12 @@ namespace Assets._Project.Ecs.Gameplay.Features.Enemies
                     _brainsFactory.CreateWalkingGhostBrain(entity);
                     break;
 
+                case RangeEnemyConfig rangeEnemyConfig:
+                    entity = _entitiesFactory.CreateRangeWalkingEntity(position, rangeEnemyConfig);
+
+                    _brainsFactory.CreateRangeEntityBrain(entity);
+                    break;
+
                 default:
                     throw new ArgumentException($"Not support {config.GetType()} type config");
             }

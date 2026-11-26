@@ -9,6 +9,7 @@ using Assets._Project.Develop.Runtime.Utilites.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
+using Assets._Project.Ecs.Gameplay.Features.AI;
 using Assets._Project.Ecs.Gameplay.Features.InputFeature;
 using Assets._Project.Ecs.Gameplay.Features.InputFeature.RaycastFeature;
 using Assets._Project.Ecs.Gameplay.Features.StagesFeature;

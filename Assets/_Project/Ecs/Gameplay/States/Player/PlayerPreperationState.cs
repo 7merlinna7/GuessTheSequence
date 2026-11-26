@@ -1,8 +1,10 @@
 ﻿using Assets._Project.Develop.Runtime.Meta.Features;
 using Assets._Project.Develop.Runtime.Utilities.StateMachineCore;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
+using Assets._Project.Ecs.Gameplay.Features.AI;
 using Assets._Project.Ecs.Gameplay.Features.InputFeature;
 using Assets._Project.Ecs.Gameplay.Features.InputFeature.RaycastFeature;
+using UnityEngine;
 
 namespace Assets._Project.Ecs.Gameplay.States.Player
 {

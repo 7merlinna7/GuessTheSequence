@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.Features.AI.States;
 using Assets._Project.Ecs.Gameplay.Features.TowerFeature;
@@ -36,6 +37,58 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
             return brain;
         }
 
+        public StateMachineBrain CreateRangeEntityBrain(Entity entity)
+        {
+            TowerHolderService towerHolderService = _container.Resolve<TowerHolderService>();
+
+            FindTargetState findTargetState = new FindTargetState(entity, towerHolderService);
+
+            AIStateMachine behaviour = CreateRangeEntityCombatStateMachine(entity, towerHolderService);
+
+            AIParallelState parallelState = new AIParallelState(findTargetState, behaviour);
+
+            AIStateMachine rootStateMachine = new AIStateMachine();
+            rootStateMachine.AddState(parallelState);
+
+            StateMachineBrain brain = new StateMachineBrain(rootStateMachine);
+
+            _brainsContext.SetFor(entity, brain);
+
+            return brain;
+        }
+
+        private AIStateMachine CreateRangeEntityCombatStateMachine(Entity entity,TowerHolderService towerHolderService)
+        {
+
+            MoveToTargetState moveToTargetState = new MoveToTargetState(entity);
+            AttackRepeatState attackTriggerState = new AttackRepeatState(entity);
+            
+            ReactiveVariable<float> attackRange = entity.AttackRange;
+
+            FuncCondition moveToAttackCondition = new FuncCondition(() =>
+            {
+                if (towerHolderService.Tower.IsDead.Value == false)
+                {
+                    Vector3 entityPosition = new Vector3(entity.Transform.position.x, 0, entity.Transform.position.z);
+
+                    float attackDistance = attackRange.Value + 3;
+
+                    return ((towerHolderService.Tower.Transform.position - entityPosition).magnitude < attackDistance);
+                }
+
+                return false;
+            });
+
+            AIStateMachine stateMachine = new AIStateMachine();
+
+            stateMachine.AddState(moveToTargetState);
+            stateMachine.AddState(attackTriggerState);
+
+            stateMachine.AddTransition(moveToTargetState,attackTriggerState,moveToAttackCondition);
+
+            return stateMachine;
+        }
+
         private AIStateMachine CreateMoveToTargetStateMachine(Entity entity, TowerHolderService towerHolderService)
         {
             MoveToTargetState moveToTargetState = new MoveToTargetState(entity);
@@ -53,15 +106,12 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
                     return false;
                 });
 
-
-
             AIStateMachine stateMachine = new AIStateMachine();
 
             stateMachine.AddState(moveToTargetState);
             stateMachine.AddState(explodeState);
 
             stateMachine.AddTransition(moveToTargetState, explodeState, moveToExplodeCondition);
-
 
             return stateMachine;
         }

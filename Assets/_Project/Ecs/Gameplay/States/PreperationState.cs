@@ -8,7 +8,6 @@ namespace Assets._Project.Ecs.Gameplay.States
     {
         public void Update(float deltaTime)
         {
-            Debug.Log("Press Space to continue");
         }
     }
 }

@@ -33,6 +33,8 @@ namespace Assets._Project.Ecs.Gameplay.States.Player
             {
                 OnMouseButtonClicked();
             }     
+
+
         }
 
         protected virtual void OnMouseButtonClicked()
