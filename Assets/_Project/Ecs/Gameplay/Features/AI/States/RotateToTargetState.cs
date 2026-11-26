@@ -25,12 +25,11 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI.States
 
         public void Update(float deltaTime)
         {
-            _inRotateProcess = true;
-
             if (_currentTarget.Value != null)
+            {
                 _rotationDirection.Value = (_currentTarget.Value.Transform.position - _transform.position).normalized;
-
-            _inRotateProcess = false;
+                _inRotateProcess = false;
+            }
         }
     }
 }

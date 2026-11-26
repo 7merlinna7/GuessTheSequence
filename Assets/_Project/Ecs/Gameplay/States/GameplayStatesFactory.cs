@@ -93,7 +93,7 @@ namespace Assets._Project.Ecs.Gameplay.States
             EntitiesFactory entitiesFactory = _container.Resolve<EntitiesFactory>();
 
             PlayerAttackState playerAttackState = new PlayerAttackState(entitiesFactory, rayShooter, playerInput);
-            PlayerPreperationState playerPreperationState = new PlayerPreperationState(entitiesFactory, rayShooter, playerInput,purchaseChecker);
+            PlayerPreperationState playerPreperationState = new PlayerPreperationState(entitiesFactory, rayShooter, playerInput,purchaseChecker,_container.Resolve<BrainsFactory>());
 
             FuncCondition preperationToProcessStateCondition = new FuncCondition(() => Input.GetKeyDown(KeyCode.Space));
 

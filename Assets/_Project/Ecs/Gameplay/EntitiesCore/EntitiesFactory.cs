@@ -45,20 +45,19 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .AddTeam(new ReactiveVariable<Teams>(team))
                 //move
                 .AddMoveDirection(new ReactiveVariable<Vector3>(direction))
-                .AddMoveSpeed(new ReactiveVariable<float>(10))
+                .AddMoveSpeed(new ReactiveVariable<float>(80))
                 .AddIsMoving()
                 .AddRotationDirection(new ReactiveVariable<Vector3>(direction))
                 .AddRotationSpeed(new ReactiveVariable<float>(9999))
                 //death
                 .AddIsDead()
                 //Damage
-                .AddContactsDetectingMask(( Layers.TowersMask))
+                .AddContactsDetectingMask((Layers.CharactersMask | Layers.TowersMask))
                 .AddContactCollidersBuffer(new Buffer<Collider>(64))
                 .AddContactEntitiesBuffer(new Buffer<Entity>(64))
                 .AddBodyContactDamage(new ReactiveVariable<float>(damage))
-                .AddDeathMask(( Layers.TowersMask))
+                .AddDeathMask((Layers.CharactersMask | Layers.TowersMask))
                 .AddIsTouchDeathMask()
-
                 ;
 
             //компоненты условий
@@ -204,6 +203,109 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .AddSystem(new ApplyDamageSystem())
                 .AddSystem(new DeathSystem())
                 .AddSystem(new DisableCollidersOnDeathSystem());
+
+            _entitiesLifeContext.Add(entity);
+
+            return entity;
+        }
+
+        public Entity CreateRangeStayEntity(Vector3 position)
+        {
+            Entity entity = CreateEmpty();
+
+            _monoEntitiesFactory.Create(entity, position, "Entities/RangeStayingEntity");
+
+            entity
+                //компоненты полей
+                //spawn
+                .AddSpawnInitialTime(new ReactiveVariable<float>(0))
+                .AddSpawnCurrentTime()
+                .AddInSpawnProcess()
+                //rotation
+                .AddRotationDirection()
+                .AddRotationSpeed(new ReactiveVariable<float>(600))
+                //health
+                .AddMaxHealth(new ReactiveVariable<float>(100))
+                .AddCurrentHealth(new ReactiveVariable<float>(100))
+                //death
+                .AddIsDead()
+                .AddInDeathProcess()
+                .AddDeathProcessInitialTime(new ReactiveVariable<float>(0))
+                .AddDeathProcessCurrentTime()
+                //takeDamage
+                .AddTakeDamageRequest()
+                .AddTakeDamageEvent()
+                //target
+                .AddTeam(new ReactiveVariable<Teams>(Teams.Player))
+                .AddCurrentTarget()
+                //--------------------------------------------------------------------------------------
+                //attack
+                //stats
+                .AddInstantAttackDamage(new ReactiveVariable<float>(20))       //урон атаки
+                .AddAttackDelayTime(new ReactiveVariable<float>(0.2f))         //задержка перед атакой
+                //events
+                .AddStartAttackRequest()
+                .AddAttackDelayEndEvent()
+                .AddStartAttackEvent()
+                .AddEndAttackEvent()
+                //bool
+                .AddInAttackProcess()
+                .AddInAttackCooldown()
+                //timers
+                .AddAttackProcessInitialTime(new ReactiveVariable<float>(1)) //длительность атаки
+                .AddAttackProcessCurrentTime()
+
+                .AddAttackCooldownInitialTime(new ReactiveVariable<float>(1)) //перезарядка атаки
+                .AddAttackCooldownCurrentTime()
+                ;
+
+            //компоненты условий
+
+            ICompositeCondition canRotate = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false))
+                .Add(new FuncCondition(() => entity.InSpawnProcess.Value == false));
+
+            ICompositeCondition mustDie = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.CurrentHealth.Value <= 0));
+
+            ICompositeCondition mustSelfRealese = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value))
+                .Add(new FuncCondition(() => entity.InDeathProcess.Value == false))
+                .Add(new FuncCondition(() => entity.InSpawnProcess.Value == false));
+
+            ICompositeCondition canApplyDamage = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false))
+                .Add(new FuncCondition(() => entity.InSpawnProcess.Value == false));
+
+            ICompositeCondition canStartAttack = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false))
+                .Add(new FuncCondition(() => entity.InSpawnProcess.Value == false))
+                .Add(new FuncCondition(() => entity.InAttackCooldown.Value == false));
+
+            entity
+                .AddCanRotate(canRotate)
+                .AddMustDie(mustDie)
+                .AddMustSelfRelease(mustSelfRealese)
+                .AddCanApplayDamage(canApplyDamage)
+                .AddCanStartAttack(canStartAttack);
+
+            entity
+                .AddSystem(new SpawnProcessTimerSystem())
+
+                .AddSystem(new RigidbodyRotationSystem())
+
+                .AddSystem(new StartAttackSystem())
+                .AddSystem(new AttackProcessTimerSystem())
+                .AddSystem(new AttackDelayEndTriggerSystem())
+                .AddSystem(new InstantShootSystem(this))
+                .AddSystem(new EndAttackSystem())
+                .AddSystem(new AttackCooldownTymerSystem())
+
+                .AddSystem(new ApplyDamageSystem())
+                .AddSystem(new DeathSystem())
+                .AddSystem(new DisableCollidersOnDeathSystem())
+                .AddSystem(new DeathProcessTimerSystem())
+                .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));
 
             _entitiesLifeContext.Add(entity);
 

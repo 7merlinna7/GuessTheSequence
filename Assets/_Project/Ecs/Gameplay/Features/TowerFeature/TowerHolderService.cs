@@ -7,6 +7,8 @@ namespace Assets._Project.Ecs.Gameplay.Features.TowerFeature
 {
     public class TowerHolderService : IInitializable,IDisposable
     {
+        public static float TowerColliderRadius = 2f;
+
         private EntitiesLifeContext _entitiesLifeContext;
         private ReactiveEvent<Entity> _towerRegistred = new();
 

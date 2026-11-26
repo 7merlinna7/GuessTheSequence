@@ -9,6 +9,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.ContactTakeDamage
 {
     public class DealDamageOnContactSystem : IInitializableSystem, IUpdatableSystem
     {
+        private Entity _entity;
         private Buffer<Entity> _contacts;
         private ReactiveVariable<float> _damage;
 
@@ -18,6 +19,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.ContactTakeDamage
         {
             _contacts = entity.ContactEntitiesBuffer;
             _damage = entity.BodyContactDamage;
+            _entity = entity;
 
             _processedEntities = new List<Entity>(_contacts.Items.Length);
         }
@@ -33,7 +35,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.ContactTakeDamage
                     _processedEntities.Add(contactEntity);
 
                     if (contactEntity.HasComponent<TakeDamageRequest>())
-                        contactEntity.TakeDamageRequest.Invoke(_damage.Value);
+                        EntitiesHelper.TryTakeDamageFrom(_entity, contactEntity, _damage.Value);
                 }
             }
 

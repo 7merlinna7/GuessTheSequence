@@ -42,7 +42,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.Enemies
                 case RangeEnemyConfig rangeEnemyConfig:
                     entity = _entitiesFactory.CreateRangeWalkingEntity(position, rangeEnemyConfig);
 
-                    _brainsFactory.CreateRangeEntityBrain(entity);
+                    _brainsFactory.CreateWalkingRangeEntityBrain(entity);
                     break;
 
                 default:

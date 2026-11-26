@@ -1,5 +1,6 @@
 ﻿using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.Features.AplyDamage;
+using Assets._Project.Ecs.Gameplay.Features.TowerFeature;
 using Assets._Project.Ecs.Utilities.Conditions;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI.States.TargetSelectors
         {
             IEnumerable<Entity> selectedTargets = targets.Where(target =>
             {
-                bool result = target.HasComponent<TakeDamageRequest>();
+                bool result = target.HasComponent<TakeDamageRequest>() && target.HasComponent<IsTower>() == false;
 
                 if (target.TryGetCanApplayDamage(out ICompositeCondition canApplayDamage))
                 {

@@ -11,18 +11,25 @@ namespace Assets._Project.Ecs.Gameplay.States.Player
     public class PlayerPreperationState : PlayerGameplayState,IUpdatableState
     {
         private readonly PurchaseChecker _purchaseChecker;
+        private readonly BrainsFactory _brainsFactory;
+
         public PlayerPreperationState(
             EntitiesFactory entitiesFactory,
             PlayerGameplayRayShooter rayShooter,
             PlayerInput playerInput,
-            PurchaseChecker purchaseChecker) : base(entitiesFactory, rayShooter, playerInput)
+            PurchaseChecker purchaseChecker,
+            BrainsFactory brainsFactory) : base(entitiesFactory, rayShooter, playerInput)
         {
             _purchaseChecker = purchaseChecker;
+            _brainsFactory = brainsFactory;
         }
         protected override void OnMouseButtonClicked()
         {
-            if (_purchaseChecker.GetBomb())
-            _entitiesFactory.CreateBomb(_rayShooter.Shoot(), _playerTeam, 1f, 100f);
+            Entity entity = _entitiesFactory.CreateRangeStayEntity(_rayShooter.Shoot());
+            _brainsFactory.CreateStayingRangeEntityBrain(entity);
+
+            //if (_purchaseChecker.GetBomb())
+            //_entitiesFactory.CreateBomb(_rayShooter.Shoot(), _playerTeam, 1f, 100f);
         }
     }
 }

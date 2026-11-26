@@ -2,6 +2,7 @@
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.Features.AI.States;
+using Assets._Project.Ecs.Gameplay.Features.AI.States.TargetSelectors;
 using Assets._Project.Ecs.Gameplay.Features.TowerFeature;
 using Assets._Project.Ecs.Utilities.Conditions;
 using UnityEngine;
@@ -19,31 +20,10 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
             _brainsContext = _container.Resolve<AIBrainsContext>();
         }
 
-        public StateMachineBrain CreateWalkingGhostBrain(Entity entity)
+        public StateMachineBrain CreateStayingRangeEntityBrain(Entity entity)
         {
-            TowerHolderService towerHolderService = _container.Resolve<TowerHolderService>();
-
-            FindTargetState findTargetState = new FindTargetState(entity,towerHolderService);
-
-            AIStateMachine behaviour = CreateMoveToTargetStateMachine(entity,towerHolderService);
-
-            AIParallelState parallelState = new AIParallelState(findTargetState, behaviour);
-
-            AIStateMachine rootStateMachine = new AIStateMachine();
-            rootStateMachine.AddState(parallelState);
-
-            StateMachineBrain brain = new StateMachineBrain(rootStateMachine);
-            _brainsContext.SetFor(entity, brain);
-            return brain;
-        }
-
-        public StateMachineBrain CreateRangeEntityBrain(Entity entity)
-        {
-            TowerHolderService towerHolderService = _container.Resolve<TowerHolderService>();
-
-            FindTargetState findTargetState = new FindTargetState(entity, towerHolderService);
-
-            AIStateMachine behaviour = CreateRangeEntityCombatStateMachine(entity, towerHolderService);
+            FindTargetState findTargetState = new FindTargetState(entity,new NearestDamagebleTargetSelector(entity),_container.Resolve<EntitiesLifeContext>());
+            AIStateMachine behaviour = CreateFollowTargetStateMachine(entity);
 
             AIParallelState parallelState = new AIParallelState(findTargetState, behaviour);
 
@@ -57,11 +37,69 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
             return brain;
         }
 
-        private AIStateMachine CreateRangeEntityCombatStateMachine(Entity entity,TowerHolderService towerHolderService)
+        private AIStateMachine CreateFollowTargetStateMachine(Entity entity)
         {
+            RotateToTargetState rotateToTargetState = new RotateToTargetState(entity);
+            AttackRepeatState attackRepeatState = new AttackRepeatState(entity);
 
+            ReactiveVariable<Vector3> rotatioinDirection = entity.RotationDirection;
+
+            ICondition canAttack = entity.CanStartAttack;
+            Transform transform = entity.Transform;
+            ReactiveVariable<Entity> currentTarget = entity.CurrentTarget;
+
+            ICompositeCondition rotateToAttackStateCondition = new CompositeCondition()
+                .Add(canAttack)
+                .Add(new FuncCondition(() =>
+                {
+                    Entity target = currentTarget.Value;
+
+                    if (target == null)
+                        return false;
+
+                    float angleToTarget = Quaternion.Angle(transform.rotation, Quaternion.LookRotation(target.Transform.position - transform.position));
+                    return angleToTarget < 5f;
+                }));
+
+            ReactiveVariable<bool> inAttackProcess = entity.InAttackProcess;
+
+            FuncCondition attackToRotateStateCondition = new FuncCondition(() => inAttackProcess.Value == false);
+
+            AIStateMachine stateMachine = new AIStateMachine();
+
+            stateMachine.AddState(rotateToTargetState);
+            stateMachine.AddState(attackRepeatState);
+
+            stateMachine.AddTransition(rotateToTargetState, attackRepeatState, rotateToAttackStateCondition);
+            stateMachine.AddTransition(attackRepeatState,rotateToTargetState,attackToRotateStateCondition);
+
+            return stateMachine;
+        }
+
+        public StateMachineBrain CreateWalkingRangeEntityBrain(Entity entity)
+        {
+            TowerHolderService towerHolderService = _container.Resolve<TowerHolderService>();
+
+            FindTowerState findTargetState = new FindTowerState(entity, towerHolderService);
+
+            AIStateMachine behaviour = CreateRangeWalkingEntityCombatStateMachine(entity, towerHolderService);
+
+            AIParallelState parallelState = new AIParallelState(findTargetState, behaviour);
+
+            AIStateMachine rootStateMachine = new AIStateMachine();
+            rootStateMachine.AddState(parallelState);
+
+            StateMachineBrain brain = new StateMachineBrain(rootStateMachine);
+
+            _brainsContext.SetFor(entity, brain);
+
+            return brain;
+        }
+
+        private AIStateMachine CreateRangeWalkingEntityCombatStateMachine(Entity entity,TowerHolderService towerHolderService)
+        {
             MoveToTargetState moveToTargetState = new MoveToTargetState(entity);
-            AttackRepeatState attackTriggerState = new AttackRepeatState(entity);
+            AttackRepeatState attackRepeatState = new AttackRepeatState(entity);
             
             ReactiveVariable<float> attackRange = entity.AttackRange;
 
@@ -71,7 +109,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
                 {
                     Vector3 entityPosition = new Vector3(entity.Transform.position.x, 0, entity.Transform.position.z);
 
-                    float attackDistance = attackRange.Value + 3;
+                    float attackDistance = attackRange.Value + TowerHolderService.TowerColliderRadius;
 
                     return ((towerHolderService.Tower.Transform.position - entityPosition).magnitude < attackDistance);
                 }
@@ -82,11 +120,29 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
             AIStateMachine stateMachine = new AIStateMachine();
 
             stateMachine.AddState(moveToTargetState);
-            stateMachine.AddState(attackTriggerState);
+            stateMachine.AddState(attackRepeatState);
 
-            stateMachine.AddTransition(moveToTargetState,attackTriggerState,moveToAttackCondition);
+            stateMachine.AddTransition(moveToTargetState,attackRepeatState,moveToAttackCondition);
 
             return stateMachine;
+        }
+
+        public StateMachineBrain CreateWalkingGhostBrain(Entity entity)
+        {
+            TowerHolderService towerHolderService = _container.Resolve<TowerHolderService>();
+
+            FindTowerState findTargetState = new FindTowerState(entity, towerHolderService);
+
+            AIStateMachine behaviour = CreateMoveToTargetStateMachine(entity, towerHolderService);
+
+            AIParallelState parallelState = new AIParallelState(findTargetState, behaviour);
+
+            AIStateMachine rootStateMachine = new AIStateMachine();
+            rootStateMachine.AddState(parallelState);
+
+            StateMachineBrain brain = new StateMachineBrain(rootStateMachine);
+            _brainsContext.SetFor(entity, brain);
+            return brain;
         }
 
         private AIStateMachine CreateMoveToTargetStateMachine(Entity entity, TowerHolderService towerHolderService)
@@ -100,7 +156,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
                     {
                         Vector3 entityPosition = new Vector3(entity.Transform.position.x, 0, entity.Transform.position.z);
 
-                        return ((towerHolderService.Tower.Transform.position - entityPosition).magnitude < 2f);
+                        return ((towerHolderService.Tower.Transform.position - entityPosition).magnitude < TowerHolderService.TowerColliderRadius);
                     }
 
                     return false;
