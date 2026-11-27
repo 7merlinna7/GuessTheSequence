@@ -548,6 +548,30 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.Sensors.IsTouchDeathMask() {Value = value}); 
 		}
 
+		public Assets._Project.Ecs.Gameplay.Features.Sensors.IsTouchAnotherTeam IsTouchAnotherTeamC => GetComponent<Assets._Project.Ecs.Gameplay.Features.Sensors.IsTouchAnotherTeam>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> IsTouchAnotherTeam => IsTouchAnotherTeamC.Value;
+
+		public bool TryGetIsTouchAnotherTeam(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> value)
+		{
+			bool result = TryGetComponent (out Assets._Project.Ecs.Gameplay.Features.Sensors.IsTouchAnotherTeam component);
+			if (result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean>);
+			return result;
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddIsTouchAnotherTeam()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.Sensors.IsTouchAnotherTeam() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean>() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddIsTouchAnotherTeam(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.Sensors.IsTouchAnotherTeam() {Value = value}); 
+		}
+
 		public Assets._Project.Ecs.Gameplay.Features.MovementFeatures.MoveDirection MoveDirectionC => GetComponent<Assets._Project.Ecs.Gameplay.Features.MovementFeatures.MoveDirection>();
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<UnityEngine.Vector3> MoveDirection => MoveDirectionC.Value;
@@ -1092,6 +1116,54 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddCanExplode(Assets._Project.Ecs.Utilities.Conditions.ICompositeCondition value)
 		{
 			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures.CanExplode() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.DamageArea.DamageDelayInitialTime DamageDelayInitialTimeC => GetComponent<Assets._Project.Ecs.Gameplay.Features.DamageArea.DamageDelayInitialTime>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> DamageDelayInitialTime => DamageDelayInitialTimeC.Value;
+
+		public bool TryGetDamageDelayInitialTime(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			bool result = TryGetComponent (out Assets._Project.Ecs.Gameplay.Features.DamageArea.DamageDelayInitialTime component);
+			if (result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>);
+			return result;
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddDamageDelayInitialTime()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.DamageArea.DamageDelayInitialTime() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddDamageDelayInitialTime(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.DamageArea.DamageDelayInitialTime() {Value = value}); 
+		}
+
+		public Assets._Project.Ecs.Gameplay.Features.DamageArea.DamageDelayCurrentTime DamageDelayCurrentTimeC => GetComponent<Assets._Project.Ecs.Gameplay.Features.DamageArea.DamageDelayCurrentTime>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> DamageDelayCurrentTime => DamageDelayCurrentTimeC.Value;
+
+		public bool TryGetDamageDelayCurrentTime(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			bool result = TryGetComponent (out Assets._Project.Ecs.Gameplay.Features.DamageArea.DamageDelayCurrentTime component);
+			if (result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>);
+			return result;
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddDamageDelayCurrentTime()
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.DamageArea.DamageDelayCurrentTime() {Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() });
+		}
+
+		public Assets._Project.Ecs.Gameplay.EntitiesCore.Entity AddDamageDelayCurrentTime(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Ecs.Gameplay.Features.DamageArea.DamageDelayCurrentTime() {Value = value}); 
 		}
 
 		public Assets._Project.Ecs.Gameplay.Features.ContactTakeDamage.BodyContactDamage BodyContactDamageC => GetComponent<Assets._Project.Ecs.Gameplay.Features.ContactTakeDamage.BodyContactDamage>();

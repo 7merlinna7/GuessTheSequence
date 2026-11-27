@@ -9,5 +9,8 @@ namespace Assets._Project.Develop.Runtime.Utilities
 
         public static readonly int Towers = LayerMask.NameToLayer("Towers");
         public static readonly LayerMask TowersMask = 1 << Towers;
+
+        public static readonly int Environment = LayerMask.NameToLayer("Environment");
+        public static readonly LayerMask EnvironmentMask = 1 << Environment;
     }
 }

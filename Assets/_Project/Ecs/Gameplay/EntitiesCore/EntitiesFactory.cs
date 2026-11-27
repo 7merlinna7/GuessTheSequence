@@ -34,6 +34,42 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
             _collidersRegistryService = _container.Resolve<CollidersRegistryService>();
         }
 
+        public Entity CreateDamageArea(Vector3 position,float damage, Teams team)
+        {
+            Entity entity = CreateEmpty();
+
+            _monoEntitiesFactory.Create(entity, position, "Entities/DamageArea");
+
+            entity
+                .AddTeam(new ReactiveVariable<Teams>(team))
+                .AddIsDead()
+                .AddContactsDetectingMask((Layers.TowersMask | Layers.CharactersMask))
+                .AddContactCollidersBuffer(new Buffer<Collider>(64))
+                .AddContactEntitiesBuffer(new Buffer<Entity>(64))
+                .AddBodyContactDamage(new ReactiveVariable<float>(damage))
+                .AddDamageDelayInitialTime(new ReactiveVariable<float>(0.5f))
+                .AddDamageDelayCurrentTime();
+
+            ICompositeCondition mustSelfRealese = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value));
+
+            entity
+                .AddMustSelfRelease(mustSelfRealese);
+
+            DealDamageOnContactSystem dealDamageOnContactSystem = new DealDamageOnContactSystem();
+
+            entity
+                .AddSystem(new BodyContactsDetectingSystem())
+                .AddSystem(new BodyContactsEntitiesFilterSystem(_collidersRegistryService))
+                .AddSystem(dealDamageOnContactSystem) //сделать сброс списка через ивент
+                .AddSystem(new BodyContactsResetTimerSystem(dealDamageOnContactSystem))
+                .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));
+
+            _entitiesLifeContext.Add(entity);
+
+            return entity;
+        }
+
         public Entity CreateProjectile(Vector3 position, Vector3 direction, float damage,Teams team)
         {
             Entity entity = CreateEmpty();
@@ -52,12 +88,13 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 //death
                 .AddIsDead()
                 //Damage
-                .AddContactsDetectingMask((Layers.TowersMask))
+                .AddContactsDetectingMask((Layers.TowersMask | Layers.CharactersMask))
                 .AddContactCollidersBuffer(new Buffer<Collider>(64))
                 .AddContactEntitiesBuffer(new Buffer<Entity>(64))
                 .AddBodyContactDamage(new ReactiveVariable<float>(damage))
-                .AddDeathMask((Layers.TowersMask)) //ДОБАВИТЬ ЧТО УМИРАЕТ ПРИ КОСАНИИ ДРУГОЙ КОМАНДЫ
+                .AddDeathMask((Layers.EnvironmentMask))
                 .AddIsTouchDeathMask()
+                .AddIsTouchAnotherTeam()
                 ;
 
             //компоненты условий
@@ -67,8 +104,9 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
             ICompositeCondition canRotate = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.IsDead.Value == false));
 
-            ICompositeCondition mustDie = new CompositeCondition()
-                .Add(new FuncCondition(() => entity.IsTouchDeathMask.Value == true));
+            ICompositeCondition mustDie = new CompositeCondition(LogicOperations.Or)
+                .Add(new FuncCondition(() => entity.IsTouchDeathMask.Value == true))
+                .Add(new FuncCondition(() => entity.IsTouchAnotherTeam.Value == true));
 
             ICompositeCondition mustSelfRealese = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.IsDead.Value));
@@ -88,6 +126,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .AddSystem(new BodyContactsEntitiesFilterSystem(_collidersRegistryService))
                 .AddSystem(new DealDamageOnContactSystem())
                 .AddSystem(new DeathMaskTouchDetectorSystem())
+                .AddSystem(new AnotherTeamTouchDetectorSystem())
                 .AddSystem(new DeathSystem())
                 .AddSystem(new DisableCollidersOnDeathSystem())
                 .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));

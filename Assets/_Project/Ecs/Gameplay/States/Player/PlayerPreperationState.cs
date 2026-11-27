@@ -25,8 +25,9 @@ namespace Assets._Project.Ecs.Gameplay.States.Player
         }
         protected override void OnMouseButtonClicked()
         {
-            Entity entity = _entitiesFactory.CreateRangeStayEntity(_rayShooter.Shoot());
-            _brainsFactory.CreateStayingRangeEntityBrain(entity);
+            Entity entity = _entitiesFactory.CreateDamageArea(_rayShooter.Shoot(),10f,Features.TeamsFeature.Teams.Player);
+
+            //_brainsFactory.CreateStayingRangeEntityBrain(entity);
 
             //if (_purchaseChecker.GetBomb())
             //_entitiesFactory.CreateBomb(_rayShooter.Shoot(), _playerTeam, 1f, 100f);

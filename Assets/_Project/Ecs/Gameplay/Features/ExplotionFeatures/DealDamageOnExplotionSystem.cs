@@ -39,8 +39,6 @@ namespace Assets._Project.Ecs.Gameplay.Features.ExplotionFeatures
                 Entity contactEntity = _contacts.Items[i];
 
                 EntitiesHelper.TryTakeDamageFrom(_entity, contactEntity, _damage.Value);
-
-                Debug.Log(contactEntity.CurrentHealth.Value +"/"+ contactEntity.MaxHealth.Value);
             }
         }
     }

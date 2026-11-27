@@ -53,5 +53,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.ContactTakeDamage
 
                 return false;
         }
+
+        public void ClearProcessedEntities() => _processedEntities.Clear();
     }
 }

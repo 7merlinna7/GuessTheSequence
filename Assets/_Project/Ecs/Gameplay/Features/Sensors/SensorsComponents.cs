@@ -34,4 +34,9 @@ namespace Assets._Project.Ecs.Gameplay.Features.Sensors
     {
         public ReactiveVariable<bool> Value;
     }
+
+    public class IsTouchAnotherTeam : IEntityComponent
+    {
+        public ReactiveVariable<bool> Value;
+    }
 }

@@ -1,5 +1,4 @@
 ﻿using Assets._Project.Develop.Runtime.UI.Core;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,7 +14,7 @@ namespace Assets._Project.Develop.Runtime.UI.CommonViews
 
         public void Add(TElement element)
         {
-            element.transform.SetParent(_parent);
+            element.transform.SetParent(_parent,false);
             _elements.Add(element);
         }
 

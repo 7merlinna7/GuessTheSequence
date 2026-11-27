@@ -50,12 +50,9 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI
         {
             foreach (EntityToBrain entityToBrain in _entityToBrains)
             {
-                if (entityToBrain.Entity.InDeathProcess.Value == true)
-                    return;
-
                 entityToBrain.Brain.Dispose();
-                _entityToBrains.Clear();
             }
+            _entityToBrains.Clear();
         }
 
         private class EntityToBrain
