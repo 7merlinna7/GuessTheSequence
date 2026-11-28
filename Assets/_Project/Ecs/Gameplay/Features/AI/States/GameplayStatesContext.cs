@@ -16,6 +16,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.AI.States
         public void Dispose()
         {
             _isRunning = false;
+            _gameplayStateMachine.Exit();
             _gameplayStateMachine.Dispose();
         }
 

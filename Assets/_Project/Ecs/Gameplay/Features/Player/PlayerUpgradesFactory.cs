@@ -1,21 +1,30 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using Assets._Project.Develop.Runtime.Configs.Gameplay.Abilities;
+using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Ecs.Gameplay.EntitiesCore;
+using Assets._Project.Ecs.Gameplay.Features.AbilitiesFeature.Abilities;
+using System;
 
 namespace Assets._Project.Ecs.Gameplay.Features.Player
 {
-    public class PlayerUpgradesFactory : MonoBehaviour
+    public class PlayerUpgradesFactory 
     {
+        private DIContainer _container;
 
-        // Use this for initialization
-        void Start()
+        public PlayerUpgradesFactory(DIContainer container)
         {
-
+            _container = container;
         }
 
-        // Update is called once per frame
-        void Update()
+        public Ability CreateAbilityFor(Entity entity,AbilityConfig config)
         {
+            switch (config)
+            {
+                case StatChangeAbilityConfig changeAbilityConfig:
+                    return new StatChangeAbility(entity, changeAbilityConfig);
 
+                default:
+                    throw new ArgumentException();
+            }
         }
     }
 }

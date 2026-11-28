@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ffb98ec36188d14aacaaf730c0c215a, type: 3}
+  m_Name: DamageChangeAbilityConfig
+  m_EditorClassIdentifier: 
+  <ID>k__BackingField: ExplotionDamage
+  <Name>k__BackingField: ExplotionDamage+
+  <Description>k__BackingField: Increase player damage
+  <Icon>k__BackingField: {fileID: 21300096, guid: 1eaee135ce037439d925cee5e41ce026,
+    type: 3}
+  <statType>k__BackingField: 1
+  _operation: 0
+  _value: 1.2

@@ -3,6 +3,7 @@ using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Utilities;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Ecs.Gameplay.EntitiesCore.Mono;
+using Assets._Project.Ecs.Gameplay.Features.AbilitiesFeature.Abilities;
 using Assets._Project.Ecs.Gameplay.Features.AplyDamage;
 using Assets._Project.Ecs.Gameplay.Features.Attack;
 using Assets._Project.Ecs.Gameplay.Features.Attack.RangeAttack.Shoot;
@@ -13,8 +14,10 @@ using Assets._Project.Ecs.Gameplay.Features.LifeCycle;
 using Assets._Project.Ecs.Gameplay.Features.MovementFeatures;
 using Assets._Project.Ecs.Gameplay.Features.Sensors;
 using Assets._Project.Ecs.Gameplay.Features.SpawnFeature;
+using Assets._Project.Ecs.Gameplay.Features.StatsFeature;
 using Assets._Project.Ecs.Gameplay.Features.TeamsFeature;
 using Assets._Project.Ecs.Utilities.Conditions;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets._Project.Ecs.Gameplay.EntitiesCore
@@ -181,7 +184,23 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 
             _monoEntitiesFactory.Create(entity, position, "Entities/Explotion");
 
+            Dictionary<StatTypes, float> baseStats = new()
+            {
+                {StatTypes.Damage, explotionDamage},
+            };
+
+            Dictionary<StatTypes, float> modifiedStatsStats = new(baseStats);
+
+            StatsEffectsList statsEffectsList = new StatsEffectsList();
+            statsEffectsList.Add(new StatsEffect(StatTypes.Damage,stat => stat * 1.2f));
+
             entity
+                .AddStatEffects(statsEffectsList)
+                .AddBaseStats(baseStats)
+                .AddModifiedStats(modifiedStatsStats)
+                .AddAbilities()//////
+                .AddSystem(new AbilityOnAddActivatorSystem())
+
                 .AddIsExplode()
                 .AddExplotionRadius(new ReactiveVariable<float>(explotionRadius))
                 .AddExplotionDamage(new ReactiveVariable<float>(explotionDamage))
@@ -195,6 +214,8 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
 
             //systems
             entity
+                .AddSystem(new DamageStatSynchronizerSystem())
+                .AddSystem(new StatsEffectsApplierSystem())
                 .AddSystem(new ExplotionContactsDetectingSystem(_entitiesLifeContext))
                 .AddSystem(new ExplotionContactsEntitiesFilterSystem(_collidersRegistryService))
                 .AddSystem(new DealDamageOnExplotionSystem());

@@ -50,6 +50,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             container.RegisterAsSingle(CreatePlayerInput);
 
             container.RegisterAsSingle(CreatePlayerAbilitiesFactory);
+            container.RegisterAsSingle(CreatePlayerUpgradesFactory);
 
             //ui
             container.RegisterAsSingle(CreateGameplayUIRoot).NonLazy();
@@ -58,7 +59,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             container.RegisterAsSingle(CreateGameplayPopupService);
         }
 
-
+        private static PlayerUpgradesFactory CreatePlayerUpgradesFactory(DIContainer c)
+            => new PlayerUpgradesFactory(c);
         private static PlayerGameplayAbilitiesFactory CreatePlayerAbilitiesFactory (DIContainer c)
             => new PlayerGameplayAbilitiesFactory(c.Resolve<EntitiesFactory>(),c.Resolve<BrainsFactory>());
         private static GameplayPopupService CreateGameplayPopupService(DIContainer c)

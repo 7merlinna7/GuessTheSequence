@@ -1,0 +1,21 @@
+﻿using Assets._Project.Ecs.Gameplay.Features.AbilitiesFeature.Abilities;
+using System;
+using System.Collections.Generic;
+
+namespace Assets._Project.Ecs.Gameplay.Features.AbilitiesFeature
+{
+    public class AbilitiesList 
+    {
+        public event Action<Ability> Added;
+        private List<Ability> _elements = new();
+
+        public IReadOnlyList<Ability> Elements => _elements;
+
+        public virtual void Add(Ability element)
+        {
+            _elements.Add(element);
+            Added?.Invoke(element);
+        }
+
+    }
+}
