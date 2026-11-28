@@ -17,7 +17,7 @@ namespace Assets._Project.Ecs.Gameplay.Features.Player
             _brainsFactory = brainsFactory;
         }
 
-        public void CreateExplotion (Vector3 position)
+        public void CreateExplotionAttack (Vector3 position)
         {
             _entitiesFactory.CreateExplotion(position,team,3f,50f);
         }

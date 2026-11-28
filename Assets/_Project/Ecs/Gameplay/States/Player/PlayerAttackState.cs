@@ -16,7 +16,7 @@ namespace Assets._Project.Ecs.Gameplay.States.Player
 
         protected override void OnMouseButtonClicked()
         {
-            _playerAbilitiesFactory.CreateExplotion(_rayShooter.Shoot());
+            _playerAbilitiesFactory.CreateExplotionAttack(_rayShooter.Shoot());
         }
     }
 }
