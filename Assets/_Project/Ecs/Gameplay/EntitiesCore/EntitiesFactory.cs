@@ -248,7 +248,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
             return entity;
         }
 
-        public Entity CreateRangeStayEntity(Vector3 position)
+        public Entity CreateRangeStayEntity(Vector3 position,Teams team)
         {
             Entity entity = CreateEmpty();
 
@@ -275,7 +275,7 @@ namespace Assets._Project.Ecs.Gameplay.EntitiesCore
                 .AddTakeDamageRequest()
                 .AddTakeDamageEvent()
                 //target
-                .AddTeam(new ReactiveVariable<Teams>(Teams.Player))
+                .AddTeam(new ReactiveVariable<Teams>(team))
                 .AddCurrentTarget()
                 //--------------------------------------------------------------------------------------
                 //attack

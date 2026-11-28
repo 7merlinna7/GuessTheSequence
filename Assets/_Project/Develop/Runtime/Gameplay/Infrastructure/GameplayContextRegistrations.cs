@@ -17,6 +17,7 @@ using Assets._Project.Ecs.Gameplay.Features.AI.States;
 using Assets._Project.Ecs.Gameplay.Features.Enemies;
 using Assets._Project.Ecs.Gameplay.Features.InputFeature;
 using Assets._Project.Ecs.Gameplay.Features.InputFeature.RaycastFeature;
+using Assets._Project.Ecs.Gameplay.Features.Player;
 using Assets._Project.Ecs.Gameplay.Features.StagesFeature;
 using Assets._Project.Ecs.Gameplay.Features.TowerFeature;
 using Assets._Project.Ecs.Gameplay.States;
@@ -48,6 +49,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             container.RegisterAsSingle(CreatePlayerGameplayRayShooter);
             container.RegisterAsSingle(CreatePlayerInput);
 
+            container.RegisterAsSingle(CreatePlayerAbilitiesFactory);
+
             //ui
             container.RegisterAsSingle(CreateGameplayUIRoot).NonLazy();
             container.RegisterAsSingle(CreateGameplayScreenPresenter).NonLazy();
@@ -55,6 +58,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             container.RegisterAsSingle(CreateGameplayPopupService);
         }
 
+
+        private static PlayerGameplayAbilitiesFactory CreatePlayerAbilitiesFactory (DIContainer c)
+            => new PlayerGameplayAbilitiesFactory(c.Resolve<EntitiesFactory>(),c.Resolve<BrainsFactory>());
         private static GameplayPopupService CreateGameplayPopupService(DIContainer c)
             => new GameplayPopupService(
                 c.Resolve<ViewsFactory>(),

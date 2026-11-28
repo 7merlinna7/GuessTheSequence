@@ -12,6 +12,7 @@ using Assets._Project.Ecs.Gameplay.EntitiesCore;
 using Assets._Project.Ecs.Gameplay.Features.AI;
 using Assets._Project.Ecs.Gameplay.Features.InputFeature;
 using Assets._Project.Ecs.Gameplay.Features.InputFeature.RaycastFeature;
+using Assets._Project.Ecs.Gameplay.Features.Player;
 using Assets._Project.Ecs.Gameplay.Features.StagesFeature;
 using Assets._Project.Ecs.Gameplay.Features.TowerFeature;
 using Assets._Project.Ecs.Gameplay.States.Player;
@@ -90,10 +91,10 @@ namespace Assets._Project.Ecs.Gameplay.States
             PlayerGameplayRayShooter rayShooter = _container.Resolve<PlayerGameplayRayShooter>();
             PlayerInput playerInput = _container.Resolve<PlayerInput>();
             PurchaseChecker purchaseChecker = _container.Resolve<PurchaseChecker>();
-            EntitiesFactory entitiesFactory = _container.Resolve<EntitiesFactory>();
+            PlayerGameplayAbilitiesFactory abilitiesFactory = _container.Resolve<PlayerGameplayAbilitiesFactory>();
 
-            PlayerAttackState playerAttackState = new PlayerAttackState(entitiesFactory, rayShooter, playerInput);
-            PlayerPreperationState playerPreperationState = new PlayerPreperationState(entitiesFactory, rayShooter, playerInput,purchaseChecker,_container.Resolve<BrainsFactory>());
+            PlayerAttackState playerAttackState = new PlayerAttackState(abilitiesFactory, rayShooter, playerInput);
+            PlayerPreperationState playerPreperationState = new PlayerPreperationState(abilitiesFactory, rayShooter, playerInput,purchaseChecker);
 
             FuncCondition preperationToProcessStateCondition = new FuncCondition(() => Input.GetKeyDown(KeyCode.Space));
 

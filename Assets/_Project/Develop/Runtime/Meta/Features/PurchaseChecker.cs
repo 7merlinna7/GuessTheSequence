@@ -26,12 +26,10 @@ namespace Assets._Project.Develop.Runtime.Meta.Features
             if (_wallet.Enough(CurrencyTypes.Gold, _bombPrice))
             {
                 _wallet.Spend(CurrencyTypes.Gold, _bombPrice);
-                Debug.Log("Мина куплена");
                 return true;
             }
             else
             {
-                Debug.Log("Не достаточно золота для покупки мины");
                 return false;
             }
         }
